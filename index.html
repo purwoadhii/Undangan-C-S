@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wedding of D/H</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: #fdfbf9;
+      color: #333;
+    }
+    header, section {
+      padding: 2rem;
+      text-align: center;
+    }
+    .hero {
+      background: url('https://i.ibb.co/6ZH0PvS/wedding-bg.jpg') center/cover no-repeat;
+      color: white;
+      padding: 5rem 2rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin: 0.5rem 0;
+    }
+    .btn {
+      background: #9c836a;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .countdown {
+      font-size: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .bank-section {
+      text-align: left;
+    }
+    .bank-card {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .gallery img {
+      width: 100%;
+      max-width: 200px;
+      margin: 0.5rem;
+      border-radius: 8px;
+    }
+    .story-section {
+      text-align: left;
+    }
+    #comments {
+      text-align: left;
+      margin-top: 1rem;
+    }
+    .comment {
+      background: #f4f4f4;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 6px;
+    }
+    .comment strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      padding: 2rem 1rem;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <audio autoplay loop hidden>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="hero">
+    <h1 id="coupleNames">D / H</h1>
+    <p>05 / 07 / 2025</p>
+    <button class="btn" onclick="document.getElementById('invitation').scrollIntoView({behavior: 'smooth'})">Buka Undangan</button>
+  </div>
+
+  <section id="invitation">
+    <h2 id="personalGreeting">Dengan penuh rasa syukur</h2>
+    <p>Kami mengundang Anda untuk hadir dalam pernikahan kami</p>
+    <div class="card">
+      <h3>Diana & Hendri</h3>
+      <p>Sabtu, 5 Juli 2025 <br> Pukul 10.00 WIB</p>
+      <p>Jl. Mawar Indah No. 123, Jakarta</p>
+      <a href="https://maps.google.com" target="_blank">Lihat Lokasi</a>
+    </div>
+
+    <div class="card">
+      <h3>Hitung Mundur</h3>
+      <div class="countdown" id="countdown"></div>
+    </div>
+
+    <div class="card story-section">
+      <h3>Kisah Cinta Kami</h3>
+      <p>Berawal dari pertemuan di kampus, kami mulai mengenal satu sama lain sejak 2018. Setelah perjalanan panjang dan banyak cerita, akhirnya kami memutuskan untuk melangkah bersama menuju kehidupan baru sebagai pasangan suami istri.</p>
+    </div>
+
+    <div class="card">
+      <h3>Galeri Foto</h3>
+      <div class="gallery" id="gallery"></div>
+    </div>
+
+    <div class="card bank-section">
+      <h3>Hadiah Pernikahan</h3>
+      <div class="bank-card">
+        <strong>Bank BCA</strong><br>
+        a.n. Diana Putri<br>
+        1234567890
+      </div>
+      <div class="bank-card">
+        <strong>Bank Mandiri</strong><br>
+        a.n. Hendri Saputra<br>
+        9876543210
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Buku Tamu</h3>
+      <form id="guestBookForm">
+        <input name="name" type="text" placeholder="Nama Anda" required style="padding: 0.5rem; width: 80%;"><br><br>
+        <textarea name="message" placeholder="Ucapan" required style="padding: 0.5rem; width: 80%; height: 80px;"></textarea><br><br>
+        <button class="btn" type="submit">Kirim</button>
+      </form>
+      <div id="comments"></div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 D & H Wedding Invitation. All Rights Reserved.
+  </footer>
+
+  <script>
+    const eventDate = new Date('2025-07-05T10:00:00').getTime();
+    const countdownEl = document.getElementById('countdown');
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = eventDate - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = `${days}h ${hours}j ${mins}m ${secs}d`;
+    }, 1000);
+
+    // Tambahkan gambar ke galeri secara dinamis
+    const galleryImages = [
+      'https://via.placeholder.com/200x250',
+      'https://via.placeholder.com/200x250',
+      'https://via.placeholder.com/200x250',
+      'https://via.placeholder.com/200x250'
+    ];
+    const gallery = document.getElementById('gallery');
+    galleryImages.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      gallery.appendChild(img);
+    });
+
+    // Ambil nama tamu dari URL jika ada
+    const params = new URLSearchParams(window.location.search);
+    const nameParam = params.get('to');
+    if(nameParam) {
+      const greeting = document.getElementById('personalGreeting');
+      greeting.innerHTML = `Kepada Yth. <strong>${decodeURIComponent(nameParam)}</strong>`;
+    }
+
+    // Google Sheets Form Submit + tampilkan komentar
+    const scriptURL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+    const form = document.getElementById('guestBookForm');
+    const comments = document.getElementById('comments');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = form.name.value;
+      const message = form.message.value;
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => {
+          alert('Terima kasih atas ucapannya!');
+          const div = document.createElement('div');
+          div.className = 'comment';
+          div.innerHTML = `<strong>${name}</strong>${message}`;
+          comments.prepend(div);
+          form.reset();
+        })
+        .catch(error => alert('Gagal mengirim ucapan.'));
+    });
+  </script>
+
+</body>
+</html>
