@@ -13,5 +13,7 @@ window.DAFTAR_TEMA = [
   { id: "jawa-klasik", nama: "Jawa Klasik", ket: "Coklat sogan & emas, gunungan, batik parang, bahasa Jawa", warna: ["#f5ecdc", "#a8762e", "#3b2516"],
     huruf: "family=Cinzel+Decorative:wght@400;700&family=Italianno&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700" },
   { id: "jawa-melati", nama: "Jawa Melati", ket: "Putih & emas, ronce melati tersibak, karangan bunga", warna: ["#fcfbf7", "#b39352", "#6f8f5f"],
-    huruf: "family=Marcellus+SC&family=Parisienne&family=Cormorant+Infant:ital,wght@0,500;0,600;1,500&family=Nunito+Sans:wght@400;600;700" }
+    huruf: "family=Marcellus+SC&family=Parisienne&family=Cormorant+Infant:ital,wght@0,500;0,600;1,500&family=Nunito+Sans:wght@400;600;700" },
+  { id: "jawa-keraton", nama: "Jawa Keraton", ket: "Hijau tua & emas, masuk lewat gapura keraton, pendapa joglo, kawung", warna: ["#10301f", "#d6b25e", "#f3ead2"],
+    huruf: "family=Cinzel:wght@400;600&family=Tangerine:wght@700&family=Gilda+Display&family=Lato:wght@400;700" }
 ];

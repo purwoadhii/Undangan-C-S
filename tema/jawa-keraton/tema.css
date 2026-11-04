@@ -1,0 +1,104 @@
+/* Tema Jawa Keraton: hijau tua, emas, batik kawung. */
+:root{
+  --bg:#10301f; --bg2:#0c2618; --card:#143a26; --ink:#f3ead2; --muted:#b9c2a9;
+  --accent:#d6b25e; --accent-2:#f4dc98; --on-accent:#0c2618; --accent-soft:rgba(214,178,94,.16); --line:rgba(214,178,94,.35);
+  --shadow:rgba(0,0,0,.8); --nav-bg:rgba(12,38,24,.94); --input-bg:#0e2b1c;
+  --font-script:"Tangerine","Great Vibes",cursive;
+  --font-cap:"Cinzel",Georgia,serif;
+  --font-serif:"Gilda Display",Georgia,serif;
+  --font-body:"Lato","Segoe UI",system-ui,sans-serif;
+  --r-card:4px;
+  color-scheme:dark;
+  --kawung:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cg fill='none' stroke='%23d6b25e' stroke-width='1' opacity='.16'%3E%3Cellipse cx='22' cy='10' rx='7' ry='10'/%3E%3Cellipse cx='22' cy='34' rx='7' ry='10'/%3E%3Cellipse cx='10' cy='22' rx='10' ry='7'/%3E%3Cellipse cx='34' cy='22' rx='10' ry='7'/%3E%3C/g%3E%3Ccircle cx='22' cy='22' r='2' fill='%23d6b25e' opacity='.25'/%3E%3C/svg%3E");
+}
+body.tema-jawa-keraton{background:var(--kawung),var(--bg)}
+.tema-jawa-keraton .app{background:var(--kawung),var(--bg)}
+.tema-jawa-keraton .names{font-size:66px;font-weight:700;color:var(--accent-2)}
+.tema-jawa-keraton .eyebrow{color:var(--accent);letter-spacing:.4em}
+.tema-jawa-keraton .hias-keraton{display:block;width:150px;margin:6px auto;color:var(--accent)}
+.tema-jawa-keraton .ting{position:absolute;top:0;width:34px;z-index:3;transform-origin:50% 0;animation:ayunTing 5s ease-in-out infinite}
+.tema-jawa-keraton .ting.t1{left:8%}.tema-jawa-keraton .ting.t2{right:8%;animation-delay:-2.5s}
+.tema-jawa-keraton .nyala{animation:nyala 1.4s ease-in-out infinite alternate}
+@keyframes ayunTing{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes nyala{from{opacity:.55}to{opacity:1}}
+
+/* Sampul: masuk melewati gapura */
+.tema-jawa-keraton .cover{background:var(--kawung),radial-gradient(circle at 50% 55%,#1d5236,#0c2618 70%)}
+.tema-jawa-keraton .gapura{position:absolute;left:50%;bottom:0;height:100%;width:auto;min-width:100%;transform:translateX(-50%);transform-origin:50% 60%;transition:transform 1.8s cubic-bezier(.6,0,.3,1),opacity 1.4s .4s}
+.tema-jawa-keraton .cover-text{padding-top:calc(45vh + env(safe-area-inset-top,0px));padding-left:16%;padding-right:16%}
+.tema-jawa-keraton .cover-text .eyebrow{font-size:11px}
+.tema-jawa-keraton .cover-text .mono{font-family:var(--font-serif);color:var(--accent);font-size:44px;font-weight:400;margin:4px 0}
+.tema-jawa-keraton .cover-text .mono .amp{color:var(--ink)}
+.tema-jawa-keraton .cover .names{font-size:46px;line-height:1}
+.tema-jawa-keraton .cover .date{font-family:var(--font-serif);color:var(--ink);font-size:15px}
+.tema-jawa-keraton .cover-bottom{margin-left:-30%;margin-right:-30%}
+.tema-jawa-keraton .guest{background:rgba(12,38,24,.85);border:1px solid var(--accent);color:var(--ink);border-radius:2px}
+.tema-jawa-keraton .btn-open{background:linear-gradient(180deg,#f4dc98,#c39a45);color:#0c2618;border-radius:2px;font-family:var(--font-cap);letter-spacing:.12em;font-size:15px;box-shadow:0 0 18px rgba(244,220,152,.45)}
+.tema-jawa-keraton .cover.open .gapura{transform:translateX(-50%) scale(3.4);opacity:0}
+.tema-jawa-keraton .cover.open .ting{opacity:0;transition:opacity .5s}
+.tema-jawa-keraton .cover.open .cover-text{transform:scale(.8);opacity:0;transition:all .7s}
+.tema-jawa-keraton .cover.open{background:transparent;transition:background .8s .9s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-jawa-keraton .side{background:var(--kawung),radial-gradient(circle at 50% 55%,#1d5236,#0c2618 70%)}
+  .tema-jawa-keraton .side .gapura{left:50%;height:96%;min-width:0}
+  .tema-jawa-keraton .side .ting{width:46px}.tema-jawa-keraton .side .ting.t1{left:18%}.tema-jawa-keraton .side .ting.t2{right:18%}
+  .tema-jawa-keraton .side-text{position:absolute;left:0;right:0;top:44%;text-align:center;z-index:3}
+  .tema-jawa-keraton .side-text .mono{font-family:var(--font-serif);font-size:72px;font-weight:400}
+  .tema-jawa-keraton .side-text .names{font-size:72px}
+  .tema-jawa-keraton .side-text p{font-family:var(--font-serif);color:var(--ink);margin:0}
+}
+
+/* Hero: foto di bawah atap pendapa */
+.tema-jawa-keraton .hero{position:relative;padding:76px 16px 50px;text-align:center;overflow:hidden;background:radial-gradient(circle at 50% 30%,rgba(214,178,94,.18),transparent 60%)}
+.tema-jawa-keraton .pendapa{position:relative;width:86%;max-width:340px;margin:0 auto;opacity:0;transform:translateY(40px);transition:all 1.5s cubic-bezier(.2,.8,.2,1)}
+.tema-jawa-keraton.play .pendapa{opacity:1;transform:none}
+.tema-jawa-keraton .pendapa .atap{display:block;width:100%;position:relative;z-index:2}
+.tema-jawa-keraton .saka{position:absolute;top:30%;bottom:0;width:7%;background:linear-gradient(90deg,#8a6526,#f4dc98,#8a6526);z-index:1}
+.tema-jawa-keraton .saka.l{left:6%}.tema-jawa-keraton .saka.r{right:6%}
+.tema-jawa-keraton .bingkai-foto{position:relative;margin:-4px 16% 0;aspect-ratio:4/5;overflow:hidden;background:linear-gradient(170deg,#2f5c43,#143a26);border:2px solid var(--accent);outline:1px solid var(--accent);outline-offset:4px}
+.tema-jawa-keraton .bingkai-foto .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-jawa-keraton .bingkai-foto .siluet{fill:var(--accent);opacity:.3}
+.tema-jawa-keraton .title-block{margin-top:26px;opacity:0;transition:opacity 1.4s .7s}
+.tema-jawa-keraton.play .title-block{opacity:1}
+.tema-jawa-keraton .title-block .date{font-family:var(--font-serif);color:var(--ink)}
+
+/* Isi */
+.tema-jawa-keraton h2{font-family:var(--font-cap);font-size:30px;color:var(--accent-2);letter-spacing:.08em}
+.tema-jawa-keraton .kicker{color:var(--accent)}
+.tema-jawa-keraton .lead{color:var(--ink)}
+.tema-jawa-keraton .salam{color:var(--accent-2)}
+.tema-jawa-keraton .sec{border-top:1px solid rgba(214,178,94,.15)}
+.tema-jawa-keraton .pic{width:180px;height:230px;border:0;border-radius:0;background:none;box-shadow:none;padding:0;overflow:visible}
+.tema-jawa-keraton .pic::before{content:"";position:absolute;inset:-6px;clip-path:polygon(50% 0,100% 20%,100% 100%,0 100%,0 20%);background:var(--accent)}
+.tema-jawa-keraton .joglo{position:absolute;inset:0;clip-path:polygon(50% 0,100% 20%,100% 100%,0 100%,0 20%);background:linear-gradient(170deg,#2f5c43,#143a26);overflow:hidden}
+.tema-jawa-keraton .joglo::after{content:"";position:absolute;inset:6px;clip-path:polygon(50% 0,100% 20%,100% 100%,0 100%,0 20%);border:1px solid rgba(244,220,152,.6);pointer-events:none}
+.tema-jawa-keraton .joglo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-jawa-keraton .joglo .siluet{fill:var(--accent);opacity:.3}
+.tema-jawa-keraton .person h3{color:var(--accent-2);font-size:58px;font-weight:700}
+.tema-jawa-keraton .person .full{font-family:var(--font-serif);font-weight:400}
+.tema-jawa-keraton .and{color:var(--accent);font-family:var(--font-cap);font-size:34px}
+.tema-jawa-keraton .cd-keraton{gap:10px}
+.tema-jawa-keraton .cd-keraton div{position:relative;padding:30px 2px 12px;background:var(--card);border:1px solid var(--accent);border-top:0;margin-top:14px}
+.tema-jawa-keraton .cd-keraton div::before{content:"";position:absolute;left:-6px;right:-6px;top:-14px;height:22px;background:var(--accent);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%)}
+.tema-jawa-keraton .cd-keraton b{color:var(--accent-2);font-family:var(--font-serif);font-weight:400}
+.tema-jawa-keraton .event{background:var(--card);border:1px solid var(--line);border-radius:2px;padding-top:86px;overflow:hidden}
+.tema-jawa-keraton .atap-kecil{position:absolute;left:50%;top:0;width:180px;margin-left:-90px}
+.tema-jawa-keraton .atap-kecil svg{display:block;width:100%}
+.tema-jawa-keraton .event h3{font-family:var(--font-cap);font-weight:400;font-size:24px;color:var(--accent-2);letter-spacing:.1em}
+.tema-jawa-keraton .event .bigdate{font-family:var(--font-serif);font-weight:400;color:var(--accent)}
+.tema-jawa-keraton .event a.addr{color:var(--accent)}
+.tema-jawa-keraton .btn{border-radius:2px;background:var(--accent);color:var(--on-accent);font-family:var(--font-cap);letter-spacing:.1em}
+.tema-jawa-keraton .btn.line{background:transparent;color:var(--accent)}
+.tema-jawa-keraton .gal-keraton{grid-template-columns:repeat(3,1fr);gap:8px}
+.tema-jawa-keraton .gal-keraton figure{aspect-ratio:3/4;border:1px solid var(--accent);padding:3px;background:var(--bg2);border-radius:0}
+.tema-jawa-keraton .gal-keraton figure:first-child{grid-column:span 3;aspect-ratio:16/10}
+.tema-jawa-keraton .gal-keraton img,.tema-jawa-keraton .gal-keraton video{inset:3px;width:calc(100% - 6px);height:calc(100% - 6px)}
+.tema-jawa-keraton .story li{background:var(--card);border-left:2px solid var(--accent);border-radius:0}
+.tema-jawa-keraton .video-box{border:1px solid var(--accent);padding:5px;border-radius:0;background:var(--bg2)}
+.tema-jawa-keraton .video-box iframe,.tema-jawa-keraton .video-box video{inset:5px;width:calc(100% - 10px);height:calc(100% - 10px)}
+.tema-jawa-keraton select option{background:#10301f}
+.tema-jawa-keraton footer.penutup .terima{font-family:var(--font-cap);color:var(--accent-2)}
+.tema-jawa-keraton footer.penutup .mono{color:var(--accent)}
+.tema-jawa-keraton footer.penutup .names{color:var(--accent-2)}
