@@ -313,6 +313,7 @@ ol.steps{padding-left:20px;margin:8px 0}
     opt = opt || {};
     return fetch("https://api.github.com/repos/" + state.repo + path, {
       method: opt.method || "GET",
+      cache: "no-store",
       headers: { "Authorization":"Bearer " + state.token, "Accept":"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28" },
       body: opt.body ? JSON.stringify(opt.body) : undefined
     }).then(function(r){
@@ -323,6 +324,20 @@ ol.steps{padding-left:20px;margin:8px 0}
       });
       return r.status === 204 ? null : r.json();
     });
+  }
+  /* Menulis perubahan ke main sebagai satu commit. Kepala main selalu dibaca ulang, dan bila main berubah
+     di tengah jalan (pesan "not a fast forward"), commit disusun ulang di atas kepala yang baru. */
+  function commitKeMain(entries, message, coba){
+    coba = coba || 0;
+    var head;
+    return api("/git/ref/heads/main").then(function(ref){ head = ref.object.sha; return api("/git/commits/" + head); })
+      .then(function(c){ return api("/git/trees", {method:"POST", body:{base_tree:c.tree.sha, tree:entries}}); })
+      .then(function(t){ return api("/git/commits", {method:"POST", body:{message:message, tree:t.sha, parents:[head]}}); })
+      .then(function(c){ return api("/git/refs/heads/main", {method:"PATCH", body:{sha:c.sha}}); })
+      .catch(function(e){
+        if (coba < 3 && /fast.?forward|reference cannot be updated|409|422/i.test(e.message)) return new Promise(function(ok){ setTimeout(ok, 800 * (coba + 1)); }).then(function(){ return commitKeMain(entries, message, coba + 1); });
+        throw e;
+      });
   }
   function b64ToText(b64){ var bin = atob(b64.replace(/\n/g,"")); var bytes = new Uint8Array(bin.length); for (var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
   function textToB64(t){ var bytes = new TextEncoder().encode(t), s = ""; for (var i=0;i<bytes.length;i+=0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000)); return btoa(s); }
@@ -540,16 +555,14 @@ ol.steps{padding-left:20px;margin:8px 0}
     box.querySelector(".ghost").addEventListener("click", function(){ box.remove(); });
     go.addEventListener("click", function(){
       go.disabled = true; inp.disabled = true; msg.textContent = "Menghapus…"; msg.className = "msg";
-      var headSha;
-      api("/git/ref/heads/main").then(function(ref){ headSha = ref.object.sha; return api("/git/commits/" + headSha); })
-        .then(function(c){ return api("/git/trees/" + c.tree.sha + "?recursive=1").then(function(t){
+      api("/git/ref/heads/main").then(function(ref){ return api("/git/commits/" + ref.object.sha); })
+        .then(function(c){ return api("/git/trees/" + c.tree.sha + "?recursive=1"); })
+        .then(function(t){
           var del = t.tree.filter(function(x){ return x.type === "blob" && x.path.indexOf(slug + "/") === 0; })
             .map(function(x){ return {path:x.path, mode:"100644", type:"blob", sha:null}; });
           if (!del.length) throw new Error("Folder tidak ditemukan.");
-          return api("/git/trees", {method:"POST", body:{base_tree:c.tree.sha, tree:del}});
-        }); })
-        .then(function(t){ return api("/git/commits", {method:"POST", body:{message:"Hapus undangan " + names + " (/" + slug + "/)", tree:t.sha, parents:[headSha]}}); })
-        .then(function(c){ return api("/git/refs/heads/main", {method:"PATCH", body:{sha:c.sha}}); })
+          return commitKeMain(del, "Hapus undangan " + names + " (/" + slug + "/)");
+        })
         .then(function(){ card.remove(); if (!$("coupleList").children.length) $("coupleList").innerHTML = '<p class="hint">Belum ada undangan. Klik "+ Undangan baru".</p>'; })
         .catch(function(e){ msg.textContent = "Gagal menghapus: " + e.message; msg.className = "msg err"; go.disabled = false; inp.disabled = false; });
     });
@@ -824,12 +837,9 @@ ol.steps{padding-left:20px;margin:8px 0}
 
     var isNew = !state.editing;
     var chain = isNew ? api("/contents/" + slug, {allow404:true}).then(function(ex){ if (ex) throw new Error("Folder /" + slug + "/ sudah ada. Pakai nama lain."); }) : Promise.resolve();
-    var headSha, baseTree, total = files.length + 2, done = 0;
+    var total = files.length + 2, done = 0;
     function step(){ done++; alertMsg("Mengunggah " + done + " / " + total + "…"); }
-    chain.then(function(){ return api("/git/ref/heads/main"); })
-      .then(function(ref){ headSha = ref.object.sha; return api("/git/commits/" + headSha); })
-      .then(function(c){
-        baseTree = c.tree.sha;
+    chain.then(function(){
         var tree = [];
         var seq = Promise.resolve();
         files.forEach(function(f){
@@ -848,11 +858,9 @@ ol.steps{padding-left:20px;margin:8px 0}
           tree.push({path:slug + "/index.html", mode:"100644", type:"blob", sha:bs[1].sha});
           var keep = {}; [data.pria.foto, data.wanita.foto, data.fotoPasangan, data.musik, data.video.src].concat(data.galeri.map(function(g){ return g.src; })).forEach(function(p){ if (p) keep[p] = 1; });
           state.removed.forEach(function(p){ if (!keep[p] && /^assets\//.test(p)) tree.push({path:slug + "/" + p, mode:"100644", type:"blob", sha:null}); });
-          return api("/git/trees", {method:"POST", body:{base_tree:baseTree, tree:tree}});
+          return commitKeMain(tree, (isNew ? "Tambah" : "Ubah") + " undangan " + pP + " & " + wP + " (/" + slug + "/)");
         });
       })
-      .then(function(t){ return api("/git/commits", {method:"POST", body:{message:(isNew ? "Tambah" : "Ubah") + " undangan " + pP + " & " + wP + " (/" + slug + "/)", tree:t.sha, parents:[headSha]}}); })
-      .then(function(c){ return api("/git/refs/heads/main", {method:"PATCH", body:{sha:c.sha}}); })
       .then(function(){
         state.dirty = false;
         var url = pagesBase() + slug + "/";
