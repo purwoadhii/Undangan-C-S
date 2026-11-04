@@ -298,7 +298,7 @@ ol.steps{padding-left:20px;margin:8px 0}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="../tema/daftar.js"></script>
+<script>document.write('<script src="../tema/daftar.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
@@ -353,7 +353,14 @@ ol.steps{padding-left:20px;margin:8px 0}
   }
   function b64ToText(b64){ var bin = atob(b64.replace(/\n/g,"")); var bytes = new Uint8Array(bin.length); for (var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
   function textToB64(t){ var bytes = new TextEncoder().encode(t), s = ""; for (var i=0;i<bytes.length;i+=0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000)); return btoa(s); }
-  function fileToB64(f){ return new Promise(function(res,rej){ var r = new FileReader(); r.onload = function(){ res(String(r.result).split(",")[1]); }; r.onerror = rej; r.readAsDataURL(f); }); }
+  function fileToB64(f){ return new Promise(function(res,rej){
+    if (f.size > 95 * 1024 * 1024) return rej(new Error('File "' + f.name + '" terlalu besar (' + Math.round(f.size / 1048576) + ' MB). Batas GitHub 100 MB per file; kecilkan dulu lalu pilih ulang.'));
+    var r = new FileReader();
+    r.onload = function(){ res(String(r.result).split(",")[1]); };
+    r.onerror = function(){ rej(new Error('File "' + f.name + '" tidak bisa dibaca browser. Biasanya karena file sudah dipindah/dihapus setelah dipilih, atau berasal dari folder cloud yang belum terunduh. Hapus lalu pilih ulang file itu.')); };
+    r.readAsDataURL(f);
+  }); }
+  function pesanError(e){ return (e && (e.message || (e.target && e.target.error && e.target.error.message) || e.type)) || String(e || "kesalahan tidak dikenal"); }
   function parseData(txt){
     var a = txt.indexOf("{"), b = txt.lastIndexOf("}");
     var body = txt.slice(a, b+1);
@@ -983,7 +990,7 @@ ol.steps{padding-left:20px;margin:8px 0}
         $("btnOpen").hidden = false; $("btnOpen").href = url;
         alertMsg("Tersimpan. Undangan tayang di " + url + " dalam 1–2 menit.");
       })
-      .catch(function(e){ alertMsg("Gagal menyimpan: " + e.message, true); })
+      .catch(function(e){ alertMsg("Gagal menyimpan: " + pesanError(e), true); })
       .finally(function(){ btn.disabled = false; });
   });
 
