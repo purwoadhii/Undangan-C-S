@@ -7,5 +7,7 @@ window.DAFTAR_TEMA = [
   { id: "pantai", nama: "Pantai", ket: "Senja di pantai, ombak menyapu, kelapa & camar", warna: ["#fdf7ee", "#e0785c", "#2f8ea4"],
     huruf: "family=Sacramento&family=Josefin+Sans:wght@400;600&family=Lora:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700" },
   { id: "laut", nama: "Bawah Laut", ket: "Samudra biru, ikan & ubur-ubur, jendela kapal, menyelam saat dibuka", warna: ["#06324a", "#7fe0e6", "#ffb385"],
-    huruf: "family=Allura&family=Raleway:wght@400;600;700&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;500;600" }
+    huruf: "family=Allura&family=Raleway:wght@400;600;700&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;500;600" },
+  { id: "gunung", nama: "Gunung", ket: "Pegunungan berlapis, kabut, pinus, foto berbentuk puncak", warna: ["#f4f1ea", "#c47a3a", "#3f5e4a"],
+    huruf: "family=Kaushan+Script&family=Oswald:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;600;700" }
 ];
