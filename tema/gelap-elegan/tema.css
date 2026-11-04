@@ -1,0 +1,111 @@
+/* Tema Gelap Elegan: hitam pekat, emas, garis art deco. */
+:root{
+  --bg:#0e0d0b; --bg2:#15130f; --card:#16140f; --ink:#efe6d4; --muted:#a69a83;
+  --accent:#d4b06a; --accent-2:#e8cf94; --on-accent:#141109; --accent-soft:rgba(212,176,106,.18); --line:rgba(212,176,106,.35);
+  --shadow:rgba(0,0,0,.9); --nav-bg:rgba(22,20,15,.92); --input-bg:#100f0b;
+  --font-script:"Pinyon Script","Great Vibes",cursive;
+  --font-cap:"Cinzel",Georgia,serif;
+  --font-serif:"Playfair Display",Georgia,serif;
+  --font-body:"Jost","Segoe UI",system-ui,sans-serif;
+  --r-card:4px;
+  color-scheme:dark; --oct:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);
+}
+.tema-gelap-elegan{font-weight:300;letter-spacing:.01em}
+.tema-gelap-elegan .kipas{display:block;width:120px;margin:0 auto 14px;color:var(--accent)}
+.tema-gelap-elegan .kipas.flip{transform:scaleY(-1);margin:14px auto 0}
+.tema-gelap-elegan .kipas.small{width:90px}
+.tema-gelap-elegan .kipas.sec{width:110px;margin-bottom:10px;opacity:.9}
+
+/* Sampul: pintu deco yang terbuka ke samping */
+.tema-gelap-elegan .cover{background:radial-gradient(circle at 50% 45%,#3a2f1a 0%,#120f0a 55%,#070605 100%);perspective:1400px}
+.tema-gelap-elegan .door{position:absolute;top:0;bottom:0;width:50%;z-index:2;background:linear-gradient(90deg,#0c0b09,#17140f 50%,#0c0b09);transition:transform 1.8s cubic-bezier(.7,0,.2,1),opacity 1.8s;transform-style:preserve-3d}
+.tema-gelap-elegan .door svg{width:100%;height:100%;display:block;opacity:.85}
+.tema-gelap-elegan .door.l{left:0;transform-origin:left center;box-shadow:inset -1px 0 0 #c9a45c}
+.tema-gelap-elegan .door.r{right:0;transform-origin:right center;box-shadow:inset 1px 0 0 #c9a45c}
+.tema-gelap-elegan .cover.open .door.l{transform:rotateY(-105deg)}
+.tema-gelap-elegan .cover.open .door.r{transform:rotateY(105deg)}
+.tema-gelap-elegan .cover.open{background:transparent;transition:background 1s 1s}
+.tema-gelap-elegan .cover .cover-text{transition:opacity .6s}
+.tema-gelap-elegan .cover.open .cover-text{opacity:0}
+.tema-gelap-elegan .cover-text{justify-content:flex-start;color:var(--ink)}
+.tema-gelap-elegan .cover-text .eyebrow{color:var(--accent-2);margin-bottom:14px}
+.tema-gelap-elegan .mono-box{position:relative;width:170px;height:170px;display:grid;place-items:center;margin:6px 0 10px}
+.tema-gelap-elegan .mono-box .mono{position:relative;z-index:1}
+.tema-gelap-elegan .mono-box::before,.tema-gelap-elegan .mono-box::after{content:"";position:absolute;inset:0;border:1px solid var(--accent);background:rgba(10,9,7,.8);transform:rotate(45deg) scale(.72)}
+.tema-gelap-elegan .mono-box::after{transform:rotate(45deg) scale(.64);opacity:.6}
+.tema-gelap-elegan .mono{font-family:var(--font-serif);color:var(--accent);font-size:64px;letter-spacing:.02em;font-weight:500}
+.tema-gelap-elegan .mono .amp{font-family:var(--font-script);color:var(--ink);font-size:.55em;top:62%}
+.tema-gelap-elegan .names.sub{font-size:40px;color:var(--ink)}
+.tema-gelap-elegan .cover .date{font-family:var(--font-cap);letter-spacing:.32em;font-size:13px;color:var(--accent-2);margin-top:6px}
+.tema-gelap-elegan .guest{background:rgba(10,9,7,.8);border:1px solid var(--line);color:var(--ink);border-radius:2px}
+.tema-gelap-elegan .btn-open{background:transparent;color:var(--accent-2);border:1px solid var(--accent);border-radius:0;letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-cap);font-size:13px;padding:13px 30px;position:relative;overflow:hidden}
+.tema-gelap-elegan .btn-open::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(232,207,148,.35) 50%,transparent 70%);transform:translateX(-100%);animation:shine 3s ease-in-out infinite}
+@keyframes shine{60%,100%{transform:translateX(100%)}}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-gelap-elegan .side{background:radial-gradient(circle at 50% 50%,#2a2214,#0b0a08 70%)}
+  .tema-gelap-elegan .side-in{position:absolute;inset:0;display:grid;place-items:center}
+  .tema-gelap-elegan .side .rays{position:absolute;width:140vh;height:140vh;animation:spin 120s linear infinite;opacity:.6}
+  .tema-gelap-elegan .side-text{position:relative;text-align:center;color:var(--ink)}
+  .tema-gelap-elegan .side-text .mono{font-size:110px}
+  .tema-gelap-elegan .side-text .names{font-size:56px;margin-top:6px}
+  .tema-gelap-elegan .side-text p{font-family:var(--font-cap);letter-spacing:.28em;color:var(--accent-2);font-size:14px;text-transform:uppercase}
+  .tema-gelap-elegan .side-text .kipas{width:200px}
+}
+
+/* Hero */
+.tema-gelap-elegan .hero{position:relative;padding:64px 0 40px;text-align:center;overflow:hidden}
+.tema-gelap-elegan .hero .rays{position:absolute;left:50%;top:260px;width:900px;height:900px;margin:-450px 0 0 -450px;animation:spin 90s linear infinite;opacity:0;transition:opacity 2s 1s}
+.tema-gelap-elegan.play .hero .rays{opacity:.5}
+.tema-gelap-elegan .chandelier{position:absolute;left:50%;top:-6px;width:110px;margin-left:-55px;opacity:0;transform:translateY(-40px);transition:all 1.4s .6s}
+.tema-gelap-elegan.play .chandelier{opacity:1;transform:none}
+.tema-gelap-elegan .chandelier{animation:swing 6s ease-in-out infinite;transform-origin:50% 0}
+.tema-gelap-elegan .flame{animation:flicker 1.2s ease-in-out infinite alternate}
+@keyframes swing{0%,100%{rotate:-2deg}50%{rotate:2deg}}
+@keyframes flicker{from{opacity:.6}to{opacity:1}}
+.tema-gelap-elegan .frame-wrap{position:relative;width:72%;max-width:320px;aspect-ratio:3/4;margin:60px auto 0}
+.tema-gelap-elegan .photo{position:absolute;inset:22px;clip-path:polygon(9% 0,91% 0,100% 7%,100% 93%,91% 100%,9% 100%,0 93%,0 7%);background:linear-gradient(170deg,#3b3428,#14120d);overflow:hidden}
+.tema-gelap-elegan .photo .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9)}
+.tema-gelap-elegan .photo .siluet{fill:#d4b06a;opacity:.25}
+.tema-gelap-elegan .deco-frame{position:absolute;inset:0;width:100%;height:100%}
+.tema-gelap-elegan .draw{stroke-dasharray:1400;stroke-dashoffset:1400;transition:stroke-dashoffset 2.6s ease .6s}
+.tema-gelap-elegan .draw.d2{transition-delay:1s}.tema-gelap-elegan .draw.d3{transition-delay:1.6s}
+.tema-gelap-elegan.play .draw{stroke-dashoffset:0}
+.tema-gelap-elegan .title-block{position:relative;margin-top:28px;padding:0 16px}
+.tema-gelap-elegan .title-block .eyebrow{color:var(--accent-2)}
+.tema-gelap-elegan .title-block .names{font-size:52px;color:var(--ink);margin-top:4px}
+.tema-gelap-elegan .title-block .date{font-family:var(--font-cap);letter-spacing:.3em;color:var(--accent);font-size:13px;text-transform:uppercase}
+
+/* Isi */
+.tema-gelap-elegan h2{font-family:var(--font-serif);font-style:italic;font-weight:500;font-size:40px;color:var(--accent-2)}
+.tema-gelap-elegan .sec{border-top:1px solid rgba(212,176,106,.12)}
+.tema-gelap-elegan .lead{color:var(--ink)}
+.tema-gelap-elegan .person h3{font-family:var(--font-script);color:var(--accent-2);font-size:48px}
+.tema-gelap-elegan .person .full{font-family:var(--font-serif);font-weight:500}
+.tema-gelap-elegan .pic{width:190px;height:190px;border:0;background:none;box-shadow:none;border-radius:0;padding:8px;overflow:visible}
+.tema-gelap-elegan .pic::before,.tema-gelap-elegan .pic::after{content:"";position:absolute;inset:0;clip-path:var(--oct);background:var(--accent)}
+.tema-gelap-elegan .pic::after{inset:1.5px;background:var(--bg)}
+.tema-gelap-elegan .pic .oct{position:absolute;inset:8px;width:auto;height:auto;z-index:1}
+.tema-gelap-elegan .oct{clip-path:var(--oct);background:linear-gradient(160deg,#3b3428,#14120d);overflow:hidden}
+.tema-gelap-elegan .oct img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-gelap-elegan .oct .siluet{fill:#d4b06a;opacity:.25}
+.tema-gelap-elegan .and{font-family:var(--font-serif);font-style:italic;color:var(--accent)}
+.tema-gelap-elegan .cd-belah b{color:var(--accent-2)}
+.tema-gelap-elegan .event{border-radius:0;background:linear-gradient(180deg,#17140f,#100e0a);border:1px solid var(--line);padding:40px 22px 28px}
+.tema-gelap-elegan .event .corner{position:absolute;width:22px;height:22px;border:1px solid var(--accent)}
+.tema-gelap-elegan .event .tl{top:8px;left:8px;border-right:0;border-bottom:0}.tema-gelap-elegan .event .tr{top:8px;right:8px;border-left:0;border-bottom:0}
+.tema-gelap-elegan .event .bl{bottom:8px;left:8px;border-right:0;border-top:0}.tema-gelap-elegan .event .br{bottom:8px;right:8px;border-left:0;border-top:0}
+.tema-gelap-elegan .event h3{font-family:var(--font-serif);font-style:italic;font-weight:500;font-size:32px;color:var(--accent-2)}
+.tema-gelap-elegan .event .bigdate{font-family:var(--font-serif);font-weight:500;color:var(--accent);font-size:60px}
+.tema-gelap-elegan .btn{border-radius:0;letter-spacing:.14em;text-transform:uppercase;font-size:12px;font-family:var(--font-cap)}
+.tema-gelap-elegan .gal-grid figure{border:1px solid var(--line);padding:5px;background:#100e0a;border-radius:0}
+.tema-gelap-elegan .gal-grid img,.tema-gelap-elegan .gal-grid video{inset:5px;width:calc(100% - 10px);height:calc(100% - 10px)}
+.tema-gelap-elegan .story li{border-left:1px solid var(--accent);border-radius:0;background:#14120e}
+.tema-gelap-elegan .video-box{border:1px solid var(--accent);border-radius:0;padding:6px;background:#0b0a08}
+.tema-gelap-elegan .video-box iframe,.tema-gelap-elegan .video-box video{inset:6px;width:calc(100% - 12px);height:calc(100% - 12px)}
+.tema-gelap-elegan form.rsvp,.tema-gelap-elegan .acc,.tema-gelap-elegan .wish{border-radius:2px}
+.tema-gelap-elegan .nav a{font-family:var(--font-cap);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.tema-gelap-elegan footer.penutup .terima{color:var(--accent-2)}
+.tema-gelap-elegan footer.penutup .mono{font-size:70px}
+.tema-gelap-elegan footer.penutup .names{color:var(--ink)}

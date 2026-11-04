@@ -1,0 +1,112 @@
+/* Tema Pantai: pasir hangat, laut toska, aksen koral. */
+:root{
+  --bg:#fdf7ee; --bg2:#f5ecdf; --card:#ffffff; --ink:#2f4045; --muted:#7c8b8c;
+  --accent:#e0785c; --accent-2:#2f8ea4; --on-accent:#ffffff; --accent-soft:#cfeaec; --line:#eadfce;
+  --shadow:rgba(47,64,69,.6); --nav-bg:rgba(255,255,255,.93); --input-bg:#fffdf9;
+  --font-script:"Sacramento","Great Vibes",cursive;
+  --font-cap:"Josefin Sans","Segoe UI",sans-serif;
+  --font-serif:"Lora",Georgia,serif;
+  --font-body:"Nunito","Segoe UI",system-ui,sans-serif;
+  --r-card:18px;
+}
+.tema-pantai .names{font-size:58px;color:var(--ink)}
+.tema-pantai .eyebrow{letter-spacing:.3em;font-size:12px;font-weight:600}
+
+/* Langit, matahari, laut */
+.tema-pantai .langit{position:absolute;inset:0;background:linear-gradient(180deg,#9fd3e0 0%,#fbd5b5 52%,#ffc39a 70%,#fde9d0 100%)}
+.tema-pantai .matahari{position:absolute;left:50%;top:calc(66% - 110px);width:150px;height:150px;margin-left:-75px;border-radius:50%;
+  background:radial-gradient(circle,#fff6d8 0 38%,#ffd98f 60%,rgba(255,200,140,0) 72%);animation:terbit 3s ease-out both}
+@keyframes terbit{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.tema-pantai .camar{position:absolute;left:8%;top:16%;width:160px;animation:terbang 14s ease-in-out infinite}
+.tema-pantai .camar path{animation:kepak .9s ease-in-out infinite alternate;transform-origin:center;transform-box:fill-box}
+.tema-pantai .camar .c2{animation-delay:.3s}.tema-pantai .camar .c3{animation-delay:.6s}
+@keyframes kepak{to{transform:scaleY(.45)}}
+@keyframes terbang{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,-14px)}}
+.tema-pantai .laut{position:absolute;left:0;right:0;bottom:0;height:34%;z-index:1;background:linear-gradient(180deg,#3d9ab0,#2a7d93 60%);transition:height 1.2s cubic-bezier(.6,0,.3,1)}
+.tema-pantai .ombak{position:absolute;left:0;width:200%;height:70px;animation:ombak 9s linear infinite}
+.tema-pantai .laut .o1{top:-44px;height:46px;animation-duration:13s}
+.tema-pantai .laut .o2{top:-28px;height:36px;animation-duration:9s;animation-direction:reverse}
+.tema-pantai .laut .o3{top:-12px;height:24px;animation-duration:11s}
+.tema-pantai .laut .buih{top:auto;bottom:calc(30% - 4px);height:26px;animation-duration:6s;opacity:.9;z-index:1}
+.tema-pantai .pasir{position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(180deg,#f2dcb8,#e9c99a)}
+@keyframes ombak{to{transform:translateX(-50%)}}
+.tema-pantai .palem{position:absolute;bottom:7%;width:190px;z-index:2;pointer-events:none}
+.tema-pantai .palem .pelepah{transform-origin:126px 128px;animation:angin 5s ease-in-out infinite}
+.tema-pantai .palem.kiri{left:-60px}
+.tema-pantai .palem.kanan{right:-60px;transform:scaleX(-1)}
+@keyframes angin{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(4deg)}}
+
+/* Sampul: laut naik menyapu layar */
+.tema-pantai .cover-text{z-index:3;padding-top:calc(70px + env(safe-area-inset-top,0px))}
+.tema-pantai .cover-text .eyebrow{color:#355a66}
+.tema-pantai .cover .date{font-family:var(--font-serif);font-style:italic;font-size:17px;color:#355a66}
+.tema-pantai .guest{background:rgba(255,255,255,.82);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:var(--ink)}
+.tema-pantai .btn-open{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border-radius:999px;font-family:var(--font-cap);font-weight:600;font-size:15px;letter-spacing:.06em;
+  box-shadow:0 10px 24px -10px rgba(224,120,92,.9);animation:goyang 2.6s ease-in-out infinite}
+.tema-pantai .btn-open svg{width:20px;height:20px}
+@keyframes goyang{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.tema-pantai .cover.open .laut{height:130%}
+.tema-pantai .cover.open .cover-text{opacity:0;transform:translateY(-30px);transition:all .6s}
+.tema-pantai .cover.open{opacity:0;transition:opacity .9s 1.1s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-pantai .side .laut{height:30%}
+  .tema-pantai .side .palem{width:300px}
+  .tema-pantai .side .palem.kiri{left:-40px}.tema-pantai .side .palem.kanan{right:-40px}
+  .tema-pantai .side .matahari{width:260px;height:260px;margin-left:-130px;top:calc(70% - 190px)}
+  .tema-pantai .side-text{position:absolute;left:0;right:0;top:16%;text-align:center;z-index:3;color:#355a66}
+  .tema-pantai .side-text .names{font-size:96px}
+  .tema-pantai .side-text p{font-family:var(--font-serif);font-style:italic;font-size:20px;margin:0}
+}
+
+/* Hero */
+.tema-pantai .hero{position:relative;height:min(820px,100svh);min-height:640px;overflow:hidden;text-align:center}
+.tema-pantai .hero .matahari{top:16%;width:300px;height:300px;margin-left:-150px}
+.tema-pantai .hero .camar{top:6%;left:18%}
+.tema-pantai .blob{position:absolute;left:50%;top:13%;width:66%;max-width:290px;aspect-ratio:4/5;transform:translateX(-50%) scale(.8);opacity:0;
+  border:6px solid #fff;box-shadow:0 22px 40px -22px var(--shadow);overflow:hidden;animation:blob 12s ease-in-out infinite;transition:transform 1.4s cubic-bezier(.2,.7,.2,1),opacity 1.2s}
+.tema-pantai.play .blob{transform:translateX(-50%);opacity:1}
+@keyframes blob{0%,100%{border-radius:58% 42% 50% 50%/46% 52% 48% 54%}33%{border-radius:44% 56% 42% 58%/56% 44% 56% 44%}66%{border-radius:52% 48% 60% 40%/42% 58% 42% 58%}}
+.tema-pantai .foto-in{position:absolute;inset:0;background:linear-gradient(170deg,#cfeaec,#f6c7a8)}
+.tema-pantai .foto-in .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-pantai .hero .palem{bottom:4%;width:170px}
+.tema-pantai .hero .palem.kiri{left:-74px}.tema-pantai .hero .palem.kanan{right:-74px}
+.tema-pantai .hero .palem.sway,.tema-pantai .hero .palem.sway.alt{animation:none}
+.tema-pantai .title-block{position:absolute;left:0;right:0;bottom:15%;z-index:3;transform:translateY(20px);opacity:0;transition:all 1.2s .6s}
+.tema-pantai.play .title-block{transform:none;opacity:1}
+.tema-pantai .title-block .eyebrow{color:#355a66}
+.tema-pantai .title-block .date{font-family:var(--font-cap);letter-spacing:.3em;color:var(--accent);font-weight:600}
+.tema-pantai .hero .ombak.h1{bottom:22px;height:60px;animation-duration:12s}
+.tema-pantai .hero .ombak.h2{bottom:-2px;height:50px;animation-duration:8s;animation-direction:reverse}
+
+/* Isi */
+.tema-pantai h2{color:var(--accent-2);font-size:56px}
+.tema-pantai .kicker{color:var(--accent)}
+.tema-pantai .hias-laut{display:block;width:34px;margin:0 auto 6px;color:var(--accent);animation:goyang 3s ease-in-out infinite}
+.tema-pantai .ombak.garis{position:relative;display:block;width:200%;height:24px;margin:-30px 0 18px}
+.tema-pantai .sec-ayat{overflow:hidden;background:var(--bg2)}
+.tema-pantai .sec:nth-of-type(even){background:linear-gradient(180deg,var(--bg),#eef7f6)}
+.tema-pantai .pic{width:200px;height:240px;border-radius:2px;border:0;padding:10px 10px 36px;background:#fff;box-shadow:0 14px 28px -16px var(--shadow);overflow:visible}
+.tema-pantai .pic.pria{transform:rotate(-3deg)}.tema-pantai .pic.wanita{transform:rotate(3deg)}
+.tema-pantai .ph{position:relative;width:100%;height:100%;overflow:hidden;background:linear-gradient(160deg,#cfeaec,#f6c7a8)}
+.tema-pantai .selotip{position:absolute;top:-10px;left:50%;width:80px;height:24px;margin-left:-40px;background:rgba(255,238,200,.85);transform:rotate(-4deg);z-index:2;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.tema-pantai .person h3{color:var(--accent-2);font-size:52px}
+.tema-pantai .and{color:var(--accent)}
+.tema-pantai .cd-pantai div{position:relative;overflow:hidden;background:#fff;border-radius:50% 50% 16px 16px;padding:18px 2px 22px;box-shadow:0 10px 22px -16px var(--shadow)}
+.tema-pantai .cd-pantai div::after{content:"";position:absolute;left:-50%;bottom:-6px;width:200%;height:20px;background:radial-gradient(circle at 10px -2px,transparent 9px,#7cc6cf 10px) 0 0/20px 20px repeat-x;animation:ombak 4s linear infinite}
+.tema-pantai .cd-pantai b{color:var(--accent-2)}
+.tema-pantai .event{background:#fff;border-radius:6px;border:1px solid var(--line);padding:46px 20px 26px;
+  background-image:repeating-linear-gradient(135deg,transparent 0 10px,rgba(224,120,92,.0) 10px 20px);box-shadow:0 0 0 6px #fff,0 0 0 7px var(--line),0 18px 30px -22px var(--shadow)}
+.tema-pantai .event::before{content:"";position:absolute;inset:-7px;border:6px solid transparent;border-image:repeating-linear-gradient(45deg,#e0785c 0 10px,#fff 10px 20px,#2f8ea4 20px 30px,#fff 30px 40px) 6;pointer-events:none}
+.tema-pantai .perangko{position:absolute;top:14px;right:14px;width:46px;height:56px;background:#fff;padding:4px;border:2px dotted #c9b9a2;transform:rotate(6deg)}
+.tema-pantai .perangko svg{display:block;width:100%;height:100%}
+.tema-pantai .cap{position:absolute;top:18px;left:18px;font-family:var(--font-cap);font-size:11px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+.tema-pantai .event h3{font-family:var(--font-script);font-weight:400;font-size:48px;color:var(--accent)}
+.tema-pantai .event .bigdate{color:var(--accent-2)}
+.tema-pantai .btn{border-radius:999px}
+.tema-pantai .gal-polaroid figure::before{content:"";position:absolute;top:-8px;left:50%;width:56px;height:18px;margin-left:-28px;background:rgba(255,238,200,.85);z-index:2;transform:rotate(3deg)}
+.tema-pantai .story li{border-radius:14px;background:#fff;border-left:4px solid #7cc6cf}
+.tema-pantai .video-box{border-radius:24px;border:6px solid #fff;box-shadow:0 18px 30px -20px var(--shadow)}
+.tema-pantai footer.penutup{background:linear-gradient(180deg,var(--bg),#cfeaec)}
+.tema-pantai footer.penutup .terima{font-family:var(--font-script);font-size:40px;color:var(--accent)}

@@ -1,0 +1,121 @@
+/* Tema Bawah Laut: biru samudra, aqua, aksen koral. */
+:root{
+  --bg:#06324a; --bg2:#08405c; --card:rgba(255,255,255,.08); --ink:#e3f5f5; --muted:#9cc7cf;
+  --accent:#7fe0e6; --accent-2:#ffb385; --on-accent:#05293b; --accent-soft:rgba(127,224,230,.18); --line:rgba(127,224,230,.28);
+  --shadow:rgba(0,10,20,.85); --nav-bg:rgba(6,42,62,.9); --input-bg:rgba(255,255,255,.07);
+  --font-script:"Allura","Great Vibes",cursive;
+  --font-cap:"Raleway","Segoe UI",sans-serif;
+  --font-serif:"Philosopher",Georgia,serif;
+  --font-body:"Quicksand","Segoe UI",system-ui,sans-serif;
+  --r-card:22px;
+  color-scheme:dark;
+}
+body.tema-laut{background:linear-gradient(180deg,#0a4d6b,#06324a 30%,#041f30)}
+.tema-laut .app{background:linear-gradient(180deg,#0b5675 0,#06324a 900px,#052a3e 60%,#03182a 100%)}
+.tema-laut .names{font-size:60px;color:#fff}
+.tema-laut .eyebrow{color:var(--accent);font-weight:600}
+
+/* Pemandangan laut */
+.tema-laut .cover{background:radial-gradient(ellipse at 50% -10%,#2fa3bf 0%,#0b5675 35%,#052a3e 75%,#03182a 100%)}
+.tema-laut .sinar{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.tema-laut .sinar i{position:absolute;top:-10%;width:80px;height:120%;background:linear-gradient(180deg,rgba(200,250,255,.32),rgba(200,250,255,0) 70%);transform-origin:top center;filter:blur(6px);animation:sinar 8s ease-in-out infinite}
+.tema-laut .sinar i:nth-child(1){left:10%;transform:rotate(18deg)}.tema-laut .sinar i:nth-child(2){left:32%;width:50px;transform:rotate(10deg);animation-delay:-2s}
+.tema-laut .sinar i:nth-child(3){left:52%;width:110px;transform:rotate(2deg);animation-delay:-4s}.tema-laut .sinar i:nth-child(4){left:72%;transform:rotate(-8deg);animation-delay:-1s}
+.tema-laut .sinar i:nth-child(5){left:88%;width:40px;transform:rotate(-16deg);animation-delay:-5s}
+@keyframes sinar{0%,100%{opacity:.35}50%{opacity:1}}
+.tema-laut .ikan{position:absolute;width:56px;z-index:1;animation:renang 18s linear infinite}
+.tema-laut .ikan.f1{top:22%;animation-duration:20s}
+.tema-laut .ikan.f2{top:58%;width:40px;animation-duration:15s;animation-delay:-7s}
+.tema-laut .ikan.f3{top:40%;width:34px;animation-duration:24s;animation-delay:-12s;animation-name:renangBalik}
+@keyframes renang{from{left:110%;transform:translateY(0)}25%{transform:translateY(-14px)}50%{transform:translateY(6px)}75%{transform:translateY(-8px)}to{left:-20%;transform:translateY(0)}}
+@keyframes renangBalik{from{left:-20%;transform:scaleX(-1)}50%{transform:scaleX(-1) translateY(-16px)}to{left:110%;transform:scaleX(-1)}}
+.tema-laut .ubur{position:absolute;width:50px;z-index:1;animation:melayang 7s ease-in-out infinite}
+.tema-laut .ubur.u1{right:10%;top:12%}.tema-laut .ubur.u2{left:8%;top:46%;width:36px;animation-delay:-3s}
+.tema-laut .ubur .tent{animation:tentakel 2.4s ease-in-out infinite alternate;transform-origin:top;transform-box:fill-box}
+@keyframes melayang{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px)}}
+@keyframes tentakel{to{transform:skewX(8deg) scaleY(.92)}}
+.tema-laut .rumput{position:absolute;bottom:0;width:46%;max-width:230px;z-index:2;pointer-events:none}
+.tema-laut .rumput.kiri{left:-6%}.tema-laut .rumput.kanan{right:-6%;transform:scaleX(-1)}
+.tema-laut .rumput .r1,.tema-laut .rumput .r2{transform-origin:bottom center;transform-box:fill-box;animation:goyangRumput 4s ease-in-out infinite}
+.tema-laut .rumput .r2{animation-delay:-1.5s;animation-duration:5s}
+@keyframes goyangRumput{0%,100%{transform:skewX(-6deg)}50%{transform:skewX(6deg)}}
+
+/* Sampul: menyelam (membesar dan memudar) */
+.tema-laut .cover-text{color:#fff}
+.tema-laut .mutiara{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:18px 0 6px;position:relative;
+  background:radial-gradient(circle at 34% 30%,#fff 0,#f4eee8 18%,#d9e8ee 50%,#9bb9c6 100%);box-shadow:0 0 0 8px rgba(255,255,255,.08),0 0 50px rgba(160,240,255,.5);animation:melayang 6s ease-in-out infinite}
+.tema-laut .mutiara::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.7) 45%,transparent 60%);animation:kilau 4s ease-in-out infinite}
+@keyframes kilau{0%,60%{opacity:0;transform:rotate(0)}70%{opacity:1}100%{opacity:0;transform:rotate(120deg)}}
+.tema-laut .mutiara .mono{font-size:62px;color:#0b5675}
+.tema-laut .mutiara .mono .amp{color:#e2725b}
+.tema-laut .cover .date{font-family:var(--font-cap);letter-spacing:.2em;font-size:13px;text-transform:uppercase;color:var(--accent)}
+.tema-laut .guest{background:rgba(255,255,255,.1);border:1px solid var(--line);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.tema-laut .btn-open{background:linear-gradient(180deg,#9ff0f2,#47c4d0);color:#05293b;border-radius:999px;font-family:var(--font-cap);font-weight:700;letter-spacing:.08em;font-size:15px;
+  box-shadow:0 0 0 0 rgba(127,224,230,.6);animation:riak 2.2s ease-out infinite}
+@keyframes riak{to{box-shadow:0 0 0 22px rgba(127,224,230,0)}}
+.tema-laut .cover.open{transform:scale(1.6);opacity:0;filter:blur(10px);transition:transform 1.6s cubic-bezier(.5,0,.3,1),opacity 1.3s .2s,filter 1.3s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-laut .side{background:radial-gradient(ellipse at 50% -10%,#2fa3bf 0%,#0b5675 35%,#052a3e 75%,#03182a 100%)}
+  .tema-laut .side .rumput{width:26%;max-width:340px}
+  .tema-laut .side .ikan{width:80px}
+  .tema-laut .side-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:3}
+  .tema-laut .side-text .mutiara{width:200px;height:200px}.tema-laut .side-text .mutiara .mono{font-size:84px}
+  .tema-laut .side-text .names{font-size:84px}
+  .tema-laut .side-text p{font-family:var(--font-cap);letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+}
+
+/* Hero: jendela kapal */
+.tema-laut .hero{position:relative;min-height:700px;height:min(860px,100svh);overflow:hidden;text-align:center;padding-top:70px}
+.tema-laut .hero-jendela{width:74%;max-width:310px;margin:0 auto;transform:scale(.6) translateY(60px);opacity:0;transition:transform 1.6s cubic-bezier(.2,.8,.2,1),opacity 1.2s}
+.tema-laut.play .hero-jendela{transform:none;opacity:1}
+.tema-laut .jendela{position:relative;width:100%;aspect-ratio:1;border-radius:50%;padding:7%;
+  background:conic-gradient(from 30deg,#b98a3e,#f2d68a,#a3732d,#f0cf7a,#b98a3e,#f6dc95,#9c6b26,#b98a3e);box-shadow:0 20px 40px -18px #000,inset 0 0 0 3px rgba(0,0,0,.25)}
+.tema-laut .baut{position:absolute;width:5%;height:5%;margin:-2.5% 0 0 -2.5%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3c4,#8a5d1e);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.tema-laut .kaca{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;background:linear-gradient(170deg,#7fd8e8,#0b5675);box-shadow:inset 0 0 0 4px rgba(0,0,0,.35),inset 0 0 30px rgba(0,0,0,.4)}
+.tema-laut .kaca::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.35),transparent 40%)}
+.tema-laut .kaca img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-laut .kaca .siluet{fill:#e3f5f5;opacity:.6}
+.tema-laut .title-block{position:relative;z-index:3;margin-top:22px;opacity:0;transform:translateY(20px);transition:all 1.2s .7s}
+.tema-laut.play .title-block{opacity:1;transform:none}
+.tema-laut .title-block .date{font-family:var(--font-cap);letter-spacing:.32em;color:var(--accent-2);font-weight:600}
+.tema-laut .hero .rumput{width:42%}
+
+/* Isi */
+.tema-laut h2{color:#fff;font-size:58px}
+.tema-laut .kicker{color:var(--accent)}
+.tema-laut .lead{color:#fff}
+.tema-laut .hias-gelembung{display:block;width:44px;margin:0 auto 8px;color:var(--accent);animation:melayang 4s ease-in-out infinite}
+.tema-laut .pic{width:200px;height:200px;border:0;background:none;box-shadow:none;border-radius:50%;overflow:visible;animation:melayang 6s ease-in-out infinite}
+.tema-laut .pic.wanita{animation-delay:-3s}
+.tema-laut .pic .jendela{padding:8%}
+.tema-laut .person h3{color:#fff}
+.tema-laut .person .full{color:var(--accent)}
+.tema-laut .and{color:var(--accent-2)}
+.tema-laut .cd-gelembung{gap:12px}
+.tema-laut .cd-gelembung div{aspect-ratio:1;border-radius:50%;display:grid;place-content:center;position:relative;
+  background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.55) 0 8%,rgba(255,255,255,.08) 22%,rgba(127,224,230,.12) 60%,rgba(127,224,230,.35) 100%);
+  border:1px solid rgba(190,245,250,.5);animation:melayang 4s ease-in-out infinite}
+.tema-laut .cd-gelembung div:nth-child(2){animation-delay:-1s}.tema-laut .cd-gelembung div:nth-child(3){animation-delay:-2s}.tema-laut .cd-gelembung div:nth-child(4){animation-delay:-3s}
+.tema-laut .cd-gelembung b{color:#fff;font-size:26px}
+.tema-laut .cd-gelembung span{color:var(--accent);font-size:9px}
+.tema-laut .event{background:rgba(255,255,255,.07);border:1px solid var(--line);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:hidden;padding-top:38px}
+.tema-laut .ombak-atas{position:absolute;left:0;top:0;width:100%;height:20px;animation:geserOmbak 6s linear infinite}
+@keyframes geserOmbak{50%{transform:translateX(-10px)}}
+.tema-laut .event h3{font-family:var(--font-script);font-weight:400;font-size:50px;color:#fff}
+.tema-laut .event .bigdate{color:var(--accent-2)}
+.tema-laut .event a.addr{color:var(--accent)}
+.tema-laut .btn{border-radius:999px;background:var(--accent);color:var(--on-accent)}
+.tema-laut .btn.line{background:transparent;color:var(--accent)}
+.tema-laut .gal-gelembung{grid-template-columns:repeat(3,1fr);gap:10px}
+.tema-laut .gal-gelembung figure{aspect-ratio:1;border-radius:50%;border:3px solid rgba(190,245,250,.55);box-shadow:0 0 22px rgba(127,224,230,.25)}
+.tema-laut .gal-gelembung figure:first-child{grid-column:span 2;grid-row:span 2}
+.tema-laut .gal-gelembung figure:nth-child(5n+4){grid-column:span 2;aspect-ratio:2/1;border-radius:999px}
+.tema-laut .story li{background:rgba(255,255,255,.06);border-left:3px solid var(--accent);border-radius:16px}
+.tema-laut .story time{color:var(--accent-2)}
+.tema-laut .video-box{border-radius:28px;border:2px solid var(--line);box-shadow:0 0 30px rgba(127,224,230,.2)}
+.tema-laut input,.tema-laut select,.tema-laut textarea{color:var(--ink);border-color:var(--line)}
+.tema-laut select option{background:#06324a}
+.tema-laut footer.penutup .terima{font-family:var(--font-script);font-size:44px;color:var(--accent-2)}
+.tema-laut footer.penutup .names{color:#fff}

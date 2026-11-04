@@ -1,0 +1,97 @@
+/* Tema Jawa Klasik: krem, coklat sogan, emas. */
+:root{
+  --bg:#f5ecdc; --bg2:#ecdfc6; --card:#fffaf0; --ink:#3b2516; --muted:#86684f;
+  --accent:#a8762e; --accent-2:#6e3b1c; --on-accent:#fff8e8; --accent-soft:#f0dfbd; --line:#e0cca6;
+  --shadow:rgba(59,37,22,.65); --nav-bg:rgba(255,250,240,.94); --input-bg:#fffdf6;
+  --font-script:"Italianno","Great Vibes",cursive;
+  --font-cap:"Cinzel Decorative","Cinzel",Georgia,serif;
+  --font-serif:"Cormorant Garamond",Georgia,serif;
+  --font-body:"Lato","Segoe UI",system-ui,sans-serif;
+  --r-card:6px;
+  --parang:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23c39447' stroke-width='2.4' opacity='.3'%3E%3Cpath d='M-6 54 L54 -6' stroke-width='6'/%3E%3Cpath d='M-6 30 L30 -6 M18 54 L54 18' stroke-width='1.2'/%3E%3Cpath d='M6 26 c4 -8 12 -6 10 0 s6 8 10 0 M22 42 c4 -8 12 -6 10 0 s6 8 10 0'/%3E%3C/g%3E%3C/svg%3E");
+  --kawung:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='none' stroke='%23a8762e' stroke-width='1' opacity='.35'%3E%3Cellipse cx='20' cy='9' rx='6' ry='9'/%3E%3Cellipse cx='20' cy='31' rx='6' ry='9'/%3E%3Cellipse cx='9' cy='20' rx='9' ry='6'/%3E%3Cellipse cx='31' cy='20' rx='9' ry='6'/%3E%3C/g%3E%3Ccircle cx='20' cy='20' r='1.6' fill='%23a8762e' opacity='.4'/%3E%3C/svg%3E");
+}
+.tema-jawa-klasik .names{font-size:62px;color:var(--accent-2)}
+.tema-jawa-klasik .eyebrow{font-family:var(--font-cap);letter-spacing:.2em;font-size:13px;color:var(--accent);text-transform:none}
+.tema-jawa-klasik .garis-emas{display:block;width:200px;margin:6px auto;color:var(--accent)}
+
+/* Sampul: dua panel batik parang + gunungan yang bergoyang lalu terbang */
+.tema-jawa-klasik .cover{background:#2a170c}
+.tema-jawa-klasik .panel{position:absolute;top:0;bottom:0;width:50.5%;background:var(--parang),radial-gradient(circle at 50% 40%,#4f2d17,#2a170c 75%);background-size:64px 64px,cover;transition:transform 1.6s cubic-bezier(.7,0,.25,1) .5s}
+.tema-jawa-klasik .panel.l{left:0;border-right:2px solid #c39447;box-shadow:inset -12px 0 24px -12px #000}
+.tema-jawa-klasik .panel.r{right:0;border-left:2px solid #c39447;box-shadow:inset 12px 0 24px -12px #000}
+.tema-jawa-klasik .cover-text{color:#f6e7c8;justify-content:flex-start}
+.tema-jawa-klasik .cover-text .eyebrow{color:#e2bd6a}
+.tema-jawa-klasik .gunungan{width:160px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.6))}
+.tema-jawa-klasik .gunungan.goyang{margin:6px 0 2px;transform-origin:50% 96%;animation:kayon 5s ease-in-out infinite}
+@keyframes kayon{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.tema-jawa-klasik .cover .names{color:#f6e7c8;font-size:56px}
+.tema-jawa-klasik .cover .garis-emas{color:#e2bd6a}
+.tema-jawa-klasik .cover .date{font-family:var(--font-serif);font-size:18px;color:#e2bd6a;letter-spacing:.06em}
+.tema-jawa-klasik .guest{background:rgba(42,23,12,.75);border:1px solid #a8762e;color:#f6e7c8;border-radius:4px}
+.tema-jawa-klasik .btn-open{background:linear-gradient(180deg,#f3d58c,#c39447 55%,#8a5e22);color:#2a170c;border-radius:4px;font-family:var(--font-cap);font-size:15px;letter-spacing:.06em;box-shadow:0 0 0 1px #f3d58c,0 0 0 4px #2a170c,0 0 0 5px #a8762e}
+.tema-jawa-klasik .cover.open .gunungan.goyang{animation:kayonPergi 1.2s cubic-bezier(.6,0,.4,1) forwards}
+@keyframes kayonPergi{0%{transform:rotate(0)}35%{transform:rotate(-14deg)}65%{transform:rotate(16deg)}100%{transform:translateY(-120vh) rotate(0)}}
+.tema-jawa-klasik .cover.open .cover-text > :not(.gunungan){opacity:0;transition:opacity .5s}
+.tema-jawa-klasik .cover.open .panel.l{transform:translateX(-102%)}
+.tema-jawa-klasik .cover.open .panel.r{transform:translateX(102%)}
+.tema-jawa-klasik .cover.open{background:transparent;transition:background .6s .4s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-jawa-klasik .side{background:var(--parang),radial-gradient(circle at 50% 45%,#5a341b,#2a170c 70%);background-size:64px 64px,cover}
+  .tema-jawa-klasik .side-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#f6e7c8}
+  .tema-jawa-klasik .side .gunungan{width:220px;animation:kayon 6s ease-in-out infinite;transform-origin:50% 96%}
+  .tema-jawa-klasik .side-text{text-align:center}
+  .tema-jawa-klasik .side-text .eyebrow{color:#e2bd6a}
+  .tema-jawa-klasik .side-text .names{font-size:84px;color:#f6e7c8}
+  .tema-jawa-klasik .side-text .garis-emas{color:#e2bd6a;width:260px}
+  .tema-jawa-klasik .side-text p{font-family:var(--font-serif);font-size:20px;color:#e2bd6a;margin:0}
+}
+
+/* Hero: foto berbingkai gunungan */
+.tema-jawa-klasik .hero{position:relative;padding:58px 18px 46px;text-align:center;background:var(--kawung),linear-gradient(180deg,var(--bg2),var(--bg));background-size:40px 40px,cover}
+.tema-jawa-klasik .sudut{position:absolute;width:64px;color:var(--accent)}
+.tema-jawa-klasik .hero .sudut.tl{left:12px;top:12px}.tema-jawa-klasik .hero .sudut.tr{right:12px;top:12px;transform:scaleX(-1)}
+.tema-jawa-klasik .g-frame{position:relative;width:74%;max-width:300px;aspect-ratio:2/3;margin:16px auto 0;
+  clip-path:polygon(50% 0,60% 6%,72% 18%,86% 36%,96% 56%,100% 76%,98% 100%,2% 100%,0 76%,4% 56%,14% 36%,28% 18%,40% 6%);
+  background:linear-gradient(160deg,#f3d58c,#a8762e 50%,#6e3b1c);padding:8px}
+.tema-jawa-klasik .g-foto{position:relative;width:100%;height:100%;clip-path:inherit;background:linear-gradient(170deg,#e9d6b4,#a07a54);overflow:hidden}
+.tema-jawa-klasik .g-foto .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-jawa-klasik .title-block{margin-top:18px}
+.tema-jawa-klasik .title-block .date{font-family:var(--font-serif);font-size:19px;color:var(--accent)}
+.tema-jawa-klasik .grow{transform:translateY(24px);opacity:0;transition:transform 1.2s,opacity 1.2s}
+.tema-jawa-klasik.play .grow{transform:none;opacity:1}
+
+/* Isi */
+.tema-jawa-klasik h2{font-family:var(--font-cap);font-size:34px;color:var(--accent-2);font-weight:400}
+.tema-jawa-klasik .kicker{color:var(--accent)}
+.tema-jawa-klasik .salam{color:var(--accent-2)}
+.tema-jawa-klasik .sec-ayat{background:#3b2516;color:#f6e7c8}
+.tema-jawa-klasik .sec-ayat .lead{color:#f6e7c8}.tema-jawa-klasik .sec-ayat .lead cite{color:#e2bd6a}.tema-jawa-klasik .sec-ayat .garis-emas{color:#e2bd6a}
+.tema-jawa-klasik .sec-acara,.tema-jawa-klasik .sec-hadiah{background:var(--kawung),var(--bg2);background-size:40px 40px,cover}
+.tema-jawa-klasik .pic{width:180px;height:230px;border-radius:50%;border:0;padding:6px;background:linear-gradient(160deg,#f3d58c,#a8762e 50%,#6e3b1c);overflow:visible}
+.tema-jawa-klasik .pic::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid var(--accent)}
+.tema-jawa-klasik .oval{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;background:linear-gradient(170deg,#e9d6b4,#a07a54);box-shadow:inset 0 0 0 3px #fffaf0}
+.tema-jawa-klasik .oval img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-jawa-klasik .person h3{color:var(--accent-2);font-size:54px}
+.tema-jawa-klasik .and{color:var(--accent);font-family:var(--font-cap);font-size:40px}
+.tema-jawa-klasik .cd-jawa div{background:#3b2516;padding:12px 2px;border:1px solid #c39447;outline:1px solid #c39447;outline-offset:3px;margin:4px}
+.tema-jawa-klasik .cd-jawa b{color:#f3d58c;font-family:var(--font-serif)}
+.tema-jawa-klasik .cd-jawa span{color:#e9d6b4}
+.tema-jawa-klasik .event{background:var(--card);border-radius:2px;border:1px solid var(--line);box-shadow:0 0 0 6px var(--card),0 0 0 7px var(--accent),0 20px 30px -24px var(--shadow);margin:8px}
+.tema-jawa-klasik .event .sudut{width:44px}
+.tema-jawa-klasik .event .a1{left:8px;top:8px}.tema-jawa-klasik .event .a2{right:8px;bottom:8px;transform:rotate(180deg)}
+.tema-jawa-klasik .event h3{font-family:var(--font-cap);font-weight:400;font-size:26px;color:var(--accent-2)}
+.tema-jawa-klasik .event .bigdate{font-family:var(--font-serif);color:var(--accent)}
+.tema-jawa-klasik .btn{border-radius:2px;background:var(--accent-2)}
+.tema-jawa-klasik .btn.line{background:transparent;color:var(--accent-2);border-color:var(--accent-2)}
+.tema-jawa-klasik .gal-mozaik figure{border-radius:0;outline:1px solid var(--accent);outline-offset:3px}
+.tema-jawa-klasik .story li{border-radius:2px;border-left:3px double var(--accent)}
+.tema-jawa-klasik .video-box{border-radius:2px;border:6px solid #3b2516;outline:1px solid #c39447;outline-offset:-3px}
+.tema-jawa-klasik footer.penutup{background:#3b2516;color:#f6e7c8}
+.tema-jawa-klasik footer.penutup .garis-emas{color:#e2bd6a}
+.tema-jawa-klasik footer.penutup .terima{font-family:var(--font-cap);color:#e2bd6a}
+.tema-jawa-klasik footer.penutup .mono{color:#e2bd6a}.tema-jawa-klasik footer.penutup .mono .amp{color:#f6e7c8}
+.tema-jawa-klasik footer.penutup .names{color:#f6e7c8}
+.tema-jawa-klasik footer.penutup p{color:inherit;opacity:.88}

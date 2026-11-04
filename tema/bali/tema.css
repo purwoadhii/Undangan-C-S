@@ -1,0 +1,111 @@
+/* Tema Bali: krem batu, hijau daun, kuning kamboja, poleng hitam-putih. */
+:root{
+  --bg:#fbf8f0; --bg2:#f2ece0; --card:#ffffff; --ink:#2f2a25; --muted:#857b6f;
+  --accent:#3f6b4f; --accent-2:#c48a2c; --on-accent:#ffffff; --accent-soft:#e3ecdf; --line:#e7dfcf;
+  --shadow:rgba(47,42,37,.55); --nav-bg:rgba(255,255,255,.95); --input-bg:#fffefa;
+  --font-script:"Petit Formal Script","Great Vibes",cursive;
+  --font-cap:"Tenor Sans","Segoe UI",sans-serif;
+  --font-serif:"Prata",Georgia,serif;
+  --font-body:"Mulish","Segoe UI",system-ui,sans-serif;
+  --r-card:12px;
+  --poleng:repeating-conic-gradient(#2b2622 0 25%,#f4f1e8 0 50%) 0 0/16px 16px;
+  --undak:polygon(0 100%,0 14%,8% 14%,8% 8%,18% 8%,18% 3%,30% 3%,30% 0,70% 0,70% 3%,82% 3%,82% 8%,92% 8%,92% 14%,100% 14%,100% 100%);
+}
+.tema-bali .names{font-family:var(--font-script);font-size:44px;color:var(--ink);line-height:1.35}
+.tema-bali .eyebrow{font-family:var(--font-cap);letter-spacing:.32em;color:var(--accent);font-size:12px}
+.tema-bali .hias-bali{display:block;width:150px;margin:6px auto;color:var(--accent-2)}
+.tema-bali .kamboja{display:block}
+.tema-bali .kamboja.utama{width:74px;margin:10px auto 4px;animation:putarPelan 14s linear infinite}
+@keyframes putarPelan{to{transform:rotate(360deg)}}
+
+/* Langit, candi bentar, penjor */
+.tema-bali .cover{background:linear-gradient(180deg,#fbe6c4 0%,#f9efdc 45%,#eef0e4 100%)}
+.tema-bali .cover::before{content:"";position:absolute;left:50%;bottom:34%;width:520px;height:160px;margin-left:-260px;background:#cfd4c4;clip-path:polygon(0 100%,38% 22%,46% 6%,52% 0,58% 8%,66% 26%,100% 100%);opacity:.7}
+.tema-bali .candi{position:absolute;bottom:0;height:48%;z-index:1;transition:transform 1.6s cubic-bezier(.7,0,.3,1) .3s}
+.tema-bali .candi svg{width:100%;height:100%;display:block}
+.tema-bali .candi.kiri{left:0;right:calc(50% + 34px)}
+.tema-bali .candi.kanan{right:0;left:calc(50% + 34px);transform:scaleX(-1)}
+.tema-bali .candi .kamboja{position:absolute;width:30px}
+.tema-bali .candi .kc1{right:6px;top:6%}.tema-bali .candi .kc2{right:24px;top:9%;width:22px}
+.tema-bali .penjor{position:absolute;bottom:0;height:86%;width:auto;z-index:2;transform-origin:20% 100%;animation:penjor 6s ease-in-out infinite;pointer-events:none}
+.tema-bali .penjor.p1{left:-18px}.tema-bali .penjor.p2{right:-18px;transform:scaleX(-1);animation-name:penjorKanan}
+@keyframes penjor{0%,100%{rotate:-1.5deg}50%{rotate:1.5deg}}
+@keyframes penjorKanan{0%,100%{transform:scaleX(-1) rotate(-1.5deg)}50%{transform:scaleX(-1) rotate(1.5deg)}}
+
+/* Sampul: gerbang candi bentar terbuka */
+.tema-bali .cover-text{z-index:3;padding-top:calc(46px + env(safe-area-inset-top,0px))}
+.tema-bali .cover .date{font-family:var(--font-serif);font-size:15px;color:var(--muted)}
+.tema-bali .cover-bottom{margin-top:22px}
+.tema-bali .guest{background:rgba(255,255,255,.85);border:1px solid var(--line);color:var(--ink);border-radius:10px}
+.tema-bali .btn-open{background:var(--accent);color:#fff;border-radius:999px;font-family:var(--font-cap);letter-spacing:.14em;font-size:14px;box-shadow:0 0 0 4px rgba(255,255,255,.8),0 0 0 5px var(--accent)}
+.tema-bali .cover.open .candi.kiri{transform:translateX(-110%)}
+.tema-bali .cover.open .candi.kanan{transform:scaleX(-1) translateX(-110%)}
+.tema-bali .cover.open .penjor{opacity:0;transition:opacity .6s}
+.tema-bali .cover.open .cover-text{transform:translateY(-30px);opacity:0;transition:all .6s}
+.tema-bali .cover.open{opacity:0;transition:opacity .7s 1.2s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-bali .side{background:linear-gradient(180deg,#fbe6c4 0%,#f9efdc 45%,#eef0e4 100%)}
+  .tema-bali .side .candi{height:62%}
+  .tema-bali .side .candi.kiri{right:calc(50% + 120px)}.tema-bali .side .candi.kanan{left:calc(50% + 120px)}
+  .tema-bali .side-text{position:absolute;left:0;right:0;top:12%;text-align:center;z-index:3}
+  .tema-bali .side-text .kamboja.utama{width:100px}
+  .tema-bali .side-text .names{font-size:66px}
+  .tema-bali .side-text p{font-family:var(--font-serif);color:var(--muted)}
+}
+
+/* Hero: foto berundak seperti candi, pita poleng */
+.tema-bali .hero{position:relative;padding:56px 16px 44px;text-align:center;overflow:hidden;background:linear-gradient(180deg,#fbe6c4,var(--bg) 70%)}
+.tema-bali .hero .penjor{height:520px;top:0;bottom:auto}
+.tema-bali .candi-foto{position:relative;width:70%;max-width:290px;aspect-ratio:3/4;margin:0 auto;clip-path:var(--undak);background:linear-gradient(180deg,#9a9184,#6f675d);padding:8px;opacity:0;transform:translateY(40px);transition:all 1.5s cubic-bezier(.2,.8,.2,1)}
+.tema-bali.play .candi-foto{opacity:1;transform:none}
+.tema-bali .cf-in{position:relative;width:100%;height:100%;clip-path:var(--undak);background:linear-gradient(170deg,#e8e2d2,#9fb59a);overflow:hidden}
+.tema-bali .cf-in .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-bali .poleng-band{width:70%;max-width:290px;height:16px;margin:0 auto;background:var(--poleng);opacity:0;transition:opacity 1s 1s}
+.tema-bali.play .poleng-band{opacity:1}
+.tema-bali .hero .kamboja.h1,.tema-bali .hero .kamboja.h2{position:absolute;width:56px;top:46%;animation:putarPelan 18s linear infinite}
+.tema-bali .hero .h1{left:calc(15% - 20px)}.tema-bali .hero .h2{right:calc(15% - 20px);width:40px;top:30%;animation-direction:reverse}
+.tema-bali .title-block{margin-top:22px;opacity:0;transition:opacity 1.2s .8s}
+.tema-bali.play .title-block{opacity:1}
+.tema-bali .title-block .date{font-family:var(--font-serif);color:var(--muted)}
+
+/* Isi */
+.tema-bali h2{font-family:var(--font-serif);font-size:32px;color:var(--accent)}
+.tema-bali .kicker{font-family:var(--font-cap);color:var(--accent-2)}
+.tema-bali .salam{font-family:var(--font-cap);font-style:normal;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;font-size:15px}
+.tema-bali .sec-ayat{background:var(--accent);color:#fff}
+.tema-bali .sec-ayat .lead{color:#fff}.tema-bali .sec-ayat .lead cite{color:#f6c94a}.tema-bali .sec-ayat .hias-bali{color:#f6c94a}
+.tema-bali .pic{width:200px;height:200px;border-radius:50%;border:0;background:none;box-shadow:none;overflow:visible;padding:12px}
+.tema-bali .poleng-ring{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(#2b2622 0 7.5deg,#f4f1e8 0 15deg);-webkit-mask:radial-gradient(circle,transparent 63%,#000 64%);mask:radial-gradient(circle,transparent 63%,#000 64%)}
+.tema-bali .bulat{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;background:linear-gradient(170deg,#e8e2d2,#9fb59a);box-shadow:0 0 0 4px #fff}
+.tema-bali .bulat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-bali .kamboja.selip{position:absolute;right:4px;top:6px;width:52px;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.2))}
+.tema-bali .pic.wanita .kamboja.selip{right:auto;left:4px}
+.tema-bali .person h3{font-size:38px}
+.tema-bali .person .full{font-family:var(--font-serif);font-weight:400}
+.tema-bali .and{color:var(--accent-2);font-size:40px}
+.tema-bali .cd-kamboja{gap:6px}
+.tema-bali .cd-kamboja div{aspect-ratio:1;display:grid;place-content:center;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23fffdf6' stroke='%23e3d6b6'%3E%3Cpath d='M50 50 C40 38 38 10 50 2 C64 10 66 34 50 50Z'/%3E%3Cpath transform='rotate(72 50 50)' d='M50 50 C40 38 38 10 50 2 C64 10 66 34 50 50Z'/%3E%3Cpath transform='rotate(144 50 50)' d='M50 50 C40 38 38 10 50 2 C64 10 66 34 50 50Z'/%3E%3Cpath transform='rotate(216 50 50)' d='M50 50 C40 38 38 10 50 2 C64 10 66 34 50 50Z'/%3E%3Cpath transform='rotate(288 50 50)' d='M50 50 C40 38 38 10 50 2 C64 10 66 34 50 50Z'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='18' fill='%23f6c94a' opacity='.55'/%3E%3C/svg%3E") center/contain no-repeat;filter:drop-shadow(0 6px 8px rgba(0,0,0,.12))}
+.tema-bali .cd-kamboja b{font-size:22px;color:var(--ink)}
+.tema-bali .cd-kamboja span{font-size:8px;color:var(--ink)}
+.tema-bali .event{background:#fff;border-radius:12px;border:1px solid var(--line);border-top:14px solid transparent;border-image:none;box-shadow:inset 0 14px 0 -0px transparent;overflow:hidden;padding-top:40px}
+.tema-bali .event::before{content:"";position:absolute;left:0;right:0;top:0;height:12px;background:var(--poleng)}
+.tema-bali .event .kamboja{position:absolute;width:44px;top:16px}
+.tema-bali .event .acara-k1{left:12px}.tema-bali .event .acara-k2{right:12px;width:32px;top:22px}
+.tema-bali .event h3{font-family:var(--font-serif);font-weight:400;font-size:28px;color:var(--accent)}
+.tema-bali .event .bigdate{font-family:var(--font-serif);font-weight:400;color:var(--accent-2)}
+.tema-bali .btn{background:var(--accent);border-radius:999px;font-family:var(--font-cap);letter-spacing:.1em}
+.tema-bali .btn.line{background:#fff;color:var(--accent);border-color:var(--accent)}
+.tema-bali .gal-candi{grid-template-columns:repeat(2,1fr);gap:10px}
+.tema-bali .gal-candi figure{aspect-ratio:3/4;border-radius:0;clip-path:var(--undak)}
+.tema-bali .gal-candi figure:nth-child(3n){grid-column:span 2;aspect-ratio:16/10}
+.tema-bali .story li{border-radius:12px;border-left:0;border-top:6px solid transparent;background:linear-gradient(#fff,#fff) padding-box,var(--poleng) border-box}
+.tema-bali .video-box{border-radius:12px;border:6px solid #fff;box-shadow:0 0 0 1px var(--line),0 16px 30px -20px var(--shadow)}
+.tema-bali footer.penutup{background:linear-gradient(180deg,var(--bg),var(--accent-soft))}
+.tema-bali footer.penutup .terima{font-family:var(--font-serif);font-size:30px;color:var(--accent)}
+@media (min-aspect-ratio:1/1){
+  .tema-bali .cover .candi{height:60%}
+  .tema-bali .cover .candi.kiri{right:calc(50% + 120px)}.tema-bali .cover .candi.kanan{left:calc(50% + 120px)}
+  .tema-bali .cover::before{width:760px;margin-left:-380px;height:230px;bottom:30%}
+}

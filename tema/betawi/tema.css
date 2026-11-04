@@ -1,0 +1,112 @@
+/* Tema Betawi: krem cerah, merah, hijau, kuning. */
+:root{
+  --bg:#fff8ec; --bg2:#fdeed3; --card:#ffffff; --ink:#3d2a20; --muted:#8a7363;
+  --accent:#d62839; --accent-2:#1f8a4c; --on-accent:#ffffff; --accent-soft:#fde0d6; --line:#f1dfc2;
+  --shadow:rgba(61,42,32,.55); --nav-bg:rgba(255,255,255,.95); --input-bg:#fffdf8;
+  --kuning:#f2a900; --kayu:#7a4a1f;
+  --font-script:"Yellowtail","Great Vibes",cursive;
+  --font-cap:"Poppins","Segoe UI",sans-serif;
+  --font-serif:"Bree Serif",Georgia,serif;
+  --font-body:"Poppins","Segoe UI",system-ui,sans-serif;
+  --r-card:14px;
+}
+.tema-betawi{font-size:14px}
+.tema-betawi .names{font-size:54px;color:var(--accent)}
+.tema-betawi .eyebrow{font-weight:700;letter-spacing:.24em;font-size:12px;color:var(--accent-2)}
+.tema-betawi .hias-betawi{display:block;width:150px;margin:6px auto}
+
+/* Gigi balang */
+.tema-betawi .gigi{height:34px;background:linear-gradient(var(--kayu),var(--kayu)) top/100% 12px no-repeat,
+  conic-gradient(from -40deg at 50% 100%,var(--kuning) 80deg,transparent 0) 0 12px/26px 22px repeat-x}
+.tema-betawi .gigi::after{content:"";display:block;height:4px;background:repeating-linear-gradient(90deg,var(--accent) 0 13px,var(--accent-2) 13px 26px)}
+
+/* Kembang kelapa & ondel-ondel */
+.tema-betawi .kembang{display:block}
+.tema-betawi .kembang.puncak{width:120px;margin:4px auto 0;animation:mekar 3s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes mekar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.06) rotate(2deg)}}
+.tema-betawi .ondel{position:absolute;bottom:-6px;width:150px;z-index:2;transform-origin:50% 100%;animation:jalan 1.8s ease-in-out infinite}
+.tema-betawi .ondel.kiri{left:-46px}.tema-betawi .ondel.kanan{right:-46px;animation-delay:-.9s}
+@keyframes jalan{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(3deg) translateY(-8px)}}
+
+/* Sampul: terbelah atas & bawah */
+.tema-betawi .cover{background:transparent}
+.tema-betawi .belah{position:absolute;left:0;right:0;height:50%;background:radial-gradient(circle at 50% 100%,#fff8ec,#fde7c4 80%);transition:transform 1.4s cubic-bezier(.7,0,.3,1) .2s}
+.tema-betawi .belah.atas{top:0;display:flex;flex-direction:column;justify-content:flex-start}
+.tema-betawi .belah.bawah{bottom:0;background:radial-gradient(circle at 50% 0,#fff8ec,#fde7c4 80%);display:flex;flex-direction:column;justify-content:flex-end}
+.tema-betawi .belah.atas .gigi{order:-1}
+.tema-betawi .belah.bawah .gigi{transform:scaleY(-1)}
+.tema-betawi .cover-text{padding-top:calc(48px + env(safe-area-inset-top,0px));padding-bottom:calc(46px + env(safe-area-inset-bottom,0px))}
+.tema-betawi .cover .date{font-family:var(--font-serif);font-size:17px;color:var(--ink)}
+.tema-betawi .guest{background:#fff;border:2px solid var(--kuning);color:var(--ink);border-radius:12px;position:relative;z-index:3}
+.tema-betawi .btn-open{background:var(--accent);color:#fff;border-radius:999px;font-family:var(--font-cap);font-weight:700;font-size:15px;letter-spacing:.04em;box-shadow:0 5px 0 #9e1626;position:relative;z-index:3}
+.tema-betawi .btn-open:active{transform:translateY(3px);box-shadow:0 2px 0 #9e1626}
+.tema-betawi .cover.open .belah.atas{transform:translateY(-105%)}
+.tema-betawi .cover.open .belah.bawah{transform:translateY(105%)}
+.tema-betawi .cover.open .ondel.kiri{transform:translateX(-140%);transition:transform 1s;animation:none}
+.tema-betawi .cover.open .ondel.kanan{transform:translateX(140%);transition:transform 1s;animation:none}
+.tema-betawi .cover.open .cover-text{opacity:0;transform:scale(.9);transition:all .5s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-betawi .side{background:radial-gradient(circle at 50% 60%,#fff8ec,#fde0b0 85%)}
+  .tema-betawi .side .gigi.atas-layar{position:absolute;left:0;right:0;top:0}
+  .tema-betawi .side .ondel{width:240px}.tema-betawi .side .ondel.kiri{left:4%}.tema-betawi .side .ondel.kanan{right:4%}
+  .tema-betawi .side-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .tema-betawi .side-text .kembang{width:160px}
+  .tema-betawi .side-text .names{font-size:82px}
+  .tema-betawi .side-text p{font-family:var(--font-serif);font-size:20px;margin:0 0 10px}
+  .tema-betawi .side-text .roti-buaya{width:200px}
+}
+
+/* Hero: foto di bawah lisplang rumah Betawi */
+.tema-betawi .hero{position:relative;padding:40px 16px 40px;text-align:center;overflow:hidden;background:radial-gradient(circle at 50% 30%,#fff,var(--bg2) 75%)}
+.tema-betawi .hero .kembang.k1,.tema-betawi .hero .kembang.k2{position:absolute;top:70px;width:110px;animation:mekar 3s ease-in-out infinite}
+.tema-betawi .hero .k1{left:-24px;transform-origin:50% 100%}.tema-betawi .hero .k2{right:-24px;animation-delay:-1.5s!important}
+.tema-betawi .rumah{position:relative;width:80%;max-width:320px;margin:0 auto;opacity:0;transform:translateY(-30px);transition:all 1.3s cubic-bezier(.2,.8,.2,1)}
+.tema-betawi.play .rumah{opacity:1;transform:none}
+.tema-betawi .rumah .gigi{position:relative;z-index:2;margin:0 -14px}
+.tema-betawi .foto-kotak{position:relative;aspect-ratio:4/5;margin-top:-18px;background:linear-gradient(170deg,#ffd9c2,#e08e6d);border:6px solid #fff;outline:3px solid var(--accent-2);box-shadow:0 20px 40px -22px var(--shadow);overflow:hidden}
+.tema-betawi .foto-kotak .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-betawi .title-block{margin-top:24px;opacity:0;transform:scale(.9);transition:all 1s .6s}
+.tema-betawi.play .title-block{opacity:1;transform:none}
+.tema-betawi .title-block .date{font-family:var(--font-serif);font-size:18px}
+.tema-betawi .roti-buaya{display:block;width:150px;margin:12px auto 0;animation:mekar 4s ease-in-out infinite}
+
+/* Isi */
+.tema-betawi h2{color:var(--accent);font-size:52px}
+.tema-betawi .kicker{color:var(--accent-2);font-weight:600}
+.tema-betawi .salam{font-family:var(--font-serif);font-style:normal;color:var(--accent-2)}
+.tema-betawi .sec-ayat{background:var(--accent-2);color:#fff}
+.tema-betawi .sec-ayat .lead{color:#fff;font-family:var(--font-serif);font-style:normal}.tema-betawi .sec-ayat .lead cite{color:#ffe08a}
+.tema-betawi .pic{width:200px;height:200px;border-radius:50%;border:0;background:none;box-shadow:none;overflow:visible;padding:28px;margin-bottom:6px}
+.tema-betawi .kembang.lingkar{position:absolute;left:-10%;top:-34%;width:120%;animation:mekar 3s ease-in-out infinite}
+.tema-betawi .bulat{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;background:linear-gradient(170deg,#ffd9c2,#e08e6d);box-shadow:0 0 0 5px #fff,0 0 0 9px var(--kuning)}
+.tema-betawi .bulat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-betawi .person h3{color:var(--accent)}
+.tema-betawi .person .full{font-family:var(--font-serif);font-weight:400}
+.tema-betawi .and{color:var(--accent-2)}
+.tema-betawi .cd-betawi{gap:8px}
+.tema-betawi .cd-betawi div{border-radius:12px 12px 4px 4px;padding:14px 2px 22px;position:relative;overflow:hidden;color:#fff}
+.tema-betawi .cd-betawi div::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:conic-gradient(from -40deg at 50% 100%,rgba(255,255,255,.9) 80deg,transparent 0) 0 0/16px 12px repeat-x}
+.tema-betawi .cd-betawi div:nth-child(1){background:var(--accent)}.tema-betawi .cd-betawi div:nth-child(2){background:var(--accent-2)}
+.tema-betawi .cd-betawi div:nth-child(3){background:var(--kuning)}.tema-betawi .cd-betawi div:nth-child(4){background:#2f80ed}
+.tema-betawi .cd-betawi b{color:#fff;font-family:var(--font-serif);font-weight:400}
+.tema-betawi .cd-betawi span{color:#fff;opacity:.9}
+.tema-betawi .event{background:#fff;border-radius:14px;border:0;padding-top:48px;box-shadow:0 14px 30px -20px var(--shadow);overflow:hidden}
+.tema-betawi .acara-gigi{position:absolute;left:0;right:0;top:0}
+.tema-betawi .event h3{font-family:var(--font-script);font-weight:400;font-size:46px;color:var(--accent)}
+.tema-betawi .event .bigdate{font-family:var(--font-serif);color:var(--accent-2)}
+.tema-betawi .btn{background:var(--accent);border-radius:999px;box-shadow:0 4px 0 #9e1626}
+.tema-betawi .btn.line{background:#fff;color:var(--accent);border-color:var(--accent);box-shadow:none}
+.tema-betawi .gal-betawi{grid-template-columns:repeat(2,1fr);gap:12px}
+.tema-betawi .gal-betawi figure{aspect-ratio:1;border-radius:12px;border:5px solid var(--accent)}
+.tema-betawi .gal-betawi figure:nth-child(3n+2){border-color:var(--accent-2)}.tema-betawi .gal-betawi figure:nth-child(3n){border-color:var(--kuning)}
+.tema-betawi .gal-betawi figure:nth-child(odd){transform:rotate(-1.5deg)}.tema-betawi .gal-betawi figure:nth-child(even){transform:rotate(1.5deg)}
+.tema-betawi .story li{border-radius:12px;border-left:5px solid var(--kuning)}
+.tema-betawi .video-box{border-radius:16px;border:5px solid var(--accent-2)}
+.tema-betawi footer.penutup{background:linear-gradient(180deg,var(--bg),var(--bg2))}
+.tema-betawi footer.penutup .terima{font-family:var(--font-script);font-size:40px;color:var(--accent-2)}
+@media (min-width:700px){
+  .tema-betawi .cover .ondel{width:230px}
+  .tema-betawi .cover .ondel.kiri{left:6%}.tema-betawi .cover .ondel.kanan{right:6%}
+}

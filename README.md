@@ -12,6 +12,29 @@ Buka **https://purwoadhii.github.io/Undangan-C-S/admin/**, masuk dengan token Gi
 Isi nama, acara (titik lokasi dipilih di peta), foto dan video galeri, rekening, dan musik, lalu klik **Simpan & terbitkan**.
 Inisial (B&S) dan alamat (`/budi-sari/`) dibuat otomatis dari nama panggilan. Undangan tayang dalam 1–2 menit.
 
+## Tema
+
+Tiap undangan memilih satu tema di admin (atau `tema: "..."` di `data.js`). Tiap tema punya sampul, cara membuka, hitung mundur, bingkai foto, susunan galeri, urutan bagian, kata-kata bawaan, dan animasi sendiri. Tombol scroll otomatis ada di semua tema.
+
+| Tema | `tema:` | Contoh |
+| --- | --- | --- |
+| Taman | `taman` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=taman) |
+| Gelap Elegan | `gelap-elegan` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=gelap-elegan) |
+| Pantai | `pantai` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=pantai) |
+| Bawah Laut | `laut` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=laut) |
+| Gunung | `gunung` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=gunung) |
+| Jawa Klasik | `jawa-klasik` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=jawa-klasik) |
+| Jawa Melati | `jawa-melati` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=jawa-melati) |
+| Jawa Keraton | `jawa-keraton` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=jawa-keraton) |
+| Sunda | `sunda` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=sunda) |
+| Betawi | `betawi` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=betawi) |
+| Minang | `minang` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=minang) |
+| Bali | `bali` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=bali) |
+| Melayu Palembang | `palembang` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=palembang) |
+
+Undangan yang sudah jalan bisa dicoba dengan tema lain tanpa mengubah apa pun: tambahkan `?tema=pantai` di belakang alamatnya.
+Kata pembuka bawaan tema bisa diganti per pasangan lewat kolom "Kata pembuka" di admin (`pembuka` di `data.js`).
+
 ## Membuat undangan secara manual (3 langkah)
 
 1. **Salin folder `_template`** lalu beri nama baru, huruf kecil dan pakai tanda hubung, misalnya `budi-sari`.
@@ -30,7 +53,10 @@ Lewat website GitHub: buka folder `_template`, buka tiap file, salin isinya, lal
 
 ## Isi repo
 
-- `tema/taman/` : tampilan dan animasi tema Taman, dipakai bersama oleh semua pasangan. Perbaikan di sini otomatis berlaku untuk semua undangan.
+- `tema/inti/` : mesin bersama semua tema (isi undangan, hitung mundur, peta, galeri, video, musik, ucapan, scroll otomatis). Perbaikan di sini berlaku untuk semua undangan.
+- `tema/<nama>/` : tampilan, gambar, dan animasi satu tema (`tema.css` + `tema.js`). Tema baru didaftarkan di `tema/daftar.js`.
+- `contoh/` : pasangan contoh untuk mencoba semua tema.
+- `admin/` : halaman admin.
 - `_template/` : contoh kosong untuk disalin. Folder berawalan `_` tidak ikut tayang.
 - `index.html` : undangan lama.
 

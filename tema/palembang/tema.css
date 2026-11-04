@@ -1,0 +1,108 @@
+/* Tema Melayu Palembang: merah songket, emas lepus, gading. */
+:root{
+  --bg:#fff7ea; --bg2:#f8e9cf; --card:#fffcf5; --ink:#3a1512; --muted:#8a6458;
+  --accent:#8e1b1b; --accent-2:#b8861f; --on-accent:#fff4dc; --accent-soft:#f6d9cf; --line:#ecd4ae;
+  --shadow:rgba(58,21,18,.65); --nav-bg:rgba(255,252,245,.95); --input-bg:#fffdf8;
+  --emas:#e8b84f;
+  --font-script:"Rouge Script","Great Vibes",cursive;
+  --font-cap:"Cormorant SC","Cinzel",Georgia,serif;
+  --font-serif:"Libre Caslon Text",Georgia,serif;
+  --font-body:"Open Sans","Segoe UI",system-ui,sans-serif;
+  --r-card:6px;
+  --lepus-bg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cg fill='%23e8b84f'%3E%3Cpath d='M20 4 L23 17 L36 20 L23 23 L20 36 L17 23 L4 20 L17 17Z' opacity='.22'/%3E%3Cpath d='M0 0 L4 0 L0 4Z M40 0 L36 0 L40 4Z M0 40 L4 40 L0 36Z M40 40 L36 40 L40 36Z' opacity='.5'/%3E%3C/g%3E%3Cg fill='none' stroke='%23e8b84f' stroke-width='.8' opacity='.25'%3E%3Cpath d='M20 0 L40 20 L20 40 L0 20Z'/%3E%3C/g%3E%3C/svg%3E");
+  --tumpal:repeating-linear-gradient(90deg,transparent 0 2px,rgba(232,184,79,.0) 2px 4px),conic-gradient(from 135deg at 50% 0,var(--emas) 90deg,transparent 0) 0 0/18px 12px repeat-x;
+}
+.tema-palembang .names{font-size:62px;color:var(--accent)}
+.tema-palembang .eyebrow{font-family:var(--font-cap);letter-spacing:.24em;color:var(--accent-2);font-size:15px;font-weight:600}
+.tema-palembang .hias-plg{display:block;width:150px;margin:6px auto;color:var(--accent-2)}
+
+/* Songket lepus & bingkai */
+.tema-palembang .lepus{position:absolute;inset:0;background:var(--lepus-bg),radial-gradient(circle at 50% 42%,#a82424,#6a0f12 70%,#3e070a);background-size:40px 40px,cover}
+.tema-palembang .bingkai-songket{position:absolute;inset:14px;border:2px solid var(--emas);outline:1px solid var(--emas);outline-offset:-8px;pointer-events:none;z-index:2}
+.tema-palembang .bingkai-songket::before,.tema-palembang .bingkai-songket::after{content:"";position:absolute;left:10px;right:10px;height:12px;background:conic-gradient(from 135deg at 50% 0,var(--emas) 90deg,transparent 0) 0 0/18px 12px repeat-x}
+.tema-palembang .bingkai-songket::before{top:10px;transform:scaleY(-1)}.tema-palembang .bingkai-songket::after{bottom:10px}
+.tema-palembang .bt{position:absolute;width:30px;height:30px;background:var(--emas);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.tema-palembang .bt.tl{left:-15px;top:-15px}.tema-palembang .bt.tr{right:-15px;top:-15px}.tema-palembang .bt.bl{left:-15px;bottom:-15px}.tema-palembang .bt.br{right:-15px;bottom:-15px}
+
+/* Sampul: kain dilipat jadi garis emas */
+.tema-palembang .cover{background:#3e070a;transform-origin:50% 50%}
+.tema-palembang .cover-text{color:#fff1d6;padding-top:calc(54px + env(safe-area-inset-top,0px));padding-bottom:calc(44px + env(safe-area-inset-bottom,0px))}
+.tema-palembang .cover-text .eyebrow{color:var(--emas)}
+.tema-palembang .limas{display:block;width:170px;margin:8px auto 0}
+.tema-palembang .cover-text .mono{font-family:var(--font-serif);color:var(--emas);font-size:52px;font-weight:400;margin-top:8px}
+.tema-palembang .cover-text .mono .amp{color:#fff1d6}
+.tema-palembang .cover .names{color:#fff1d6;font-size:54px}
+.tema-palembang .cover .hias-plg{color:var(--emas)}
+.tema-palembang .cover .date{font-family:var(--font-cap);font-size:18px;letter-spacing:.1em;color:#f6d98c}
+.tema-palembang .guest{background:rgba(62,7,10,.75);border:1px solid var(--emas);color:#fff1d6;border-radius:4px}
+.tema-palembang .btn-open{background:linear-gradient(180deg,#fbe2a0,#e8b84f 50%,#b8861f);color:#4a0c0e;border-radius:4px;font-family:var(--font-cap);font-weight:700;font-size:17px;letter-spacing:.12em;box-shadow:0 0 22px rgba(232,184,79,.5)}
+.tema-palembang .cover.open{animation:lipat 1.6s cubic-bezier(.7,0,.3,1) forwards}
+.tema-palembang .cover.open .cover-text,.tema-palembang .cover.open .bingkai-songket{opacity:0;transition:opacity .3s}
+@keyframes lipat{0%{transform:scale(1,1);background:#3e070a}45%{transform:scale(1,.006);background:var(--emas)}55%{transform:scale(1,.006);background:var(--emas)}100%{transform:scale(0,.006);background:var(--emas)}}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-palembang .side .bingkai-songket{inset:24px}
+  .tema-palembang .side-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff1d6;z-index:3}
+  .tema-palembang .side-text .eyebrow{color:var(--emas)}
+  .tema-palembang .side-text .limas{width:240px}
+  .tema-palembang .side-text .names{font-size:92px;color:#fff1d6}
+  .tema-palembang .side-text .hias-plg{color:var(--emas);width:200px}
+  .tema-palembang .side-text p{font-family:var(--font-cap);font-size:22px;color:#f6d98c;margin:0}
+}
+
+/* Hero: mahkota aesan gede di atas foto berbingkai songket */
+.tema-palembang .hero{position:relative;padding:40px 16px 48px;text-align:center;overflow:hidden;background:var(--lepus-bg),radial-gradient(circle at 50% 35%,#fffaf0,var(--bg2) 75%);background-size:40px 40px,cover}
+.tema-palembang .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(255,250,240,.95),rgba(248,233,207,.85) 70%)}
+.tema-palembang .mahkota.atas{position:relative;display:block;width:68%;max-width:280px;margin:0 auto -26px;z-index:2;opacity:0;transform:translateY(-30px);transition:all 1.3s cubic-bezier(.2,.8,.2,1) .5s}
+.tema-palembang.play .mahkota.atas{opacity:1;transform:none}
+.tema-palembang .mahkota .g{transform-origin:bottom}
+.tema-palembang .foto-songket{position:relative;width:70%;max-width:290px;aspect-ratio:3/4;margin:0 auto;padding:10px;border-radius:999px 999px 8px 8px;
+  background:var(--lepus-bg),linear-gradient(160deg,#a82424,#6a0f12);background-size:20px 20px,cover;box-shadow:0 0 0 2px var(--emas),0 0 0 6px var(--card),0 0 0 8px var(--emas),0 24px 40px -22px var(--shadow);opacity:0;transform:scale(.9);transition:all 1.4s cubic-bezier(.2,.8,.2,1)}
+.tema-palembang.play .foto-songket{opacity:1;transform:none}
+.tema-palembang .fs-in{position:relative;width:100%;height:100%;border-radius:999px 999px 4px 4px;overflow:hidden;background:linear-gradient(170deg,#efd9bc,#a77a62);box-shadow:0 0 0 2px var(--emas)}
+.tema-palembang .fs-in .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-palembang .title-block{position:relative;margin-top:26px;opacity:0;transition:opacity 1.2s .8s}
+.tema-palembang.play .title-block{opacity:1}
+.tema-palembang .title-block .date{font-family:var(--font-cap);font-size:18px;color:var(--ink);letter-spacing:.06em}
+
+/* Isi */
+.tema-palembang h2{font-family:var(--font-cap);font-size:38px;color:var(--accent);font-weight:600}
+.tema-palembang .kicker{font-family:var(--font-cap);font-size:14px;color:var(--accent-2)}
+.tema-palembang .salam{color:var(--accent)}
+.tema-palembang .sec-ayat{background:var(--lepus-bg),var(--accent);background-size:40px 40px,cover;color:#fff1d6}
+.tema-palembang .sec-ayat .lead{color:#fff1d6}.tema-palembang .sec-ayat .lead cite{color:var(--emas)}.tema-palembang .sec-ayat .hias-plg{color:var(--emas)}
+.tema-palembang .pic{width:180px;height:230px;border-radius:999px 999px 8px 8px;border:0;background:none;box-shadow:none;overflow:visible;padding:0;margin-top:40px}
+.tema-palembang .mahkota.mini{position:absolute;left:-6%;width:112%;top:-50px;z-index:2}
+.tema-palembang .lengkung{position:relative;width:100%;height:100%;border-radius:inherit;overflow:hidden;background:linear-gradient(170deg,#efd9bc,#a77a62);box-shadow:0 0 0 3px var(--emas),0 0 0 7px var(--accent),0 0 0 9px var(--emas)}
+.tema-palembang .lengkung img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-palembang .person h3{color:var(--accent);font-size:56px}
+.tema-palembang .person .full{font-family:var(--font-serif);font-weight:400;font-size:18px}
+.tema-palembang .and{color:var(--accent-2);font-family:var(--font-cap);font-size:44px}
+.tema-palembang .cd-koin{gap:10px}
+.tema-palembang .cd-koin div{aspect-ratio:1;border-radius:50%;display:grid;place-content:center;background:radial-gradient(circle at 35% 30%,#fff1c2,#e8b84f 45%,#a8761a 100%);
+  box-shadow:inset 0 0 0 3px rgba(255,241,194,.6),inset 0 0 0 6px rgba(154,107,28,.5),0 8px 14px -8px var(--shadow);animation:kilauKoin 4s ease-in-out infinite}
+.tema-palembang .cd-koin div:nth-child(2){animation-delay:-1s}.tema-palembang .cd-koin div:nth-child(3){animation-delay:-2s}.tema-palembang .cd-koin div:nth-child(4){animation-delay:-3s}
+@keyframes kilauKoin{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+.tema-palembang .cd-koin b{color:#4a0c0e;font-family:var(--font-serif);font-size:24px}
+.tema-palembang .cd-koin span{color:#5e2a0e;font-size:8px;font-weight:700}
+.tema-palembang .event{background:var(--card);border-radius:4px;border:1px solid var(--line);padding-top:76px;overflow:hidden;box-shadow:0 0 0 4px var(--card),0 0 0 6px var(--accent-2)}
+.tema-palembang .event::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:conic-gradient(from 135deg at 50% 0,var(--accent) 90deg,transparent 0) 0 0/18px 12px repeat-x;transform:scaleY(-1)}
+.tema-palembang .limas-acara{position:absolute;left:50%;top:14px;width:150px;margin-left:-75px}
+.tema-palembang .limas-acara .limas{width:100%;margin:0}
+.tema-palembang .limas-acara .limas g[fill="none"]{stroke:var(--accent-2)}
+.tema-palembang .event h3{font-family:var(--font-cap);font-weight:600;font-size:30px;color:var(--accent)}
+.tema-palembang .event .bigdate{font-family:var(--font-serif);font-weight:400;color:var(--accent-2)}
+.tema-palembang .btn{background:var(--accent);border-radius:4px;font-family:var(--font-cap);font-weight:700;letter-spacing:.1em;font-size:15px}
+.tema-palembang .btn.line{background:transparent;color:var(--accent);border-color:var(--accent)}
+.tema-palembang .gal-lepus{grid-template-columns:repeat(2,1fr);gap:12px;padding:12px;background:var(--lepus-bg),var(--accent);background-size:30px 30px,cover;border-radius:6px}
+.tema-palembang .gal-lepus figure{aspect-ratio:4/5;border-radius:4px;box-shadow:0 0 0 2px var(--emas)}
+.tema-palembang .gal-lepus figure:first-child{grid-column:span 2;aspect-ratio:16/10}
+.tema-palembang .story li{border-radius:4px;border-left:4px double var(--accent-2)}
+.tema-palembang .video-box{border-radius:6px;border:8px solid var(--accent);box-shadow:0 0 0 2px var(--emas)}
+.tema-palembang footer.penutup{background:linear-gradient(rgba(70,8,10,.55),rgba(70,8,10,.55)),var(--lepus-bg),var(--accent);background-size:cover,40px 40px,cover;color:#fff1d6}
+.tema-palembang footer.penutup .hias-plg{color:var(--emas)}
+.tema-palembang footer.penutup p{color:#fff1d6;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.tema-palembang footer.penutup .terima{font-family:var(--font-cap);color:var(--emas);font-size:26px;font-weight:600}
+.tema-palembang footer.penutup .mono{color:var(--emas)}.tema-palembang footer.penutup .mono .amp{color:#fff1d6}
+.tema-palembang footer.penutup .names{color:#fff1d6}
