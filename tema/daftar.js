@@ -11,5 +11,7 @@ window.DAFTAR_TEMA = [
   { id: "gunung", nama: "Gunung", ket: "Pegunungan berlapis, kabut, pinus, foto berbentuk puncak", warna: ["#f4f1ea", "#c47a3a", "#3f5e4a"],
     huruf: "family=Kaushan+Script&family=Oswald:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;600;700" },
   { id: "jawa-klasik", nama: "Jawa Klasik", ket: "Coklat sogan & emas, gunungan, batik parang, bahasa Jawa", warna: ["#f5ecdc", "#a8762e", "#3b2516"],
-    huruf: "family=Cinzel+Decorative:wght@400;700&family=Italianno&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700" }
+    huruf: "family=Cinzel+Decorative:wght@400;700&family=Italianno&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700" },
+  { id: "jawa-melati", nama: "Jawa Melati", ket: "Putih & emas, ronce melati tersibak, karangan bunga", warna: ["#fcfbf7", "#b39352", "#6f8f5f"],
+    huruf: "family=Marcellus+SC&family=Parisienne&family=Cormorant+Infant:ital,wght@0,500;0,600;1,500&family=Nunito+Sans:wght@400;600;700" }
 ];

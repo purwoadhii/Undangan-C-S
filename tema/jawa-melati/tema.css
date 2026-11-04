@@ -1,0 +1,93 @@
+/* Tema Jawa Melati: putih gading, emas lembut, hijau daun. */
+:root{
+  --bg:#fcfbf7; --bg2:#f5f2e9; --card:#ffffff; --ink:#4b4a3f; --muted:#8c8a7c;
+  --accent:#b39352; --accent-2:#6f8f5f; --on-accent:#ffffff; --accent-soft:#f1ead8; --line:#ebe4d2;
+  --shadow:rgba(75,74,63,.5); --nav-bg:rgba(255,255,255,.95); --input-bg:#fffef9;
+  --font-script:"Parisienne","Great Vibes",cursive;
+  --font-cap:"Marcellus SC","Cinzel",Georgia,serif;
+  --font-serif:"Cormorant Infant","Cormorant Garamond",Georgia,serif;
+  --font-body:"Nunito Sans","Segoe UI",system-ui,sans-serif;
+  --r-card:24px;
+  --truntum:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cg fill='%23d8c798' opacity='.35'%3E%3Ccircle cx='9' cy='9' r='1.6'/%3E%3Ccircle cx='27' cy='27' r='1.6'/%3E%3C/g%3E%3Cg stroke='%23d8c798' opacity='.35' stroke-width='.8'%3E%3Cpath d='M9 4v10M4 9h10M27 22v10M22 27h10'/%3E%3C/g%3E%3C/svg%3E");
+}
+body.tema-jawa-melati{background:var(--truntum),var(--bg)}
+.tema-jawa-melati .names{font-size:56px;color:var(--ink)}
+.tema-jawa-melati .eyebrow{font-family:var(--font-cap);color:var(--accent);letter-spacing:.24em}
+
+/* Ronce melati */
+.tema-jawa-melati .tirai{position:absolute;left:4%;right:4%;top:-6px;height:0;z-index:2;pointer-events:none}
+.tema-jawa-melati .ronce{position:absolute;top:0;width:16px;margin-left:-8px;transform-origin:50% 0;animation:ayun 4.6s ease-in-out infinite;filter:drop-shadow(0 2px 2px rgba(120,110,80,.18))}
+@keyframes ayun{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.tema-jawa-melati .karangan.putar{animation:spin 90s linear infinite}
+
+/* Sampul: ronce tersibak ke kiri & kanan */
+.tema-jawa-melati .cover{background:var(--truntum),radial-gradient(circle at 50% 42%,#fffefa,#f3eedf 80%)}
+.tema-jawa-melati .cover::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,#d8c798,#f6ecc8,#b39352,#f6ecc8,#d8c798);z-index:5}
+.tema-jawa-melati .cover-text{padding-top:calc(150px + env(safe-area-inset-top,0px))}
+.tema-jawa-melati .wreath{position:relative;width:190px;height:190px;display:grid;place-items:center;margin:8px 0}
+.tema-jawa-melati .wreath .karangan{position:absolute;inset:0;width:100%;height:100%}
+.tema-jawa-melati .wreath .mono{font-size:62px;font-family:var(--font-serif);color:var(--accent)}
+.tema-jawa-melati .wreath .mono .amp{color:var(--accent-2)}
+.tema-jawa-melati .cover .date{font-family:var(--font-serif);font-size:19px;font-style:italic;color:var(--muted)}
+.tema-jawa-melati .guest{background:#fff;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:10px 30px}
+.tema-jawa-melati .btn-open{background:#fff;color:var(--accent);border:1px solid var(--accent);border-radius:999px;font-family:var(--font-cap);font-size:15px;letter-spacing:.1em;box-shadow:0 0 0 4px #fff,0 0 0 5px var(--line)}
+.tema-jawa-melati .btn-open:hover{background:var(--accent);color:#fff}
+.tema-jawa-melati .cover .ronce{transition:transform 1.4s cubic-bezier(.6,0,.3,1),opacity 1.4s}
+.tema-jawa-melati .cover.open .ronce.kiri{transform:translateX(-60vw) rotate(10deg);opacity:0;animation:none}
+.tema-jawa-melati .cover.open .ronce.kanan{transform:translateX(60vw) rotate(-10deg);opacity:0;animation:none}
+.tema-jawa-melati .cover.open .wreath{transform:scale(1.8);opacity:0;transition:all 1.2s .2s}
+.tema-jawa-melati .cover.open .cover-text > :not(.wreath){opacity:0;transition:opacity .5s}
+.tema-jawa-melati .cover.open{opacity:0;transition:opacity .8s 1.1s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-jawa-melati .side{background:var(--truntum),radial-gradient(circle at 50% 50%,#fffefa,#efe8d4 85%)}
+  .tema-jawa-melati .side .tirai{left:2%;right:2%}
+  .tema-jawa-melati .side .ronce{width:22px;margin-left:-11px}
+  .tema-jawa-melati .side-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:120px;text-align:center}
+  .tema-jawa-melati .side-text .wreath{width:250px;height:250px}.tema-jawa-melati .side-text .wreath .mono{font-size:84px}
+  .tema-jawa-melati .side-text .names{font-size:76px}
+  .tema-jawa-melati .side-text p{font-family:var(--font-serif);font-style:italic;font-size:21px;color:var(--muted);margin:0}
+}
+
+/* Hero: foto oval dalam karangan melati */
+.tema-jawa-melati .hero{position:relative;padding:150px 16px 50px;text-align:center;overflow:hidden}
+.tema-jawa-melati .hero .tirai{left:2%;right:2%}
+.tema-jawa-melati .oval-wrap{position:relative;width:78%;max-width:320px;aspect-ratio:1;margin:0 auto;opacity:0;transform:scale(.85);transition:all 1.6s cubic-bezier(.2,.8,.2,1)}
+.tema-jawa-melati.play .oval-wrap{opacity:1;transform:none}
+.tema-jawa-melati .oval-wrap .karangan{position:absolute;inset:0;width:100%;height:100%}
+.tema-jawa-melati .oval-foto{position:absolute;inset:12%;border-radius:50%;overflow:hidden;background:linear-gradient(170deg,#f1ead8,#cdbf9c);box-shadow:0 0 0 3px #fff,0 0 0 4px var(--accent)}
+.tema-jawa-melati .oval-foto .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-jawa-melati .title-block{margin-top:22px;opacity:0;transform:translateY(18px);transition:all 1.2s .6s}
+.tema-jawa-melati.play .title-block{opacity:1;transform:none}
+.tema-jawa-melati .title-block .date{font-family:var(--font-serif);font-style:italic;font-size:19px;color:var(--muted)}
+.tema-jawa-melati .hias-melati{display:block;width:130px;margin:8px auto}
+
+/* Isi */
+.tema-jawa-melati h2{color:var(--accent);font-size:50px}
+.tema-jawa-melati .kicker{font-family:var(--font-cap)}
+.tema-jawa-melati .salam{font-family:var(--font-cap);font-style:normal;color:var(--accent-2);letter-spacing:.06em;font-size:16px}
+.tema-jawa-melati .pic{width:190px;height:240px;border-radius:999px 999px 16px 16px;border:0;background:none;box-shadow:none;overflow:visible;padding:0}
+.tema-jawa-melati .lengkung{position:relative;width:100%;height:100%;border-radius:inherit;overflow:hidden;background:linear-gradient(170deg,#f1ead8,#cdbf9c);box-shadow:0 0 0 5px #fff,0 0 0 6px var(--accent),0 16px 30px -18px var(--shadow)}
+.tema-jawa-melati .lengkung img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-jawa-melati .ronce.sisi{position:absolute;top:22px;width:14px;z-index:2}
+.tema-jawa-melati .ronce.sisi.a{left:-14px}.tema-jawa-melati .ronce.sisi.b{right:-14px;left:auto;margin:0;animation-delay:-2s}
+.tema-jawa-melati .person h3{color:var(--accent);font-size:48px}
+.tema-jawa-melati .and{color:var(--accent-2)}
+.tema-jawa-melati .cd-melati{gap:10px}
+.tema-jawa-melati .cd-melati div{aspect-ratio:1;border-radius:50%;display:grid;place-content:center;background:#fff;position:relative;
+  box-shadow:0 0 0 4px #fff,0 0 0 5px var(--line),0 10px 20px -14px var(--shadow)}
+.tema-jawa-melati .cd-melati div::before{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px dotted var(--accent);animation:spin 30s linear infinite}
+.tema-jawa-melati .cd-melati b{color:var(--accent);font-family:var(--font-serif);font-size:28px}
+.tema-jawa-melati .cd-melati span{font-size:9px}
+.tema-jawa-melati .event{background:#fff;border-radius:200px 200px 24px 24px;border:1px solid var(--line);padding-top:70px;overflow:visible}
+.tema-jawa-melati .event .acara-ronce{position:absolute;top:30px;width:14px}
+.tema-jawa-melati .event .acara-ronce.a{left:24px}.tema-jawa-melati .event .acara-ronce.b{right:24px;left:auto;margin:0}
+.tema-jawa-melati .event h3{font-family:var(--font-script);font-weight:400;font-size:46px;color:var(--accent)}
+.tema-jawa-melati .event .bigdate{font-family:var(--font-serif);color:var(--accent-2)}
+.tema-jawa-melati .btn{border-radius:999px;background:var(--accent)}
+.tema-jawa-melati .btn.line{background:#fff;color:var(--accent);border-color:var(--accent)}
+.tema-jawa-melati .gal-lengkung figure{box-shadow:0 0 0 4px #fff,0 0 0 5px var(--line)}
+.tema-jawa-melati .story li{border-radius:18px;background:#fff;border-left:0;border-top:3px solid var(--accent-soft)}
+.tema-jawa-melati .video-box{border-radius:24px;border:5px solid #fff;box-shadow:0 0 0 1px var(--accent),0 16px 30px -18px var(--shadow)}
+.tema-jawa-melati footer.penutup .terima{font-family:var(--font-script);font-size:38px;color:var(--accent)}
