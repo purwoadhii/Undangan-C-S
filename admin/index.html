@@ -321,8 +321,11 @@ ol.steps{padding-left:20px;margin:8px 0}
   function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
 
   /* ---------- GitHub API ---------- */
-  function api(path, opt){
-    opt = opt || {};
+  /* Server GitHub kadang membalas 5xx atau koneksi putus, terutama saat mengunggah file besar.
+     Permintaan seperti itu dicoba ulang sampai 4 kali dengan jeda yang makin lama. */
+  function api(path, opt, coba){
+    opt = opt || {}; coba = coba || 0;
+    function ulang(){ return new Promise(function(ok){ setTimeout(ok, 1500 * Math.pow(2, coba)); }).then(function(){ return api(path, opt, coba + 1); }); }
     return fetch("https://api.github.com/repos/" + state.repo + path, {
       method: opt.method || "GET",
       cache: "no-store",
@@ -330,11 +333,16 @@ ol.steps{padding-left:20px;margin:8px 0}
       body: opt.body ? JSON.stringify(opt.body) : undefined
     }).then(function(r){
       if (r.status === 404 && opt.allow404) return null;
+      if (r.status >= 500 && coba < 4) return ulang();
+      if (r.status >= 500) throw new Error("Server GitHub sedang bermasalah (Error " + r.status + "). Tunggu sebentar lalu tekan Simpan lagi; data Anda di halaman ini tidak hilang.");
       if (!r.ok) return r.json().catch(function(){return {};}).then(function(j){
         var m = r.status === 401 ? "Token salah atau sudah kedaluwarsa." : r.status === 403 ? "Token tidak punya izin Contents: Read and write untuk repo ini." : r.status === 404 ? "Repo tidak ditemukan atau token tidak punya akses ke repo ini." : (j.message || ("Error " + r.status));
         throw new Error(m);
       });
       return r.status === 204 ? null : r.json();
+    }, function(){
+      if (coba < 4) return ulang();
+      throw new Error("Koneksi ke GitHub terputus. Periksa internet lalu coba simpan lagi.");
     });
   }
   /* Menulis perubahan ke main sebagai satu commit. Kepala main selalu dibaca ulang, dan bila main berubah
