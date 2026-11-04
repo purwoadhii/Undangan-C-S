@@ -17,5 +17,7 @@ window.DAFTAR_TEMA = [
   { id: "jawa-keraton", nama: "Jawa Keraton", ket: "Hijau tua & emas, masuk lewat gapura keraton, pendapa joglo, kawung", warna: ["#10301f", "#d6b25e", "#f3ead2"],
     huruf: "family=Cinzel:wght@400;600&family=Tangerine:wght@700&family=Gilda+Display&family=Lato:wght@400;700" },
   { id: "sunda", nama: "Sunda", ket: "Marun & emas, siger, awi & angklung, kere bambu digulung, bahasa Sunda", warna: ["#faf3e6", "#7b1e2b", "#b8892f"],
-    huruf: "family=Forum&family=Alex+Brush&family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600" }
+    huruf: "family=Forum&family=Alex+Brush&family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600" },
+  { id: "betawi", nama: "Betawi", ket: "Merah-hijau-kuning, gigi balang, ondel-ondel, roti buaya, logat Betawi", warna: ["#fff8ec", "#d62839", "#1f8a4c"],
+    huruf: "family=Yellowtail&family=Bree+Serif&family=Poppins:wght@400;600;700" }
 ];
