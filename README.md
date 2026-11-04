@@ -12,6 +12,11 @@ Buka **https://purwoadhii.github.io/Undangan-C-S/admin/**, masuk dengan token Gi
 Isi nama, acara (titik lokasi dipilih di peta), foto dan video galeri, rekening, dan musik, lalu klik **Simpan & terbitkan**.
 Inisial (B&S) dan alamat (`/budi-sari/`) dibuat otomatis dari nama panggilan. Undangan tayang dalam 1–2 menit.
 
+## Kirim undangan lewat WhatsApp
+
+Di admin, klik **Kirim** pada undangan. Ketik nama tamu dan nomor WA, lalu klik **Kirim via WhatsApp**: WhatsApp terbuka dengan pesan berisi nama tamu, link khusus (nama tamu tampil di sampul), dan ucapan terima kasih. Tinggal tekan kirim.
+Kata-kata pesan bisa diubah. Daftar tamu bisa ditambah banyak sekaligus, dan bisa diunduh atau dibuka sebagai CSV. Daftar tamu dan nomor WA hanya disimpan di browser, tidak diunggah ke repo karena repo bersifat publik.
+
 ## Tema
 
 Tiap undangan memilih satu tema di admin (atau `tema: "..."` di `data.js`). Tiap tema punya sampul, cara membuka, hitung mundur, bingkai foto, susunan galeri, urutan bagian, kata-kata bawaan, dan animasi sendiri. Tombol scroll otomatis ada di semua tema.

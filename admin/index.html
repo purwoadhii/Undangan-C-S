@@ -76,6 +76,19 @@ button:disabled{opacity:.55;cursor:wait}
 .theme a{font-size:12px;color:var(--rose)}
 .note{background:var(--rose-soft);border-radius:12px;padding:12px 14px;font-size:14px}
 ol.steps{padding-left:20px;margin:8px 0}
+.tamu{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.tamu:first-child{border-top:0}
+.tamu .nm{font-weight:700;min-width:0;overflow-wrap:anywhere}
+.tamu .no{color:var(--muted);font-size:13px}
+.tamu .st{font-size:12px;color:var(--sage)}
+.tamu .st.belum{color:var(--muted)}
+.tamu .acts{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+.btn.wa,button.wa{background:#1f9d55}
+.pv{white-space:pre-wrap;background:#f3f7f1;border:1px solid #dce8d8;border-radius:12px;padding:12px 14px;font-size:14px;overflow-wrap:anywhere}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 0}
+.chips code{background:#f3eee9;border-radius:6px;padding:1px 6px;font-size:12px}
+.stat{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.stat b{color:var(--ink)}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -117,6 +130,55 @@ ol.steps{padding-left:20px;margin:8px 0}
       <button id="btnNew" type="button">+ Undangan baru</button>
     </div>
     <div class="list" id="coupleList"><p class="hint">Memuat…</p></div>
+  </section>
+
+  <!-- ===== Kirim undangan lewat WhatsApp ===== -->
+  <section id="viewKirim" hidden>
+    <div class="card">
+      <h2 id="kTitle">Kirim undangan</h2>
+      <p class="hint">Ketik nama tamu dan nomor WA. Pesan dan link khusus dibuat otomatis, dan nama tamu tampil di sampul undangan. Tekan <b>Kirim via WhatsApp</b>, lalu tekan kirim di WhatsApp.</p>
+      <div class="grid">
+        <label>Nama tamu<input id="kNama" placeholder="Bapak Joko & Keluarga" autocomplete="off"></label>
+        <label>Nomor WhatsApp (opsional)<input id="kNomor" inputmode="tel" placeholder="0812xxxxxxx" autocomplete="off"></label>
+      </div>
+      <p class="hint" style="margin:10px 0 6px">Pratinjau pesan:</p>
+      <div class="pv" id="kPreview"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button type="button" class="wa" id="kKirim">Kirim via WhatsApp</button>
+        <button type="button" class="ghost" id="kSimpan">Simpan ke daftar saja</button>
+        <button type="button" class="ghost" id="kSalin">Salin pesan</button>
+      </div>
+      <p class="msg" id="kMsg"></p>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">Daftar tamu</h2>
+        <div class="stat" id="kStat"></div>
+      </div>
+      <label style="margin-top:12px">Cari<input id="kCari" placeholder="Cari nama atau nomor" autocomplete="off"></label>
+      <div id="kList" style="margin-top:6px"></div>
+      <p class="hint" style="margin:12px 0 0">Daftar tamu dan nomor WA hanya disimpan di browser ini, tidak diunggah ke GitHub (repo bersifat publik). Gunakan Unduh CSV untuk cadangan atau untuk dibuka di HP lain.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button type="button" class="ghost small" id="kUnduh">Unduh CSV</button>
+        <label class="pick"><span class="btn ghost small" style="padding:6px 10px;font-size:13px">Buka CSV</span><input type="file" id="kBuka" accept=".csv,text/csv,text/plain"></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Tambah banyak sekaligus</h2>
+      <p class="hint">Satu tamu per baris: <b>nama, nomor</b>. Contoh: <code>Bapak Joko, 081234567890</code></p>
+      <textarea id="kBanyak" placeholder="Bapak Joko, 081234567890&#10;Ibu Rina &amp; Keluarga, 6285712345678&#10;Mas Dimas"></textarea>
+      <p style="margin:10px 0 0"><button type="button" class="ghost" id="kTambahBanyak">Tambahkan ke daftar</button></p>
+    </div>
+
+    <div class="card">
+      <h2>Kata-kata undangan</h2>
+      <p class="hint">Bisa diubah sesuka hati. Kata dalam kurung kurawal akan diganti otomatis:</p>
+      <div class="chips"><code>{nama}</code><code>{link}</code><code>{mempelai}</code><code>{tanggal}</code><code>{tempat}</code></div>
+      <textarea id="kTpl" style="min-height:260px;margin-top:10px"></textarea>
+      <p style="margin:10px 0 0"><button type="button" class="ghost small" id="kReset">Kembalikan kata-kata bawaan</button></p>
+    </div>
   </section>
 
   <!-- ===== Form ===== -->
@@ -236,8 +298,8 @@ ol.steps{padding-left:20px;margin:8px 0}
 
   function store(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); }catch(e){} }
   function read(k){ try{ return localStorage.getItem(k) || ""; }catch(e){ return ""; } }
-  function show(view){ ["viewLogin","viewList","viewEdit"].forEach(function(v){ $(v).hidden = v !== view; });
-    $("saveBar").hidden = view !== "viewEdit"; $("btnList").hidden = view !== "viewEdit"; $("btnLogout").hidden = view === "viewLogin"; window.scrollTo(0,0); }
+  function show(view){ ["viewLogin","viewList","viewEdit","viewKirim"].forEach(function(v){ $(v).hidden = v !== view; });
+    $("saveBar").hidden = view !== "viewEdit"; $("btnList").hidden = view !== "viewEdit" && view !== "viewKirim"; $("btnLogout").hidden = view === "viewLogin"; window.scrollTo(0,0); }
   function pagesBase(){
     var p = state.repo.split("/");
     if (location.hostname.endsWith("github.io")) return location.origin + location.pathname.replace(/admin\/?(index\.html)?$/,"");
@@ -290,7 +352,7 @@ ol.steps{padding-left:20px;margin:8px 0}
   });
   $("btnLogout").addEventListener("click", function(){ store("adm_token", null); state.token = ""; $("inToken").value = ""; show("viewLogin"); });
   $("btnList").addEventListener("click", function(){
-    if (state.dirty && !window.confirm("Perubahan belum disimpan. Tetap kembali ke daftar?")) return;
+    if (!$("viewEdit").hidden && state.dirty && !window.confirm("Perubahan belum disimpan. Tetap kembali ke daftar?")) return;
     loadList();
   });
 
@@ -317,14 +379,155 @@ ol.steps{padding-left:20px;margin:8px 0}
         var el = document.createElement("div"); el.className = "couple";
         el.innerHTML = '<div class="mono">' + esc(monoOf(d)) + '</div><b>' + esc(p.panggilan) + ' &amp; ' + esc(w.panggilan) + '</b>' +
           '<div class="meta">' + esc(ac.tanggal || "") + ' · ' + esc(ac.tempat || "") + '</div><div class="slug">/' + esc(c.slug) + '/</div>' +
-          '<div class="actions"><button type="button" class="small" data-act="edit">Ubah</button><button type="button" class="small danger" data-act="del">Hapus</button><a class="btn ghost small" style="padding:6px 10px;font-size:13px" target="_blank" rel="noopener" href="' + pagesBase() + c.slug + '/">Buka</a></div>';
+          '<div class="actions"><button type="button" class="small wa" data-act="kirim">Kirim</button><button type="button" class="small ghost" data-act="edit">Ubah</button><button type="button" class="small danger" data-act="del">Hapus</button><a class="btn ghost small" style="padding:6px 10px;font-size:13px" target="_blank" rel="noopener" href="' + pagesBase() + c.slug + '/">Buka</a></div>';
         el.querySelector('[data-act="edit"]').addEventListener("click", function(){ openEditor(c.slug, d); });
+        el.querySelector('[data-act="kirim"]').addEventListener("click", function(){ openKirim(c.slug, d); });
         el.querySelector('[data-act="del"]').addEventListener("click", function(){ askDelete(c.slug, (p.panggilan || "") + " & " + (w.panggilan || ""), el); });
         box.appendChild(el);
       });
     }).catch(function(e){ box.innerHTML = '<p class="msg err">' + esc(e.message) + '</p>'; });
   }
   $("btnNew").addEventListener("click", function(){ openEditor(null, null); });
+
+  /* ---------- Kirim undangan lewat WhatsApp ---------- */
+  var K = { slug:"", d:{}, tamu:[] };
+  var K_HARI = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+  var K_BULAN = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  function kTplBawaan(d){
+    var bali = d.tema === "bali";
+    return (bali ? "Om Swastyastu" : "Assalamu'alaikum Warahmatullahi Wabarakatuh") + "\n\n" +
+      "Kepada Yth.\n*{nama}*\n\n" +
+      "Tanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami:\n\n" +
+      "*{mempelai}*\n{tanggal}\n{tempat}\n\n" +
+      "Informasi lengkap acara dan lokasi dapat dilihat di undangan berikut:\n{link}\n\n" +
+      "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\n" +
+      "Terima kasih atas perhatian dan doanya.\n" +
+      (bali ? "Om Shanti Shanti Shanti Om" : "Wassalamu'alaikum Warahmatullahi Wabarakatuh") + "\n\n" +
+      "Kami yang berbahagia,\n{mempelai}";
+  }
+  function kTanggal(iso){
+    var p = String(iso || "").slice(0,10).split("-"); if (p.length < 3) return "";
+    var dt = new Date(+p[0], +p[1]-1, +p[2]);
+    return K_HARI[dt.getDay()] + ", " + dt.getDate() + " " + K_BULAN[dt.getMonth()] + " " + dt.getFullYear();
+  }
+  function kNomor(n){
+    var x = String(n || "").replace(/[^0-9]/g, "");
+    if (!x) return "";
+    if (x.indexOf("0") === 0) x = "62" + x.slice(1);
+    else if (x.indexOf("8") === 0) x = "62" + x;
+    return x;
+  }
+  function kLink(nama){ return pagesBase() + K.slug + "/" + (nama ? "?to=" + encodeURIComponent(nama).replace(/%20/g, "+") : ""); }
+  function kPesan(nama){
+    var d = K.d, p = d.pria || {}, w = d.wanita || {}, ac = (d.acara || [])[0] || {};
+    var ganti = { nama: nama || "Bapak/Ibu/Saudara/i", link: kLink(nama), mempelai: (p.panggilan || "") + " & " + (w.panggilan || ""), tanggal: kTanggal(d.tanggal || ac.tanggal), tempat: ac.tempat || "" };
+    return ($("kTpl").value || kTplBawaan(d)).replace(/\{(nama|link|mempelai|tanggal|tempat)\}/g, function(m, k){ return ganti[k]; }).replace(/\n{3,}/g, "\n\n");
+  }
+  function kSimpanDaftar(){ store("kirim_tamu_" + K.slug, JSON.stringify(K.tamu)); }
+  function kMuat(){ try { K.tamu = JSON.parse(read("kirim_tamu_" + K.slug) || "[]"); } catch(e) { K.tamu = []; } }
+  function kMsg(t, ok){ $("kMsg").textContent = t; $("kMsg").className = "msg " + (ok === false ? "err" : "ok"); }
+  function kSalin(teks, label){
+    var done = function(){ kMsg(label + " disalin."); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(teks).then(done, function(){ kSalinLama(teks); done(); });
+    else { kSalinLama(teks); done(); }
+  }
+  function kSalinLama(teks){ var t = document.createElement("textarea"); t.value = teks; t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch(e) {} t.remove(); }
+  function kTambah(nama, nomor){
+    nama = String(nama || "").trim(); if (!nama) return null;
+    var no = kNomor(nomor);
+    var ada = K.tamu.filter(function(t){ return t.nama.toLowerCase() === nama.toLowerCase() && t.no === no; })[0];
+    if (ada) return ada;
+    var t = { nama: nama, no: no, terkirim: "" }; K.tamu.unshift(t); kSimpanDaftar(); return t;
+  }
+  function kBukaWa(t){
+    var url = "https://wa.me/" + (t.no || "") + "?text=" + encodeURIComponent(kPesan(t.nama));
+    window.open(url, "_blank", "noopener");
+    t.terkirim = new Date().toISOString(); kSimpanDaftar(); kRender();
+  }
+  function kWaktu(iso){ var d = new Date(iso); return d.getDate() + " " + K_BULAN[d.getMonth()].slice(0,3) + " " + ("0"+d.getHours()).slice(-2) + ":" + ("0"+d.getMinutes()).slice(-2); }
+  function kRender(){
+    var q = $("kCari").value.trim().toLowerCase();
+    var box = $("kList"); box.innerHTML = "";
+    var sudah = K.tamu.filter(function(t){ return t.terkirim; }).length;
+    $("kStat").innerHTML = "<span><b>" + K.tamu.length + "</b> tamu</span><span><b>" + sudah + "</b> terkirim</span><span><b>" + (K.tamu.length - sudah) + "</b> belum</span>";
+    var list = K.tamu.filter(function(t){ return !q || t.nama.toLowerCase().indexOf(q) >= 0 || (t.no || "").indexOf(q.replace(/[^0-9]/g,"") || "~") >= 0; });
+    if (!list.length) { box.innerHTML = '<p class="hint">' + (K.tamu.length ? "Tidak ada yang cocok." : "Belum ada tamu. Tambahkan di atas.") + '</p>'; return; }
+    list.forEach(function(t){
+      var el = document.createElement("div"); el.className = "tamu";
+      el.innerHTML = '<div style="min-width:0"><div class="nm">' + esc(t.nama) + '</div><div class="no">' + esc(t.no ? "+" + t.no : "tanpa nomor") + '</div></div>' +
+        '<div class="st' + (t.terkirim ? "" : " belum") + '">' + (t.terkirim ? "✓ Terkirim " + esc(kWaktu(t.terkirim)) : "Belum dikirim") + '</div>' +
+        '<div class="acts"><button type="button" class="small wa" data-a="wa">' + (t.terkirim ? "Kirim lagi" : "Kirim via WhatsApp") + '</button>' +
+        '<button type="button" class="small ghost" data-a="pesan">Salin pesan</button><button type="button" class="small ghost" data-a="link">Salin link</button>' +
+        '<button type="button" class="small danger" data-a="hapus">Hapus</button></div>';
+      el.querySelector('[data-a="wa"]').addEventListener("click", function(){ kBukaWa(t); });
+      el.querySelector('[data-a="pesan"]').addEventListener("click", function(){ kSalin(kPesan(t.nama), "Pesan untuk " + t.nama); });
+      el.querySelector('[data-a="link"]').addEventListener("click", function(){ kSalin(kLink(t.nama), "Link untuk " + t.nama); });
+      el.querySelector('[data-a="hapus"]').addEventListener("click", function(){
+        if (!window.confirm("Hapus " + t.nama + " dari daftar?")) return;
+        K.tamu.splice(K.tamu.indexOf(t), 1); kSimpanDaftar(); kRender();
+      });
+      box.appendChild(el);
+    });
+  }
+  function kPreview(){ $("kPreview").textContent = kPesan($("kNama").value.trim()); }
+  function openKirim(slug, d){
+    K.slug = slug; K.d = d || {}; kMuat();
+    var p = K.d.pria || {}, w = K.d.wanita || {};
+    $("kTitle").textContent = "Kirim undangan " + (p.panggilan || "") + " & " + (w.panggilan || "");
+    $("kTpl").value = read("kirim_tpl_" + slug) || kTplBawaan(K.d);
+    $("kNama").value = ""; $("kNomor").value = ""; $("kCari").value = ""; $("kBanyak").value = ""; kMsg("");
+    show("viewKirim"); kPreview(); kRender();
+  }
+  $("kNama").addEventListener("input", kPreview);
+  $("kTpl").addEventListener("input", function(){ store("kirim_tpl_" + K.slug, $("kTpl").value); kPreview(); });
+  $("kReset").addEventListener("click", function(){ $("kTpl").value = kTplBawaan(K.d); store("kirim_tpl_" + K.slug, null); kPreview(); });
+  $("kCari").addEventListener("input", kRender);
+  function kAmbilForm(){
+    var nama = $("kNama").value.trim();
+    if (!nama) { kMsg("Ketik nama tamu dulu.", false); $("kNama").focus(); return null; }
+    var raw = $("kNomor").value.trim(), no = kNomor(raw);
+    if (raw && (no.length < 10 || no.length > 15)) { kMsg("Nomor WA sepertinya belum benar. Contoh: 081234567890", false); $("kNomor").focus(); return null; }
+    return kTambah(nama, raw);
+  }
+  function kBersihkan(){ $("kNama").value = ""; $("kNomor").value = ""; kPreview(); $("kNama").focus(); }
+  $("kKirim").addEventListener("click", function(){ var t = kAmbilForm(); if (!t) return; kBukaWa(t); kMsg("WhatsApp dibuka untuk " + t.nama + ". Tekan kirim di WhatsApp."); kBersihkan(); });
+  $("kSimpan").addEventListener("click", function(){ var t = kAmbilForm(); if (!t) return; kRender(); kMsg(t.nama + " ditambahkan ke daftar."); kBersihkan(); });
+  $("kSalin").addEventListener("click", function(){ kSalin(kPesan($("kNama").value.trim()), "Pesan"); });
+  $("kTambahBanyak").addEventListener("click", function(){
+    var n = 0;
+    $("kBanyak").value.split(/\r?\n/).forEach(function(line){
+      line = line.trim(); if (!line) return;
+      var m = line.match(/^(.*?)[,;\t]\s*([+0-9][0-9 .\-]{6,})\s*$/);
+      if (kTambah(m ? m[1] : line, m ? m[2] : "")) n++;
+    });
+    $("kBanyak").value = ""; kRender(); kMsg(n + " tamu ditambahkan ke daftar.");
+  });
+  function kCsvSel(v){ v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+  $("kUnduh").addEventListener("click", function(){
+    var rows = [["nama","nomor","terkirim","link"]].concat(K.tamu.map(function(t){ return [t.nama, t.no, t.terkirim, kLink(t.nama)]; }));
+    var csv = "﻿" + rows.map(function(r){ return r.map(kCsvSel).join(","); }).join("\n");
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"})); a.download = "tamu-" + K.slug + ".csv";
+    document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  });
+  $("kBuka").addEventListener("change", function(e){
+    var f = e.target.files[0]; if (!f) return;
+    f.text().then(function(txt){
+      var n = 0;
+      txt.replace(/^﻿/, "").split(/\r?\n/).forEach(function(line, i){
+        var cells = [], cur = "", inq = false;
+        for (var j = 0; j < line.length; j++) {
+          var ch = line[j];
+          if (inq) { if (ch === '"' && line[j+1] === '"') { cur += '"'; j++; } else if (ch === '"') inq = false; else cur += ch; }
+          else if (ch === '"') inq = true; else if (ch === "," || ch === ";") { cells.push(cur); cur = ""; } else cur += ch;
+        }
+        cells.push(cur);
+        if (!cells[0] || (i === 0 && cells[0].toLowerCase() === "nama")) return;
+        var t = kTambah(cells[0], cells[1]); if (t) { if (cells[2] && !t.terkirim) t.terkirim = cells[2]; n++; }
+      });
+      kSimpanDaftar(); kRender(); kMsg(n + " tamu dimuat dari CSV.");
+      e.target.value = "";
+    });
+  });
 
   /* ---------- Hapus undangan ---------- */
   function askDelete(slug, names, card){
