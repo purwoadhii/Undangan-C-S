@@ -5,6 +5,12 @@
    ===================================================================== */
 window.UNDANGAN = {
 
+  // Tema undangan. Pilihan: lihat tema/daftar.js (contoh: "taman")
+  tema: "taman",
+
+  // Kata pembuka dari mempelai (opsional). Kosongkan untuk memakai kalimat bawaan tema.
+  pembuka: "",
+
   pria: {
     panggilan: "Riziky",
     lengkap:   "Riziky Pratama, S.T.",

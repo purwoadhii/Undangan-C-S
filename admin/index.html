@@ -67,6 +67,13 @@ button:disabled{opacity:.55;cursor:wait}
 .bar .in{max-width:860px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .bar .msg{flex:1;min-width:180px;font-size:14px}
 .msg.ok{color:var(--sage)} .msg.err{color:var(--danger)}
+.themes{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.theme{border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;display:grid;gap:6px;background:#fcfbfa;position:relative}
+.theme input{position:absolute;opacity:0;pointer-events:none}
+.theme:has(input:checked){border-color:var(--rose);box-shadow:0 0 0 2px var(--rose-soft)}
+.theme .sw{display:flex;gap:4px}.theme .sw i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+.theme b{font-size:14px}.theme small{color:var(--muted);font-size:12px;line-height:1.35}
+.theme a{font-size:12px;color:var(--rose)}
 .note{background:var(--rose-soft);border-radius:12px;padding:12px 14px;font-size:14px}
 ol.steps{padding-left:20px;margin:8px 0}
 [hidden]{display:none!important}
@@ -127,6 +134,12 @@ ol.steps{padding-left:20px;margin:8px 0}
     </div>
 
     <div class="card">
+      <h2>Tema</h2>
+      <p class="hint">Tiap tema punya sampul, animasi, bingkai foto, dan susunan yang berbeda. Klik "Lihat contoh" untuk mencoba tema dengan data contoh.</p>
+      <div class="themes" id="themeList"></div>
+    </div>
+
+    <div class="card">
       <h2>Mempelai</h2>
       <div class="grid">
         <div>
@@ -142,6 +155,7 @@ ol.steps{padding-left:20px;margin:8px 0}
           <div style="margin-top:10px"><label>Foto wanita</label><div class="media" id="m_wanita"></div></div>
         </div>
       </div>
+      <label style="margin-top:14px">Kata pembuka dari mempelai (opsional, kosong = kalimat bawaan tema)<textarea id="f_pembuka" placeholder="Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami:"></textarea></label>
       <div class="grid" style="margin-top:14px">
         <label>Inisial (opsional, kosong = otomatis)<input id="f_mono" maxlength="3" placeholder="otomatis"></label>
         <div><label>Foto berdua (bingkai lengkung)</label><div class="media" id="m_couple"></div></div>
@@ -210,10 +224,11 @@ ol.steps{padding-left:20px;margin:8px 0}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="../tema/daftar.js"></script>
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
-  var RESERVED = ["tema","admin","_template","assets"];
+  var RESERVED = ["tema","admin","_template","assets","contoh"];
   var DEFAULT_AYAT = "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.";
   var DEFAULT_PENUTUP = "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.";
   var ZONA = { WIB:"+07:00", WITA:"+08:00", WIT:"+09:00" };
@@ -473,6 +488,8 @@ ol.steps{padding-left:20px;margin:8px 0}
     $("f_p_panggilan").value = p.panggilan || ""; $("f_p_lengkap").value = p.lengkap || ""; $("f_p_ortu").value = p.orangTua || "";
     $("f_w_panggilan").value = w.panggilan || ""; $("f_w_lengkap").value = w.lengkap || ""; $("f_w_ortu").value = w.orangTua || "";
     $("f_mono").value = d.monogram || "";
+    $("f_pembuka").value = d.pembuka || "";
+    renderThemes(d.tema || "taman");
     $("f_ayat").value = (d.ayat||{}).teks || ""; $("f_ayat_sumber").value = (d.ayat||{}).sumber || "";
     $("f_script").value = d.ucapanScriptUrl || ""; $("f_penutup").value = d.penutup || "";
     function one(path){ return path ? [{path:path}] : []; }
@@ -501,6 +518,16 @@ ol.steps{padding-left:20px;margin:8px 0}
     show("viewEdit"); maps.forEach(function(m){ setTimeout(function(){ m.invalidateSize(); }, 60); });
     $("btnOpen").hidden = !slug; if (slug) $("btnOpen").href = pagesBase() + slug + "/";
     updatePreview(); state.dirty = false; alertMsg("Belum ada perubahan.");
+  }
+  function renderThemes(sel){
+    var box = $("themeList"); box.innerHTML = "";
+    (window.DAFTAR_TEMA || [{id:"taman", nama:"Taman", ket:"", warna:[]}]).forEach(function(t){
+      var el = document.createElement("label"); el.className = "theme";
+      el.innerHTML = '<input type="radio" name="tema" value="' + esc(t.id) + '"' + (t.id === sel ? " checked" : "") + '><div class="sw">' + (t.warna || []).map(function(c){ return '<i style="background:' + esc(c) + '"></i>'; }).join("") + '</div>' +
+        '<b>' + esc(t.nama) + '</b><small>' + esc(t.ket) + '</small><a href="' + pagesBase() + 'contoh/?tema=' + encodeURIComponent(t.id) + '" target="_blank" rel="noopener">Lihat contoh</a>';
+      el.querySelector("input").addEventListener("change", markDirty);
+      box.appendChild(el);
+    });
   }
   function pad2(n){ return ("0" + n).slice(-2); }
   function checkExisting(slug){
@@ -545,7 +572,10 @@ ol.steps{padding-left:20px;margin:8px 0}
       if (it.file) { var path = "assets/" + base + "-" + stamp + "." + ext(it.file); files.push({path:path, file:it.file}); it.newPath = path; return path; }
       return it.path;
     }
+    var temaSel = document.querySelector('input[name="tema"]:checked');
     var data = {
+      tema: temaSel ? temaSel.value : "taman",
+      pembuka: $("f_pembuka").value.trim(),
       pria: { panggilan:pP, lengkap:$("f_p_lengkap").value.trim(), orangTua:$("f_p_ortu").value.trim(), foto:takeOne("pria","pria") },
       wanita: { panggilan:wP, lengkap:$("f_w_lengkap").value.trim(), orangTua:$("f_w_ortu").value.trim(), foto:takeOne("wanita","wanita") },
       monogram: $("f_mono").value.trim().toUpperCase(),
@@ -585,9 +615,8 @@ ol.steps{padding-left:20px;margin:8px 0}
     var indexHtml = '<!doctype html>\n<html lang="id">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' +
       '<!-- Judul untuk tab browser & preview saat link dibagikan di WhatsApp (ganti namanya saja) -->\n<title>' + duo + '</title>\n' +
       '<meta property="og:title" content="The Wedding of ' + duo + '">\n<meta property="og:description" content="' + esc(tglTeks) + '">\n' +
-      '<!-- Bagian di bawah ini tidak perlu diubah -->\n<meta name="theme-color" content="#f6f3ee">\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-      '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Mulish:wght@400;600;700&display=swap">\n' +
-      '<link rel="stylesheet" href="../tema/taman/style.css">\n</head>\n<body>\n<script src="data.js"><\/script>\n<script src="../tema/taman/gambar.js"><\/script>\n<script src="../tema/taman/tema.js"><\/script>\n</body>\n</html>\n';
+      '<!-- Bagian di bawah ini tidak perlu diubah. Tema dipilih di data.js -->\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n</head>\n<body>\n' +
+      '<script src="../tema/daftar.js"><\/script>\n<script src="data.js"><\/script>\n<script src="../tema/inti/muat.js"><\/script>\n</body>\n</html>\n';
     var dataJs = "/* Data undangan " + pP + " & " + wP + ". Dibuat dan diubah lewat halaman admin. */\nwindow.UNDANGAN = " + JSON.stringify(data, null, 2) + ";\n";
 
     var isNew = !state.editing;

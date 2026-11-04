@@ -1,0 +1,57 @@
+/* Tema Taman: kabut pagi, hijau daun, pink mawar. */
+:root{
+  --bg:#f8f5f0; --bg2:#f1ece4; --card:#fff; --ink:#4a4340; --muted:#8a7f79;
+  --accent:#c94b86; --accent-2:#b33c74; --on-accent:#fff; --accent-soft:#f3d6e3; --line:#efe6e9;
+  --shadow:rgba(74,67,64,.7); --nav-bg:rgba(255,255,255,.92);
+}
+.tema-taman .cover{background:#eef0ea;transition:transform 1.5s cubic-bezier(.77,0,.18,1),opacity 1.5s ease;will-change:transform}
+.tema-taman .cover.open{transform:translateY(105%);opacity:.6}
+.tema-taman .lace{position:absolute;left:0;right:0;top:0;height:34px;z-index:4;opacity:.9;
+  background:radial-gradient(circle at 10px 26px,transparent 7px,#fff 7.5px,#fff 9px,transparent 9.5px) 0 0/20px 34px repeat-x,linear-gradient(#fff 0 18px,transparent 18px)}
+.tema-taman .mono{margin-top:8px}
+.tema-taman .names.sub{font-size:30px;margin-top:2px}
+.tema-taman .guest{background:rgba(255,255,255,.82);backdrop-filter:blur(4px)}
+.tema-taman .btn-open{background:#fff;color:var(--ink);box-shadow:0 6px 18px -8px rgba(0,0,0,.35);animation:pulseT 2.4s ease-in-out infinite}
+@keyframes pulseT{0%,100%{box-shadow:0 6px 18px -8px rgba(0,0,0,.35),0 0 0 0 rgba(201,75,134,.35)}50%{box-shadow:0 6px 18px -8px rgba(0,0,0,.35),0 0 0 10px rgba(201,75,134,0)}}
+@media (min-width:900px){
+  .tema-taman .side{background:#eef0ea}
+  .tema-taman .side-text{position:absolute;left:0;right:0;top:9%;text-align:center;z-index:2}
+  .tema-taman .side-text .names{font-size:64px;color:var(--accent);text-shadow:0 2px 12px #fff}
+  .tema-taman .side-text p{font-family:var(--font-cap);letter-spacing:.2em;margin:0;background:rgba(255,255,255,.75);display:inline-block;padding:4px 16px;border-radius:99px}
+}
+/* Hero foto */
+.tema-taman .hero{position:relative;height:640px;max-height:150vw}
+.tema-taman .ghost-trees{position:absolute;inset:0;width:100%;height:100%;opacity:.4}
+.tema-taman .arch{position:absolute;left:50%;top:42px;width:76%;aspect-ratio:3/4;max-width:100%;transform:translateX(-50%);border-radius:999px 999px 0 0;border:2px solid #e9a9c6;padding:6px;background:var(--bg)}
+.tema-taman .arch-in{position:relative;width:100%;height:100%;border-radius:999px 999px 0 0;overflow:hidden;background:linear-gradient(165deg,#e3e9dd 0%,#b9c9b2 55%,#8ea888 100%)}
+.tema-taman .arch-in .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-taman .ph-label{position:absolute;top:30%;left:0;right:0;text-align:center;font-family:var(--font-serif);font-style:italic;color:#fff;font-size:18px;text-shadow:0 1px 6px rgba(0,0,0,.25)}
+.tema-taman .deco{position:absolute;pointer-events:none}
+.tema-taman .cyp-l{left:-10%;bottom:150px;width:34%}
+.tema-taman .cyp-r{right:-10%;bottom:170px;width:28%}
+.tema-taman .urn{right:3%;bottom:190px;width:24%}
+.tema-taman .rail{left:30%;bottom:146px;width:40%}
+.tema-taman .fl-l{left:-10%;bottom:70px;width:56%}
+.tema-taman .fl-r{right:-12%;bottom:56px;width:54%}
+.tema-taman .bf{right:6%;top:6px;width:44px;animation:hover 4s ease-in-out infinite}
+.tema-taman .bf .w{transform-box:fill-box;transform-origin:center;animation:flap .3s ease-in-out infinite alternate}
+@keyframes flap{to{transform:scaleX(.3)}}
+@keyframes hover{0%,100%{translate:0 0}50%{translate:-14px 10px}}
+.tema-taman .birds{position:absolute;left:0;right:0;top:0;height:220px;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1s 1.2s}
+.tema-taman.play .birds{opacity:1}
+.tema-taman .bird{position:absolute;left:-40px;width:26px;animation:flyAcross 11s linear infinite}
+.tema-taman .bird path{fill:none;stroke:#5d5450;stroke-width:1.6;stroke-linecap:round}
+.tema-taman .bird .wing{transform-box:fill-box;transform-origin:50% 100%;animation:wing .45s ease-in-out infinite alternate}
+.tema-taman .bird:nth-child(1){top:40px}
+.tema-taman .bird:nth-child(2){top:70px;width:20px;animation-delay:-1.2s;animation-duration:13s}
+.tema-taman .bird:nth-child(3){top:24px;width:18px;animation-delay:-6s;animation-duration:12s}
+.tema-taman .bird:nth-child(4){top:110px;width:22px;animation-delay:-8s;animation-duration:14s}
+@keyframes wing{to{transform:scaleY(-.5)}}
+@keyframes flyAcross{0%{transform:translate(0,0)}50%{transform:translate(calc(var(--col) * .55),-26px)}100%{transform:translate(calc(var(--col) + 80px),10px)}}
+.tema-taman .title-block{text-align:center;padding:0 16px 30px;margin-top:-40px;position:relative;z-index:2}
+.tema-taman .title-block .mono{font-size:96px}
+.tema-taman .title-block .names{font-size:42px;margin-top:6px}
+.tema-taman .title-block .date{font-family:var(--font-cap);letter-spacing:.2em;font-size:14px;color:var(--muted);text-transform:uppercase}
+.tema-taman .sec-mempelai,.tema-taman .sec-cerita,.tema-taman .sec-video,.tema-taman .sec-hadiah{background:linear-gradient(180deg,var(--bg),var(--bg2) 50%,var(--bg))}
+.tema-taman .pic.wanita{background:linear-gradient(160deg,#e1e8dc,#9fb59a)}
+.tema-taman .pic.pria{background:linear-gradient(160deg,#ece3e7,#c7a9b8)}

@@ -1,316 +1,42 @@
-/* Tema "Taman" untuk undangan online.
-   File ini dipakai bersama oleh semua pasangan. Data tiap pasangan ada di <folder-pasangan>/data.js.
-   Tidak perlu diubah untuk membuat undangan baru. */
+/* Gambar SVG tema Taman (bunga, pohon, rumah kaca). Tidak perlu diubah. */
+window.TEMA_TAMAN_GAMBAR = "<svg width=\"0\" height=\"0\" style=\"position:absolute\" aria-hidden=\"true\">\n  <defs>\n    <radialGradient id=\"gRose\" cx=\"50%\" cy=\"45%\"><stop offset=\"0\" stop-color=\"#b8326f\"/><stop offset=\".55\" stop-color=\"#e17aa8\"/><stop offset=\"1\" stop-color=\"#f7c9dc\"/></radialGradient>\n    <radialGradient id=\"gPeach\" cx=\"50%\" cy=\"50%\"><stop offset=\"0\" stop-color=\"#e08b3c\"/><stop offset=\".6\" stop-color=\"#f4b77a\"/><stop offset=\"1\" stop-color=\"#fbe0bf\"/></radialGradient>\n    <radialGradient id=\"gCream\" cx=\"50%\" cy=\"50%\"><stop offset=\"0\" stop-color=\"#e9cf95\"/><stop offset=\"1\" stop-color=\"#fbf3e2\"/></radialGradient>\n    <linearGradient id=\"gCyp\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#9aab92\"/><stop offset=\".5\" stop-color=\"#c4d0bc\"/><stop offset=\"1\" stop-color=\"#8d9f87\"/></linearGradient>\n    <linearGradient id=\"gGlass\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f4f8fa\"/><stop offset=\"1\" stop-color=\"#c9d7de\"/></linearGradient>\n    <linearGradient id=\"gSky\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#f3f1ec\"/><stop offset=\".45\" stop-color=\"#e6e9e2\"/><stop offset=\"1\" stop-color=\"#dfe5d8\"/></linearGradient>\n\n    <symbol id=\"rose\" viewBox=\"-22 -22 44 44\">\n      <circle r=\"21\" fill=\"url(#gRose)\"/>\n      <path d=\"M-16 -6c4-10 18-12 24-4M-14 8c6 8 22 8 26-6M-8 -2c2-6 12-6 14 0s-6 10-10 6-2-8 2-8\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".55\" stroke-width=\"1.6\"/>\n      <path d=\"M-4 -1c1-3 6-3 7 0s-3 5-5 3\" fill=\"none\" stroke=\"#8f1f55\" stroke-width=\"1.4\"/>\n    </symbol>\n    <symbol id=\"peony\" viewBox=\"-22 -22 44 44\">\n      <g fill=\"#f6dbe6\" stroke=\"#e8a9c3\" stroke-width=\".8\">\n        <ellipse rx=\"9\" ry=\"20\" transform=\"rotate(0)\"/><ellipse rx=\"9\" ry=\"20\" transform=\"rotate(45)\"/>\n        <ellipse rx=\"9\" ry=\"20\" transform=\"rotate(90)\"/><ellipse rx=\"9\" ry=\"20\" transform=\"rotate(135)\"/>\n      </g>\n      <circle r=\"9\" fill=\"#efb6cc\"/><circle r=\"4\" fill=\"#e6c26a\"/>\n    </symbol>\n    <symbol id=\"cosmos\" viewBox=\"-22 -22 44 44\">\n      <g fill=\"url(#gPeach)\">\n        <ellipse cy=\"-11\" rx=\"6\" ry=\"11\"/><ellipse cy=\"-11\" rx=\"6\" ry=\"11\" transform=\"rotate(60)\"/><ellipse cy=\"-11\" rx=\"6\" ry=\"11\" transform=\"rotate(120)\"/>\n        <ellipse cy=\"-11\" rx=\"6\" ry=\"11\" transform=\"rotate(180)\"/><ellipse cy=\"-11\" rx=\"6\" ry=\"11\" transform=\"rotate(240)\"/><ellipse cy=\"-11\" rx=\"6\" ry=\"11\" transform=\"rotate(300)\"/>\n      </g>\n      <circle r=\"5\" fill=\"#c27a2c\"/>\n    </symbol>\n    <symbol id=\"daisy\" viewBox=\"-22 -22 44 44\">\n      <g fill=\"url(#gCream)\">\n        <ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\"/><ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(40)\"/><ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(80)\"/>\n        <ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(120)\"/><ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(160)\"/><ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(200)\"/>\n        <ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(240)\"/><ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(280)\"/><ellipse cy=\"-12\" rx=\"4.5\" ry=\"10\" transform=\"rotate(320)\"/>\n      </g>\n      <circle r=\"5\" fill=\"#d9a441\"/>\n    </symbol>\n    <symbol id=\"lav\" viewBox=\"0 0 20 60\">\n      <path d=\"M10 60V8\" stroke=\"#7f9a7a\" stroke-width=\"1.5\"/>\n      <g fill=\"#b9a3d6\"><ellipse cx=\"7\" cy=\"12\" rx=\"3\" ry=\"5\"/><ellipse cx=\"13\" cy=\"18\" rx=\"3\" ry=\"5\"/><ellipse cx=\"7\" cy=\"24\" rx=\"3\" ry=\"5\"/><ellipse cx=\"13\" cy=\"30\" rx=\"3\" ry=\"5\"/><ellipse cx=\"10\" cy=\"6\" rx=\"3\" ry=\"5\"/></g>\n    </symbol>\n    <symbol id=\"leaves\" viewBox=\"-30 -30 60 60\">\n      <g fill=\"#7f9a7a\"><ellipse cx=\"-14\" cy=\"0\" rx=\"16\" ry=\"6\" transform=\"rotate(-25 -14 0)\"/><ellipse cx=\"14\" cy=\"2\" rx=\"16\" ry=\"6\" transform=\"rotate(30 14 2)\"/></g>\n      <g fill=\"#a9bba3\"><ellipse cx=\"0\" cy=\"-12\" rx=\"6\" ry=\"15\"/><ellipse cx=\"-6\" cy=\"12\" rx=\"13\" ry=\"5\" transform=\"rotate(35 -6 12)\"/></g>\n    </symbol>\n    <symbol id=\"bush\" viewBox=\"0 0 100 60\">\n      <g fill=\"#a3b59c\"><circle cx=\"20\" cy=\"40\" r=\"20\"/><circle cx=\"45\" cy=\"30\" r=\"26\"/><circle cx=\"75\" cy=\"38\" r=\"22\"/></g>\n      <g fill=\"#8ea487\" opacity=\".7\"><circle cx=\"30\" cy=\"48\" r=\"14\"/><circle cx=\"62\" cy=\"46\" r=\"16\"/></g>\n    </symbol>\n    <symbol id=\"tree\" viewBox=\"0 0 120 200\">\n      <rect x=\"56\" y=\"120\" width=\"8\" height=\"80\" fill=\"#9d978e\"/>\n      <g fill=\"#c3cbbd\"><circle cx=\"60\" cy=\"70\" r=\"46\"/><circle cx=\"30\" cy=\"100\" r=\"30\"/><circle cx=\"90\" cy=\"100\" r=\"30\"/><circle cx=\"60\" cy=\"30\" r=\"28\"/></g>\n      <g fill=\"#d6dccf\" opacity=\".8\"><circle cx=\"45\" cy=\"60\" r=\"20\"/><circle cx=\"78\" cy=\"80\" r=\"18\"/></g>\n    </symbol>\n    <symbol id=\"cypress\" viewBox=\"0 0 60 220\">\n      <rect x=\"27\" y=\"196\" width=\"6\" height=\"24\" fill=\"#8a8178\"/>\n      <path d=\"M30 0C46 40 54 110 50 160C47 190 38 200 30 200C22 200 13 190 10 160C6 110 14 40 30 0Z\" fill=\"url(#gCyp)\"/>\n      <path d=\"M30 20C34 60 36 120 32 190\" stroke=\"#e3e8df\" stroke-width=\"2\" fill=\"none\" opacity=\".7\"/>\n    </symbol>\n    <symbol id=\"bouquetL\" viewBox=\"0 0 260 200\">\n      <use href=\"#leaves\" x=\"10\" y=\"90\" width=\"80\" height=\"80\"/>\n      <use href=\"#leaves\" x=\"150\" y=\"110\" width=\"90\" height=\"90\"/>\n      <use href=\"#bush\" x=\"0\" y=\"120\" width=\"260\" height=\"90\"/>\n      <use href=\"#lav\" x=\"40\" y=\"30\" width=\"22\" height=\"70\"/><use href=\"#lav\" x=\"58\" y=\"20\" width=\"22\" height=\"75\"/>\n      <use href=\"#peony\" x=\"50\" y=\"80\" width=\"80\" height=\"80\"/>\n      <use href=\"#rose\" x=\"110\" y=\"110\" width=\"90\" height=\"90\"/>\n      <use href=\"#cosmos\" x=\"5\" y=\"120\" width=\"56\" height=\"56\"/>\n      <use href=\"#daisy\" x=\"180\" y=\"96\" width=\"50\" height=\"50\"/>\n      <use href=\"#rose\" x=\"20\" y=\"150\" width=\"56\" height=\"56\"/>\n      <use href=\"#cosmos\" x=\"190\" y=\"150\" width=\"46\" height=\"46\"/>\n    </symbol>\n    <symbol id=\"bouquetR\" viewBox=\"0 0 260 200\">\n      <use href=\"#leaves\" x=\"160\" y=\"80\" width=\"90\" height=\"90\"/>\n      <use href=\"#bush\" x=\"0\" y=\"122\" width=\"260\" height=\"88\"/>\n      <use href=\"#cosmos\" x=\"30\" y=\"70\" width=\"64\" height=\"64\"/>\n      <use href=\"#rose\" x=\"90\" y=\"96\" width=\"100\" height=\"100\"/>\n      <use href=\"#lav\" x=\"200\" y=\"30\" width=\"22\" height=\"70\"/>\n      <use href=\"#daisy\" x=\"190\" y=\"110\" width=\"54\" height=\"54\"/>\n      <use href=\"#peony\" x=\"20\" y=\"130\" width=\"64\" height=\"64\"/>\n      <use href=\"#cosmos\" x=\"170\" y=\"150\" width=\"44\" height=\"44\"/>\n    </symbol>\n    <symbol id=\"urn\" viewBox=\"0 0 120 180\">\n      <use href=\"#leaves\" x=\"10\" y=\"0\" width=\"60\" height=\"60\"/><use href=\"#leaves\" x=\"55\" y=\"6\" width=\"56\" height=\"56\"/>\n      <use href=\"#daisy\" x=\"20\" y=\"14\" width=\"38\" height=\"38\"/><use href=\"#cosmos\" x=\"54\" y=\"4\" width=\"40\" height=\"40\"/>\n      <use href=\"#lav\" x=\"78\" y=\"-6\" width=\"18\" height=\"50\"/><use href=\"#peony\" x=\"40\" y=\"30\" width=\"36\" height=\"36\"/>\n      <path d=\"M18 62h84c0 26-14 42-30 48v12h-24v-12c-16-6-30-22-30-48z\" fill=\"#efe9e1\" stroke=\"#d8cfc4\"/>\n      <rect x=\"38\" y=\"122\" width=\"44\" height=\"10\" rx=\"2\" fill=\"#e5ddd2\"/>\n      <rect x=\"44\" y=\"132\" width=\"32\" height=\"40\" fill=\"#efe9e1\" stroke=\"#d8cfc4\"/>\n      <rect x=\"36\" y=\"170\" width=\"48\" height=\"10\" rx=\"2\" fill=\"#e5ddd2\"/>\n    </symbol>\n    <symbol id=\"rail\" viewBox=\"0 0 200 90\">\n      <rect x=\"0\" y=\"0\" width=\"200\" height=\"12\" rx=\"2\" fill=\"#efe9e1\" stroke=\"#d8cfc4\"/>\n      <rect x=\"0\" y=\"78\" width=\"200\" height=\"12\" rx=\"2\" fill=\"#e5ddd2\"/>\n      <g fill=\"#f4efe8\" stroke=\"#d8cfc4\">\n        <path d=\"M16 12h16c-6 10 6 18 0 34s6 26 0 32h-16c-6-6 6-16 0-32s6-24 0-34z\"/>\n        <path d=\"M60 12h16c-6 10 6 18 0 34s6 26 0 32h-16c-6-6 6-16 0-32s6-24 0-34z\"/>\n        <path d=\"M104 12h16c-6 10 6 18 0 34s6 26 0 32h-16c-6-6 6-16 0-32s6-24 0-34z\"/>\n        <path d=\"M148 12h16c-6 10 6 18 0 34s6 26 0 32h-16c-6-6 6-16 0-32s6-24 0-34z\"/>\n      </g>\n    </symbol>\n    <symbol id=\"butterfly\" viewBox=\"0 0 34 28\">\n      <g class=\"w\"><path d=\"M17 14C10 0 0 2 2 10c1 5 8 6 15 4z\" fill=\"#f2a6c8\"/><path d=\"M17 14c-6 4-13 10-8 12 4 1 7-6 8-12z\" fill=\"#e57aa9\"/></g>\n      <g class=\"w\"><path d=\"M17 14C24 0 34 2 32 10c-1 5-8 6-15 4z\" fill=\"#f2a6c8\"/><path d=\"M17 14c6 4 13 10 8 12-4 1-7-6-8-12z\" fill=\"#e57aa9\"/></g>\n      <rect x=\"16\" y=\"8\" width=\"2\" height=\"13\" rx=\"1\" fill=\"#6b4a5a\"/>\n    </symbol>\n\n    <!-- Taman lengkap untuk sampul -->\n    <g id=\"gardenArt\">\n      <rect x=\"-620\" y=\"-140\" width=\"1640\" height=\"1000\" fill=\"url(#gSky)\"/>\n      <path d=\"M-620 220C-540 180-480 200-420 230C-300 170-200 200-120 215S-20 170 0 210C70 160 130 170 200 200S330 150 400 180C480 150 560 200 640 190S760 160 820 200C900 170 960 200 1020 210V330H-620Z\" fill=\"#d7ddd2\"/>\n      <path d=\"M-620 255C-540 240-480 250-420 260C-320 230-220 250-120 255S-30 240 0 250C80 220 150 240 220 250S340 220 400 240C500 225 600 255 700 245S800 240 820 250C900 240 960 250 1020 255V360H-620Z\" fill=\"#c8d1c2\"/>\n      <rect x=\"-620\" y=\"440\" width=\"1640\" height=\"420\" fill=\"#e4e9dd\"/>\n      <use href=\"#tree\" x=\"-560\" y=\"190\" width=\"160\" height=\"260\"/>\n      <use href=\"#tree\" x=\"790\" y=\"190\" width=\"160\" height=\"260\"/>\n      <use href=\"#bouquetL\" x=\"-600\" y=\"640\" width=\"280\" height=\"210\"/>\n      <use href=\"#bouquetR\" x=\"720\" y=\"640\" width=\"280\" height=\"210\"/>\n      <use href=\"#tree\" x=\"-330\" y=\"170\" width=\"170\" height=\"280\"/>\n      <use href=\"#tree\" x=\"-190\" y=\"230\" width=\"120\" height=\"200\"/>\n      <use href=\"#tree\" x=\"470\" y=\"230\" width=\"120\" height=\"200\"/>\n      <use href=\"#tree\" x=\"560\" y=\"170\" width=\"170\" height=\"280\"/>\n      <use href=\"#bush\" x=\"-300\" y=\"420\" width=\"200\" height=\"90\"/>\n      <use href=\"#bush\" x=\"500\" y=\"420\" width=\"200\" height=\"90\"/>\n      <use href=\"#cypress\" x=\"-140\" y=\"400\" width=\"40\" height=\"160\"/>\n      <use href=\"#cypress\" x=\"500\" y=\"400\" width=\"40\" height=\"160\"/>\n      <use href=\"#bouquetL\" x=\"-360\" y=\"560\" width=\"280\" height=\"210\"/>\n      <use href=\"#bouquetR\" x=\"-240\" y=\"680\" width=\"260\" height=\"190\"/>\n      <use href=\"#bouquetL\" x=\"380\" y=\"680\" width=\"260\" height=\"190\"/>\n      <use href=\"#bouquetR\" x=\"480\" y=\"560\" width=\"280\" height=\"210\"/>\n      <use href=\"#tree\" x=\"-40\" y=\"190\" width=\"150\" height=\"250\"/>\n      <use href=\"#tree\" x=\"300\" y=\"180\" width=\"150\" height=\"250\"/>\n      <use href=\"#tree\" x=\"40\" y=\"250\" width=\"100\" height=\"170\"/>\n      <use href=\"#tree\" x=\"270\" y=\"250\" width=\"100\" height=\"170\"/>\n      <!-- rumah kaca -->\n      <g transform=\"translate(200 0)\">\n        <path d=\"M-60 330C-60 270-30 245 0 238C30 245 60 270 60 330Z\" fill=\"url(#gGlass)\" stroke=\"#9fb0b8\" stroke-width=\"2\"/>\n        <g stroke=\"#9fb0b8\" stroke-width=\"1.2\" fill=\"none\">\n          <path d=\"M0 238V330M-30 250C-36 280-38 305-38 330M30 250C36 280 38 305 38 330M-50 275H50M-58 305H58\"/>\n        </g>\n        <path d=\"M-10 238L0 222L10 238Z\" fill=\"#9fb0b8\"/>\n        <rect x=\"-118\" y=\"330\" width=\"236\" height=\"120\" fill=\"url(#gGlass)\" stroke=\"#9fb0b8\" stroke-width=\"2\"/>\n        <path d=\"M-130 330H130L118 318H-118Z\" fill=\"#e9eef1\" stroke=\"#9fb0b8\"/>\n        <g stroke=\"#9fb0b8\" stroke-width=\"1.2\">\n          <path d=\"M-92 330V450M-66 330V450M-40 330V450M40 330V450M66 330V450M92 330V450M-118 390H-26M26 390H118\"/>\n        </g>\n        <path d=\"M-26 450V372C-26 352-14 342 0 342S26 352 26 372V450Z\" fill=\"#f7fafb\" stroke=\"#9fb0b8\" stroke-width=\"2\"/>\n        <path d=\"M0 342V450M-26 395H26\" stroke=\"#9fb0b8\" stroke-width=\"1.2\"/>\n        <rect x=\"-140\" y=\"448\" width=\"280\" height=\"10\" fill=\"#e5e2dc\"/>\n      </g>\n      <use href=\"#bush\" x=\"40\" y=\"420\" width=\"140\" height=\"70\"/>\n      <use href=\"#bush\" x=\"220\" y=\"420\" width=\"140\" height=\"70\"/>\n      <!-- jalan setapak -->\n      <path d=\"M182 458H218L300 860H100Z\" fill=\"#efe8dc\"/>\n      <path d=\"M182 458L100 860M218 458L300 860\" stroke=\"#e1d7c6\" stroke-width=\"3\"/>\n      <!-- bedeng bunga kiri & kanan -->\n      <use href=\"#cypress\" x=\"58\" y=\"440\" width=\"30\" height=\"120\"/>\n      <use href=\"#cypress\" x=\"312\" y=\"440\" width=\"30\" height=\"120\"/>\n      <use href=\"#bouquetL\" x=\"-30\" y=\"520\" width=\"200\" height=\"150\"/>\n      <use href=\"#bouquetR\" x=\"230\" y=\"520\" width=\"200\" height=\"150\"/>\n      <use href=\"#bouquetL\" x=\"-60\" y=\"640\" width=\"230\" height=\"170\"/>\n      <use href=\"#bouquetR\" x=\"230\" y=\"640\" width=\"230\" height=\"170\"/>\n      <use href=\"#bouquetL\" x=\"-40\" y=\"740\" width=\"200\" height=\"150\"/>\n      <use href=\"#bouquetR\" x=\"240\" y=\"740\" width=\"200\" height=\"150\"/>\n      <!-- air mancur -->\n      <g transform=\"translate(200 760)\">\n        <ellipse cx=\"0\" cy=\"62\" rx=\"70\" ry=\"16\" fill=\"#e6dfd3\" stroke=\"#cfc4b4\"/>\n        <ellipse cx=\"0\" cy=\"56\" rx=\"62\" ry=\"12\" fill=\"#cfe0e6\"/>\n        <rect x=\"-8\" y=\"10\" width=\"16\" height=\"48\" fill=\"#ece5da\" stroke=\"#cfc4b4\"/>\n        <ellipse cx=\"0\" cy=\"12\" rx=\"32\" ry=\"8\" fill=\"#ece5da\" stroke=\"#cfc4b4\"/>\n        <path d=\"M0 -14C-4 -2-14 4-20 10M0 -14C4 -2 14 4 20 10\" stroke=\"#bcd5de\" stroke-width=\"2\" fill=\"none\"/>\n        <rect x=\"-3\" y=\"-16\" width=\"6\" height=\"22\" fill=\"#ece5da\"/>\n      </g>\n    </g>\n    <symbol id=\"garden\" viewBox=\"0 0 400 860\" preserveAspectRatio=\"xMidYMid slice\"><use href=\"#gardenArt\"/></symbol>\n    <symbol id=\"gardenWide\" viewBox=\"-600 -120 1600 980\" preserveAspectRatio=\"xMidYMax slice\"><use href=\"#gardenArt\"/></symbol>\n\n    <!-- Pohon samar untuk latar foto -->\n    <symbol id=\"ghost\" viewBox=\"0 0 400 640\" preserveAspectRatio=\"xMidYMid slice\">\n      <g fill=\"none\" stroke=\"#b6b0aa\" stroke-width=\"1.2\">\n        <path d=\"M30 640V380M30 470L5 430M30 440L55 400M30 520L60 490\"/>\n        <path d=\"M370 640V360M370 450L395 410M370 420L340 380M370 500L345 470\"/>\n      </g>\n      <g fill=\"#cfcac4\">\n        <circle cx=\"30\" cy=\"350\" r=\"40\"/><circle cx=\"0\" cy=\"400\" r=\"28\"/><circle cx=\"60\" cy=\"395\" r=\"26\"/><circle cx=\"30\" cy=\"300\" r=\"26\"/>\n        <circle cx=\"370\" cy=\"330\" r=\"40\"/><circle cx=\"400\" cy=\"380\" r=\"28\"/><circle cx=\"340\" cy=\"375\" r=\"26\"/><circle cx=\"370\" cy=\"280\" r=\"26\"/>\n      </g>\n    </symbol>\n  </defs>\n</svg>";
+
+/* ===== Tema Taman ===== */
 (function () {
-  var D = window.UNDANGAN || {};
-  var pria = D.pria || {}, wanita = D.wanita || {};
-  var HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  var BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
-  function esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
-  }
-  function tgl(iso) {
-    var p = String(iso || "").slice(0, 10).split("-");
-    if (p.length < 3) return null;
-    var d = new Date(+p[0], +p[1] - 1, +p[2]);
-    return { hari: HARI[d.getDay()], tgl: d.getDate(), bulan: BULAN[d.getMonth()], tahun: d.getFullYear() };
-  }
-
-  var nama1 = pria.panggilan || "Mempelai Pria";
-  var nama2 = wanita.panggilan || "Mempelai Wanita";
-  var duaNama = esc(nama1) + " &amp; " + esc(nama2);
-  var mono = (D.monogram || (nama1.charAt(0) + nama2.charAt(0))).toUpperCase().slice(0, 3);
-  var monoHtml = esc(mono) + '<span class="amp">&amp;</span>';
-  var acara = D.acara || [];
-  var utama = tgl(D.tanggal || (acara[0] && acara[0].tanggal));
-  var tanggalPanjang = utama ? utama.hari + ", " + utama.tgl + " " + utama.bulan + " " + utama.tahun : "";
-  var tanggalPendek = utama ? ("0" + utama.tgl).slice(-2) + " · " + ("0" + (BULAN.indexOf(utama.bulan) + 1)).slice(-2) + " · " + utama.tahun : "";
-
-  if (!document.title || document.title === "Undangan") document.title = nama1 + " & " + nama2;
-
-  var orang = function (p, cls) {
-    return '<div class="person reveal"><div class="pic' + cls + '">' +
-      '<svg viewBox="0 0 150 120" aria-hidden="true"><circle cx="75" cy="45" r="26" fill="#fff" opacity=".8"/><path d="M20 120c4-38 26-52 55-52s51 14 55 52z" fill="#fff" opacity=".8"/></svg>' +
-      (p.foto ? '<img src="' + esc(p.foto) + '" alt="' + esc(p.panggilan) + '" onerror="this.remove()">' : "") +
-      '</div><h3>' + esc(p.panggilan) + '</h3><div class="full">' + esc(p.lengkap) + '</div><p>' + esc(p.orangTua) + '</p></div>';
+  var burung = new Array(5).join('<svg class="bird" viewBox="0 0 26 12"><path class="wing" d="M1 9Q7 1 13 9Q19 1 25 9"/></svg>');
+  window.TEMA = {
+    id: "taman",
+    gambar: window.TEMA_TAMAN_GAMBAR,
+    hitung: "kotak",
+    galeri: "mozaik",
+    partikel: { jenis: "kelopak", warna: ["#f2a6c8", "#e57aa9", "#f7d2e1", "#f4b77a", "#b9a3d6", "#a9bba3"], min: 5, max: 10 },
+    label: {
+      mempelai: ["Mempelai", "Bride &amp; Groom"], acara: ["Save the Date", "Menuju Hari Bahagia"], cerita: ["Our Story", "Cerita Kami"],
+      video: ["Our Moment", "Video Kami"], galeri: ["Gallery", "Momen Bahagia"], hadiah: ["Wedding Gift", "Tanda Kasih"], ucapan: ["Wishes", "Konfirmasi Kehadiran &amp; Ucapan"]
+    },
+    kata: { buka: "Open Invitation" },
+    sampul: function (c) {
+      return '<div class="lace" aria-hidden="true"></div>' +
+        '<svg class="scene tall" aria-hidden="true"><use href="#garden"/></svg><svg class="scene wide" aria-hidden="true"><use href="#gardenWide"/></svg>' +
+        '<div class="cover-text"><div class="eyebrow">The Wedding of</div><div class="mono" aria-hidden="true">' + c.monoHtml + '</div>' +
+        '<div class="names sub">' + c.duaNama + '</div><div class="cover-bottom"><div class="guest"><small>' + c.kepada + '</small>' +
+        '<strong id="guestName">Tamu Undangan</strong></div><button class="btn-open" id="openBtn" type="button">' + c.tombolBuka + '</button></div></div>';
+    },
+    samping: function (c) {
+      return '<svg class="scene"><use href="#gardenWide"/></svg><div class="side-text"><div class="names">' + c.duaNama + '</div><p>' + c.tanggalPendek + '</p></div>';
+    },
+    pembuka: function (c) {
+      return '<div class="hero" id="top"><svg class="ghost-trees" aria-hidden="true"><use href="#ghost"/></svg>' +
+        '<div class="birds" aria-hidden="true">' + burung + '</div>' +
+        '<div class="arch"><div class="arch-in">' + c.siluet + '<div class="ph-label">Foto Pasangan</div>' + c.fotoPasangan + '</div></div>' +
+        '<svg class="deco cyp-l grow d1" viewBox="0 0 160 240" aria-hidden="true"><g class="sway"><use href="#cypress" x="0" y="20" width="60" height="220"/><use href="#cypress" x="44" y="0" width="64" height="240"/><use href="#cypress" x="96" y="50" width="50" height="190"/></g></svg>' +
+        '<svg class="deco cyp-r grow d2" viewBox="0 0 120 240" aria-hidden="true"><g class="sway alt"><use href="#cypress" x="10" y="0" width="64" height="240"/><use href="#cypress" x="60" y="40" width="54" height="200"/></g></svg>' +
+        '<svg class="deco rail grow d3" viewBox="0 0 200 90" aria-hidden="true"><use href="#rail"/></svg>' +
+        '<svg class="deco urn grow d3" viewBox="0 0 120 180" aria-hidden="true"><g class="sway"><use href="#urn"/></g></svg>' +
+        '<svg class="deco fl-l grow d4" viewBox="0 0 260 200" aria-hidden="true"><g class="sway"><use href="#bouquetL"/></g></svg>' +
+        '<svg class="deco fl-r grow d5" viewBox="0 0 260 200" aria-hidden="true"><g class="sway alt"><use href="#bouquetR"/></g></svg>' +
+        '<svg class="deco bf grow d6" viewBox="0 0 34 28" aria-hidden="true"><use href="#butterfly"/></svg></div>' +
+        '<div class="title-block"><div class="eyebrow">The Wedding of</div><div class="mono" aria-hidden="true">' + c.monoHtml + '</div><div class="names">' + c.duaNama + '</div><div class="date">' + c.esc(c.tanggalPanjang) + '</div></div>';
+    }
   };
-
-  function petaUrl(a) {
-    if (a.lokasi && a.lokasi.lat != null) return "https://www.google.com/maps/search/?api=1&query=" + a.lokasi.lat + "," + a.lokasi.lng;
-    if (a.peta) return a.peta;
-    return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent((a.tempat || "") + ", " + (a.alamat || ""));
-  }
-  function embedUrl(a) {
-    var q = a.lokasi && a.lokasi.lat != null ? a.lokasi.lat + "," + a.lokasi.lng : (a.tempat || "") + ", " + (a.alamat || "");
-    return "https://maps.google.com/maps?q=" + encodeURIComponent(q) + "&z=16&output=embed";
-  }
-  var acaraHtml = acara.map(function (a) {
-    var t = tgl(a.tanggal) || {};
-    var url = esc(petaUrl(a));
-    return '<article class="event reveal"><h3>' + esc(a.nama) + '</h3>' +
-      '<div class="day">' + esc((t.hari || "").toUpperCase()) + '</div><div class="bigdate">' + esc(t.tgl) + '</div>' +
-      '<div class="day">' + esc(((t.bulan || "") + " " + (t.tahun || "")).toUpperCase()) + '</div>' +
-      '<div class="time">' + esc(a.jam) + '</div><div class="place">' + esc(a.tempat) + '</div>' +
-      '<a class="addr" href="' + url + '" target="_blank" rel="noopener"><address>' + esc(a.alamat) + '</address></a>' +
-      ((a.lokasi && a.lokasi.lat != null) || a.alamat ? '<a class="map" href="' + url + '" target="_blank" rel="noopener" aria-label="Buka lokasi ' + esc(a.tempat) + ' di Google Maps">' +
-        '<iframe src="' + esc(embedUrl(a)) + '" loading="lazy" tabindex="-1" title="Peta ' + esc(a.tempat) + '"></iframe><span>Ketuk untuk buka Google Maps</span></a>' : "") +
-      '<a class="btn" href="' + url + '" target="_blank" rel="noopener">Lihat Lokasi</a></article>';
-  }).join("");
-
-  var cerita = D.cerita || [];
-  var ceritaHtml = cerita.map(function (c) {
-    return '<li class="reveal"><time>' + esc(String(c.waktu || "").toUpperCase()) + '</time><h4>' + esc(c.judul) + '</h4><p>' + esc(c.isi) + '</p></li>';
-  }).join("");
-
-  var galeri = Array.isArray(D.galeri) ? D.galeri.filter(function (g) { return g && (typeof g === "string" || g.src); }) : [];
-  /* File yang hilang dibuang; bagian yang jadi kosong disembunyikan (tidak ada kotak kosong). */
-  window.__undanganHilang = function (el) {
-    var fig = el.closest("figure"); if (fig) fig.remove();
-    var gal = document.querySelector(".gallery");
-    if (gal && !gal.querySelector("figure")) sembunyikan("galeri");
-  };
-  window.__videoHilang = function () { sembunyikan("video"); };
-  function sembunyikan(id) {
-    var sec = document.getElementById(id); if (sec) sec.remove();
-    var a = document.querySelector('.nav a[href="#' + id + '"]');
-    if (a && id === "galeri" && document.getElementById("video")) { a.setAttribute("href", "#video"); a.setAttribute("aria-label", "Video"); a.querySelector("span").textContent = "Video"; }
-    else if (a) a.remove();
-  }
-  function youtubeId(v) {
-    var m = String(v || "").match(/(?:youtu\.be\/|v=|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/);
-    return m ? m[1] : (/^[A-Za-z0-9_-]{11}$/.test(String(v || "")) ? v : "");
-  }
-  var vid = D.video || {};
-  var ytId = youtubeId(vid.youtube);
-  var videoHtml = ytId
-    ? '<div class="video-box reveal"><iframe src="https://www.youtube-nocookie.com/embed/' + ytId + '?rel=0" title="Video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>'
-    : vid.src ? '<div class="video-box reveal"><video src="' + esc(vid.src) + '" controls playsinline preload="metadata" onerror="__videoHilang()"></video></div>' : "";
-  function isVideo(item) {
-    if (item && typeof item === "object") return item.tipe === "video";
-    return /\.(mp4|webm|mov|m4v)$/i.test(String(item));
-  }
-  function srcOf(item) { return item && typeof item === "object" ? item.src : item; }
-  var galeriHtml = galeri.map(function (item, i) {
-    var src = esc(srcOf(item));
-    var media = isVideo(item)
-      ? '<video src="' + src + '#t=0.1" muted playsinline preload="metadata" onerror="__undanganHilang(this)"></video><span class="play" aria-hidden="true"></span>'
-      : '<img src="' + src + '" alt="" onerror="__undanganHilang(this)">';
-    return '<figure tabindex="0" data-i="' + i + '" data-video="' + (isVideo(item) ? 1 : 0) + '" data-src="' + src + '">' + media + '<figcaption>' + (isVideo(item) ? "VIDEO " : "FOTO ") + (i + 1) + '</figcaption></figure>';
-  }).join("");
-
-  var rekening = D.rekening || [];
-  var rekHtml = rekening.map(function (r, i) {
-    return '<div class="acc reveal"><div><small>' + esc(r.bank) + ' · a.n. ' + esc(r.atasNama) + '</small><strong id="acc' + i + '">' + esc(r.nomor) + '</strong></div>' +
-      '<button class="btn line" type="button" data-copy="acc' + i + '">Salin</button></div>';
-  }).join("");
-
-  var ayat = D.ayat || {};
-  var cerah = function (id, judul, kicker, isi, tint) {
-    return '<section id="' + id + '"' + (tint ? ' class="tint"' : "") + '><h2 class="reveal">' + judul + '</h2><p class="kicker reveal">' + kicker + '</p>' + isi + '</section>';
-  };
-  var navItems = [
-    ["mempelai", "Couple", '<path d="M12 21s-7.5-4.6-10-9.3C.4 8.5 2.3 4.5 6 4.5c2.2 0 3.5 1.2 4.5 2.6 1-1.4 2.3-2.6 4.5-2.6 3.7 0 5.6 4 4 7.2C19.5 16.4 12 21 12 21z" fill="currentColor" stroke="none"/>'],
-    ["acara", "Event", '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'],
-    ["galeri", "Gallery", '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/>'],
-    ["hadiah", "Gift", '<rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12M12 9c-2-4-6-4-6-1s6 1 6 1zm0 0c2-4 6-4 6-1s-6 1-6 1z"/>'],
-    ["ucapan", "Wishes", '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>']
-  ].filter(function (n) {
-    if (n[0] === "hadiah") return rekening.length;
-    if (n[0] === "galeri") return galeri.length || videoHtml;
-    return true;
-  }).map(function (n) { return n[0] === "galeri" && !galeri.length ? ["video", "Video", n[2]] : n; });
-
-  var html = (window.TEMA_TAMAN_GAMBAR || "") +
-  '<div id="cover" role="dialog" aria-label="Sampul undangan"><div class="lace" aria-hidden="true"></div>' +
-    '<svg class="scene tall" aria-hidden="true"><use href="#garden"/></svg><svg class="scene wide" aria-hidden="true"><use href="#gardenWide"/></svg>' +
-    '<div class="cover-text"><div class="eyebrow">THE WEDDING OF</div><div class="mono" aria-hidden="true">' + monoHtml + '</div>' +
-    '<div class="mono-sub">' + duaNama + '</div><div class="cover-bottom"><div class="guest"><small>Kepada Yth. Bapak/Ibu/Saudara/i</small>' +
-    '<strong id="guestName">Tamu Undangan</strong></div><button class="btn-open" id="openBtn" type="button">Open Invitation</button></div></div></div>' +
-  '<aside class="side" aria-hidden="true"><svg class="scene"><use href="#gardenWide"/></svg><div class="side-text"><div class="names">' + duaNama + '</div><p>' + tanggalPendek + '</p></div></aside>' +
-  '<canvas id="petals" aria-hidden="true"></canvas>' +
-  '<button class="music" id="musicBtn" type="button" aria-label="Putar atau hentikan musik"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5h11v2H3zm0 4h11v2H3zm0 4h7v2H3zm13-8v9.2A3 3 0 1 0 18 17V8h3V5z"/></svg></button>' +
-  '<audio id="music" loop preload="none"' + (D.musik ? ' src="' + esc(D.musik) + '"' : "") + '></audio>' +
-  '<div class="app" id="app">' +
-    '<div class="hero" id="top"><svg class="ghost-trees" aria-hidden="true"><use href="#ghost"/></svg>' +
-      '<div class="birds" aria-hidden="true">' + new Array(5).join('<svg class="bird" viewBox="0 0 26 12"><path class="wing" d="M1 9Q7 1 13 9Q19 1 25 9"/></svg>') + '</div>' +
-      '<div class="arch"><div class="arch-in"><svg class="ph" viewBox="0 0 300 260" aria-hidden="true"><circle cx="118" cy="96" r="34" fill="#fff" opacity=".75"/><circle cx="186" cy="84" r="36" fill="#fff" opacity=".75"/><path d="M50 260c4-70 34-110 68-110s50 30 60 70" fill="#fff" opacity=".75"/><path d="M130 260c6-80 28-128 56-128s54 44 62 128z" fill="#fff" opacity=".85"/></svg>' +
-        '<div class="ph-label">Foto Pasangan</div>' + (D.fotoPasangan ? '<img src="' + esc(D.fotoPasangan) + '" alt="' + esc(nama1 + " dan " + nama2) + '" onerror="this.remove()">' : "") + '</div></div>' +
-      '<svg class="deco cyp-l grow d1" viewBox="0 0 160 240" aria-hidden="true"><g class="sway"><use href="#cypress" x="0" y="20" width="60" height="220"/><use href="#cypress" x="44" y="0" width="64" height="240"/><use href="#cypress" x="96" y="50" width="50" height="190"/></g></svg>' +
-      '<svg class="deco cyp-r grow d2" viewBox="0 0 120 240" aria-hidden="true"><g class="sway alt"><use href="#cypress" x="10" y="0" width="64" height="240"/><use href="#cypress" x="60" y="40" width="54" height="200"/></g></svg>' +
-      '<svg class="deco rail grow d3" viewBox="0 0 200 90" aria-hidden="true"><use href="#rail"/></svg>' +
-      '<svg class="deco urn grow d3" viewBox="0 0 120 180" aria-hidden="true"><g class="sway"><use href="#urn"/></g></svg>' +
-      '<svg class="deco fl-l grow d4" viewBox="0 0 260 200" aria-hidden="true"><g class="sway"><use href="#bouquetL"/></g></svg>' +
-      '<svg class="deco fl-r grow d5" viewBox="0 0 260 200" aria-hidden="true"><g class="sway alt"><use href="#bouquetR"/></g></svg>' +
-      '<svg class="deco bf grow d6" viewBox="0 0 34 28" aria-hidden="true"><use href="#butterfly"/></svg></div>' +
-    '<div class="title-block"><div class="eyebrow">THE WEDDING OF</div><div class="mono" aria-hidden="true">' + monoHtml + '</div><div class="names">' + duaNama + '</div><div class="date">' + esc(tanggalPanjang.toUpperCase()) + '</div></div>' +
-    (ayat.teks ? '<section class="reveal"><p class="lead">“' + esc(ayat.teks) + '”<cite>' + esc(String(ayat.sumber || "").toUpperCase()) + '</cite></p></section>' : "") +
-    cerah("mempelai", "Mempelai", "BRIDE &amp; GROOM", orang(pria, "") + '<div class="and reveal" aria-hidden="true">&amp;</div>' + orang(wanita, " b"), true) +
-    cerah("acara", "Save the Date", "MENUJU HARI BAHAGIA",
-      '<div class="countdown reveal"><div><b id="cd-d">00</b><span>Hari</span></div><div><b id="cd-h">00</b><span>Jam</span></div><div><b id="cd-m">00</b><span>Menit</span></div><div><b id="cd-s">00</b><span>Detik</span></div></div><div style="height:34px"></div>' + acaraHtml, false) +
-    (cerita.length ? cerah("cerita", "Our Story", "CERITA KAMI", '<ol class="story">' + ceritaHtml + '</ol>', true) : "") +
-    (videoHtml ? cerah("video", esc(vid.judul || "Our Moment"), "VIDEO KAMI", videoHtml, true) : "") +
-    (galeri.length ? cerah("galeri", "Gallery", "MOMEN BAHAGIA", '<div class="gallery reveal">' + galeriHtml + '</div>', false) : "") +
-    (rekening.length ? cerah("hadiah", "Wedding Gift", "TANDA KASIH", '<p class="lead reveal" style="margin-bottom:22px">Doa restu Anda adalah hadiah terindah. Bila ingin memberi tanda kasih, dapat melalui:</p><div class="gift">' + rekHtml + '</div>', true) : "") +
-    cerah("ucapan", "Wishes", "KONFIRMASI KEHADIRAN &amp; UCAPAN",
-      '<form class="rsvp reveal" id="rsvpForm"><div><label for="f-name">Nama</label><input id="f-name" name="nama" required placeholder="Nama Anda"></div>' +
-      '<div><label for="f-att">Kehadiran</label><select id="f-att" name="hadir"><option>Hadir</option><option>Tidak Hadir</option><option>Masih Ragu</option></select></div>' +
-      '<div><label for="f-pax">Jumlah Tamu</label><select id="f-pax" name="jumlah"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>' +
-      '<div><label for="f-msg">Ucapan &amp; Doa</label><textarea id="f-msg" name="ucapan" required placeholder="Tulis ucapan untuk kedua mempelai"></textarea></div>' +
-      '<button class="btn" type="submit" style="justify-self:start;margin-top:2px">Kirim Ucapan</button><p class="toast" id="toast" role="status"></p></form><div class="wishes" id="wishes"></div>', false) +
-    '<footer><p>' + esc(D.penutup || "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.") + '</p>' +
-      '<div class="mono" aria-hidden="true" style="margin-top:18px">' + monoHtml + '</div><div style="font-family:var(--font-script);font-size:34px">' + duaNama + '</div></footer>' +
-  '</div>' +
-  '<div class="lightbox" id="lightbox" hidden><button type="button" class="lb-close" aria-label="Tutup">&times;</button><div class="lb-body" id="lbBody"></div></div>' +
-  '<nav class="nav" aria-label="Navigasi undangan">' + navItems.map(function (n, i) {
-    return '<a href="#' + n[0] + '"' + (i ? "" : ' class="on"') + ' aria-label="' + n[1] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' + n[2] + '</svg><span>' + n[1] + '</span></a>';
-  }).join("") + '</nav>';
-
-  document.body.classList.add("locked");
-  document.body.insertAdjacentHTML("afterbegin", html);
-
-  /* ================= Interaksi ================= */
-  var body = document.body;
-  var WEDDING_DATE = new Date(D.tanggal || ((acara[0] && acara[0].tanggal) + "T08:00:00+07:00"));
-  var SCRIPT_URL = D.ucapanScriptUrl || "";
-
-  try {
-    var to = new URLSearchParams(location.search).get("to");
-    if (to) document.getElementById("guestName").textContent = to.slice(0, 60);
-  } catch (e) {}
-
-  var cover = document.getElementById("cover");
-  var audio = document.getElementById("music");
-  var musicBtn = document.getElementById("musicBtn");
-  var hasMusic = !!D.musik;
-  if (!hasMusic) musicBtn.hidden = true;
-  audio.addEventListener("error", function () { hasMusic = false; musicBtn.hidden = true; });
-  function playMusic() {
-    if (!hasMusic) return;
-    var p = audio.play(); if (p && p.then) p.then(function () { musicBtn.classList.add("spin"); }, function () {});
-  }
-  musicBtn.addEventListener("click", function () {
-    if (audio.paused) playMusic(); else { audio.pause(); musicBtn.classList.remove("spin"); }
-  });
-  document.getElementById("openBtn").addEventListener("click", function () {
-    window.scrollTo(0, 0);
-    cover.classList.add("open");
-    body.classList.remove("locked");
-    setTimeout(function () { body.classList.add("play"); startPetals(); }, 700);
-    setTimeout(function () { cover.hidden = true; }, 1600);
-    playMusic();
-  });
-
-  function pad(n) { return String(n).padStart(2, "0"); }
-  function tick() {
-    var s = Math.max(0, Math.floor((WEDDING_DATE - new Date()) / 1000)) || 0;
-    document.getElementById("cd-d").textContent = pad(Math.floor(s / 86400));
-    document.getElementById("cd-h").textContent = pad(Math.floor(s % 86400 / 3600));
-    document.getElementById("cd-m").textContent = pad(Math.floor(s % 3600 / 60));
-    document.getElementById("cd-s").textContent = pad(s % 60);
-  }
-  tick(); setInterval(tick, 1000);
-
-  var reveals = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -8% 0px" });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else reveals.forEach(function (el) { el.classList.add("in"); });
-
-  function setActive() {
-    var links = document.querySelectorAll(".nav a"), y = window.innerHeight * .45, idx = 0;
-    Array.prototype.forEach.call(links, function (a, i) { var s = document.querySelector(a.getAttribute("href")); if (s && s.getBoundingClientRect().top < y) idx = i; });
-    Array.prototype.forEach.call(links, function (a, i) { a.classList.toggle("on", i === idx); });
-  }
-  window.addEventListener("scroll", setActive, { passive: true }); setActive();
-
-  var KEY = "ucapan-" + location.pathname;
-  var sample = D.contohUcapan || [];
-  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
-  function save(l) { try { localStorage.setItem(KEY, JSON.stringify(l)); } catch (e) {} }
-  function render(list) {
-    var box = document.getElementById("wishes"); box.innerHTML = "";
-    list.forEach(function (w) {
-      var d = document.createElement("div"); d.className = "wish";
-      var b = document.createElement("b"); b.textContent = w.nama;
-      var t = document.createElement("span"); t.className = "tag"; t.textContent = w.hadir;
-      var p = document.createElement("p"); p.textContent = w.ucapan;
-      d.append(b, t, p); box.appendChild(d);
-    });
-  }
-  function refresh() {
-    if (SCRIPT_URL) {
-      fetch(SCRIPT_URL).then(function (r) { return r.json(); }).then(function (rows) { render(rows.concat(sample)); })
-        .catch(function () { render(load().concat(sample)); });
-    } else render(load().concat(sample));
-  }
-  refresh();
-  document.getElementById("rsvpForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var f = e.target, item = { nama: f.nama.value.trim(), hadir: f.hadir.value, jumlah: f.jumlah.value, ucapan: f.ucapan.value.trim() };
-    if (!item.nama || !item.ucapan) return;
-    var l = load(); l.unshift(item); save(l);
-    if (SCRIPT_URL) {
-      var fd = new FormData(); Object.keys(item).forEach(function (k) { fd.append(k, item[k]); });
-      fetch(SCRIPT_URL, { method: "POST", body: fd }).then(refresh, refresh);
-    } else refresh();
-    f.ucapan.value = "";
-    document.getElementById("toast").textContent = "Terima kasih, " + item.nama + ". Ucapan Anda sudah terkirim.";
-  });
-
-  document.querySelectorAll("[data-copy]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var el = document.getElementById(btn.dataset.copy), txt = el.textContent.replace(/\s/g, "");
-      function ok() { btn.textContent = "Tersalin"; setTimeout(function () { btn.textContent = "Salin"; }, 1800); }
-      function fb() { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Tekan Ctrl+C"; }
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fb); else fb();
-    });
-  });
-
-  var lb = document.getElementById("lightbox"), lbBody = document.getElementById("lbBody");
-  function openLb(fig) {
-    var src = fig.getAttribute("data-src");
-    lbBody.innerHTML = fig.getAttribute("data-video") === "1"
-      ? '<video src="' + src + '" controls autoplay playsinline></video>'
-      : '<img src="' + src + '" alt="">';
-    lb.hidden = false;
-    if (!audio.paused && fig.getAttribute("data-video") === "1") { audio.pause(); musicBtn.classList.remove("spin"); lb.dataset.resume = "1"; }
-  }
-  function closeLb() {
-    lb.hidden = true; lbBody.innerHTML = "";
-    if (lb.dataset.resume) { delete lb.dataset.resume; playMusic(); }
-  }
-  document.querySelectorAll(".gallery figure").forEach(function (fig) {
-    fig.addEventListener("click", function () { if (fig.querySelector("img,video")) openLb(fig); });
-    fig.addEventListener("keydown", function (e) { if (e.key === "Enter" && fig.querySelector("img,video")) openLb(fig); });
-  });
-  lb.addEventListener("click", function (e) { if (e.target === lb || e.target.classList.contains("lb-close")) closeLb(); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !lb.hidden) closeLb(); });
-
-  function startPetals() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    var cv = document.getElementById("petals"), ctx = cv.getContext("2d"), W, H;
-    var cols = ["#f2a6c8", "#e57aa9", "#f7d2e1", "#f4b77a", "#b9a3d6", "#a9bba3"];
-    function rs() { var d = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
-    rs(); addEventListener("resize", rs);
-    function r(a, b) { return a + Math.random() * (b - a); }
-    function mk(top) { return { x: r(0, W), y: top ? -20 : r(-H, H), s: r(5, 10), vy: r(.5, 1.2), ph: r(0, 6.3), rot: r(0, 6.3), vr: r(-.03, .03), c: cols[Math.floor(Math.random() * cols.length)] }; }
-    var ps = []; for (var i = 0; i < Math.min(28, Math.round(W / 30) + 10); i++) ps.push(mk(false));
-    (function f() {
-      ctx.clearRect(0, 0, W, H);
-      ps.forEach(function (p, i) {
-        p.ph += .02; p.y += p.vy; p.x += Math.sin(p.ph) * .8 + .2; p.rot += p.vr;
-        if (p.y > H + 20) ps[i] = mk(true);
-        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.scale(1, Math.cos(p.ph * 1.4) * .45 + .6);
-        ctx.globalAlpha = .8; ctx.fillStyle = p.c;
-        ctx.beginPath(); ctx.moveTo(0, -p.s); ctx.bezierCurveTo(p.s, -p.s * .6, p.s * .7, p.s * .7, 0, p.s); ctx.bezierCurveTo(-p.s * .7, p.s * .7, -p.s, -p.s * .6, 0, -p.s); ctx.fill();
-        ctx.restore();
-      });
-      requestAnimationFrame(f);
-    })();
-  }
 })();
