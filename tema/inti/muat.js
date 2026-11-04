@@ -11,7 +11,9 @@
   document.write(
     '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?' + t.huruf + '&display=swap">' +
     '<link rel="stylesheet" href="' + base + 'inti/inti.css">' +
+    (t.dasar ? '<link rel="stylesheet" href="' + base + t.dasar + '/tema.css">' : '') +
     '<link rel="stylesheet" href="' + base + t.id + '/tema.css">' +
+    (t.dasar ? '<script src="' + base + t.dasar + '/tema.js"><\/script>' : '') +
     '<script src="' + base + t.id + '/tema.js"><\/script>' +
     '<script src="' + base + 'inti/inti.js"><\/script>'
   );

@@ -25,5 +25,11 @@ window.DAFTAR_TEMA = [
   { id: "bali", nama: "Bali", ket: "Candi bentar terbuka, penjor, kamboja, kain poleng, salam Om Swastyastu", warna: ["#fbf8f0", "#3f6b4f", "#c48a2c"],
     huruf: "family=Tenor+Sans&family=Petit+Formal+Script&family=Prata&family=Mulish:wght@400;600;700" },
   { id: "palembang", nama: "Melayu Palembang", ket: "Songket lepus emas, rumah limas, mahkota aesan gede, kain dilipat", warna: ["#fff7ea", "#8e1b1b", "#e8b84f"],
-    huruf: "family=Cormorant+SC:wght@500;600;700&family=Rouge+Script&family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Open+Sans:wght@400;600;700" }
+    huruf: "family=Cormorant+SC:wght@500;600;700&family=Rouge+Script&family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Open+Sans:wght@400;600;700" },
+  { id: "jelajah-gedung", nama: "Jelajah Gedung", ket: "Game piksel: tamu memilih karakter lalu berjalan di ballroom ke pelaminan, galeri, kado, buku tamu", warna: ["#fdf7ea", "#22284a", "#c9a24a"], dasar: "jelajah",
+    huruf: "family=Pixelify+Sans:wght@400;600;700&family=Nunito:wght@400;600;700" },
+  { id: "jelajah-pantai", nama: "Jelajah Pantai", ket: "Game piksel: acara terbuka di tepi pantai, gapura bunga, kursi putih, ombak, pohon kelapa", warna: ["#fffaf0", "#1f5d6e", "#e0785c"], dasar: "jelajah",
+    huruf: "family=Pixelify+Sans:wght@400;600;700&family=Nunito:wght@400;600;700" },
+  { id: "jelajah-hutan", nama: "Jelajah Hutan", ket: "Game piksel: pesta di pinggir hutan, sungai dan jembatan, lampu tali, kunang-kunang", warna: ["#fbf4e2", "#3b2a1a", "#7fa35a"], dasar: "jelajah",
+    huruf: "family=Pixelify+Sans:wght@400;600;700&family=Nunito:wght@400;600;700" }
 ];
