@@ -103,6 +103,8 @@ h2{font-family:var(--font-script);font-weight:400;font-size:46px;line-height:1.1
 .event .place{font-family:var(--font-serif);font-weight:600;font-size:19px}
 .event address{font-style:normal;font-size:14px;color:var(--muted)}
 .event a.addr{color:inherit;text-decoration:none}
+.event .sama-lokasi{font-size:13px;color:var(--muted);margin-top:4px;font-style:italic}
+.event.lokasi-bersama{padding-top:52px}
 .event a.addr address{text-decoration:underline;text-decoration-color:var(--accent-soft);text-underline-offset:3px}
 .event a.map{display:block;position:relative;margin:14px auto 0;border-radius:16px;overflow:hidden;height:170px;border:1px solid var(--line)}
 .event a.map iframe{width:100%;height:100%;border:0;pointer-events:none;display:block}

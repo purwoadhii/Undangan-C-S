@@ -62,18 +62,31 @@
     var q = a.lokasi && a.lokasi.lat != null ? a.lokasi.lat + "," + a.lokasi.lng : (a.tempat || "") + ", " + (a.alamat || "");
     return "https://maps.google.com/maps?q=" + encodeURIComponent(q) + "&z=16&output=embed";
   }
-  var acaraHtml = acara.map(function (a, i) {
-    var t = tgl(a.tanggal) || {};
+  /* Acara yang tempatnya sama cukup memakai satu peta. Bila semua acara di satu tempat, peta tampil sekali
+     di kartu "Lokasi" setelah kartu-kartu acara; bila berbeda, tiap tempat punya peta di kartu acara pertamanya. */
+  function lokasiKunci(a) { return a.lokasi && a.lokasi.lat != null ? (+a.lokasi.lat).toFixed(5) + "," + (+a.lokasi.lng).toFixed(5) : ((a.tempat || "") + "|" + (a.alamat || "")).toLowerCase().trim(); }
+  function adaLokasi(a) { return a.tempat || a.alamat || (a.lokasi && a.lokasi.lat != null); }
+  var kunciAcara = acara.map(lokasiKunci);
+  var satuTempat = acara.length > 1 && acara.every(function (a, i) { return adaLokasi(a) && kunciAcara[i] === kunciAcara[0]; });
+  function blokLokasi(a) {
     var url = esc(petaUrl(a));
+    return '<div class="place">' + esc(a.tempat) + '</div>' +
+      (a.alamat ? '<a class="addr" href="' + url + '" target="_blank" rel="noopener"><address>' + esc(a.alamat) + '</address></a>' : "") +
+      ((a.lokasi && a.lokasi.lat != null) || a.alamat ? '<a class="map" href="' + url + '" target="_blank" rel="noopener" aria-label="Buka lokasi ' + esc(a.tempat) + ' di Google Maps">' +
+        '<iframe src="' + esc(embedUrl(a)) + '" loading="lazy" tabindex="-1" title="Peta ' + esc(a.tempat) + '"></iframe><span>Ketuk untuk buka Google Maps</span></a>' : "") +
+      '<a class="btn" href="' + url + '" target="_blank" rel="noopener">Lihat Lokasi</a>';
+  }
+  var acaraHtml = acara.map(function (a, i) {
+    var t = tgl(a.tanggal) || {}, awal = kunciAcara.indexOf(kunciAcara[i]), lok;
+    if (satuTempat) lok = a.tempat ? '<div class="place">' + esc(a.tempat) + '</div>' : "";
+    else if (awal < i && adaLokasi(a)) lok = '<div class="place">' + esc(a.tempat) + '</div><div class="sama-lokasi">Lokasi sama dengan ' + esc(acara[awal].nama || "acara sebelumnya") + '</div>';
+    else lok = adaLokasi(a) ? blokLokasi(a) : "";
     return '<article class="event reveal ev' + i + '">' + (T.hiasAcara ? T.hiasAcara(i) : "") + '<h3>' + esc(a.nama) + '</h3>' +
       '<div class="day">' + esc(t.hari || "") + '</div><div class="bigdate">' + esc(t.tgl) + '</div>' +
       '<div class="month">' + esc((t.bulan || "") + " " + (t.tahun || "")) + '</div>' +
-      '<div class="time">' + esc(a.jam) + '</div><div class="place">' + esc(a.tempat) + '</div>' +
-      '<a class="addr" href="' + url + '" target="_blank" rel="noopener"><address>' + esc(a.alamat) + '</address></a>' +
-      ((a.lokasi && a.lokasi.lat != null) || a.alamat ? '<a class="map" href="' + url + '" target="_blank" rel="noopener" aria-label="Buka lokasi ' + esc(a.tempat) + ' di Google Maps">' +
-        '<iframe src="' + esc(embedUrl(a)) + '" loading="lazy" tabindex="-1" title="Peta ' + esc(a.tempat) + '"></iframe><span>Ketuk untuk buka Google Maps</span></a>' : "") +
-      '<a class="btn" href="' + url + '" target="_blank" rel="noopener">Lihat Lokasi</a></article>';
+      '<div class="time">' + esc(a.jam) + '</div>' + lok + '</article>';
   }).join("");
+  if (satuTempat) acaraHtml += '<article class="event lokasi-bersama reveal ev' + acara.length + '">' + (T.hiasAcara ? T.hiasAcara(acara.length) : "") + '<h3>' + esc(T.judulLokasi || "Lokasi") + '</h3>' + blokLokasi(acara[0]) + '</article>';
 
   var cerita = D.cerita || [];
   var ceritaHtml = cerita.map(function (c) {

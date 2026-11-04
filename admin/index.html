@@ -55,12 +55,26 @@ button:disabled{opacity:.55;cursor:wait}
 .thumb .x{position:absolute;right:4px;top:4px;width:24px;height:24px;padding:0;justify-content:center;border-radius:50%;background:rgba(255,255,255,.92);color:var(--danger);font-size:16px}
 .thumb .mv{position:absolute;bottom:4px;display:flex;gap:4px;left:4px}
 .thumb .mv button{width:24px;height:24px;padding:0;justify-content:center;border-radius:6px;background:rgba(255,255,255,.92);color:var(--ink);font-size:12px}
+.thumb .ukuran{position:absolute;right:4px;bottom:4px;font-size:10px;background:rgba(0,0,0,.6);color:#fff;padding:1px 6px;border-radius:99px}
+.thumb .ukuran.besar{background:#c0392b}
+.thumb.audio .ukuran{position:static;display:inline-block;margin-top:6px}
 .thumb.empty{display:grid;place-items:center;color:var(--muted);font-size:12px;text-align:center;padding:6px}
 .pick{display:inline-flex}
 .pick input{display:none}
 .map-pick{height:260px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:0}
 .search-row{display:flex;gap:8px;margin-top:8px}
-.search-row input{margin:0}
+.search-row input{margin:0;flex:1;min-width:0}
+.search-row{flex-wrap:wrap}
+.hasil-cari{margin-top:6px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.hasil-cari .hasil{display:block;width:100%;text-align:left;background:#fff;color:var(--ink);border:0;border-bottom:1px solid var(--line);border-radius:0;padding:8px 12px;font-size:13px}
+.hasil-cari .hasil:last-child{border-bottom:0}
+.hasil-cari .hasil:hover{background:#faf3f5}
+.hasil-cari .hasil span{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.leaflet-control-layers-base label{display:flex!important;align-items:center;gap:6px;margin:2px 0!important;font-size:13px;font-weight:600;color:var(--ink)}
+.leaflet-control-layers-base label > span,.leaflet-control-layers-base label > div{display:flex;align-items:center;gap:6px}
+.leaflet-control-layers input{width:auto!important;margin:0!important;padding:0!important}
+.sama-box{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.sama-box input{width:auto;margin:0}
 .coord{font-size:12px;color:var(--muted);margin-top:6px}
 .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.95);backdrop-filter:blur(6px);border-top:1px solid var(--line);z-index:20;
   padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
@@ -236,7 +250,7 @@ ol.steps{padding-left:20px;margin:8px 0}
 
     <div class="card">
       <h2>Acara</h2>
-      <p class="hint">Hitung mundur memakai tanggal dan jam mulai acara pertama. Klik peta untuk menaruh titik lokasi; tamu bisa mengetuk alamat untuk membuka Google Maps.</p>
+      <p class="hint">Hitung mundur memakai tanggal dan jam mulai acara pertama. Bila akad dan resepsi di tempat yang sama, centang "Tempatnya sama dengan acara pertama" sehingga undangan cukup menampilkan satu peta. Klik peta untuk menaruh titik lokasi; tamu bisa mengetuk peta untuk membuka Google Maps.</p>
       <div id="acaraList"></div>
       <button class="ghost small" type="button" id="addAcara">+ Tambah acara</button>
     </div>
@@ -361,6 +375,7 @@ ol.steps{padding-left:20px;margin:8px 0}
   }
   function b64ToText(b64){ var bin = atob(b64.replace(/\n/g,"")); var bytes = new Uint8Array(bin.length); for (var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
   function textToB64(t){ var bytes = new TextEncoder().encode(t), s = ""; for (var i=0;i<bytes.length;i+=0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000)); return btoa(s); }
+  var BLOB_SHA = typeof WeakMap === "function" ? new WeakMap() : null; // File -> sha blob yang sudah ada di GitHub
   function fileToB64(f){ return new Promise(function(res,rej){
     if (f.size > 95 * 1024 * 1024) return rej(new Error('File "' + f.name + '" terlalu besar (' + Math.round(f.size / 1048576) + ' MB). Batas GitHub 100 MB per file; kecilkan dulu lalu pilih ulang.'));
     var r = new FileReader();
@@ -672,6 +687,29 @@ ol.steps{padding-left:20px;margin:8px 0}
     if (it.file) return it.url || (it.url = URL.createObjectURL(it.file));
     return state.editing ? rawUrl(state.editing, it.path) : "";
   }
+  function ukuranTeks(n){ return n >= 1048576 ? (n / 1048576).toFixed(n >= 10485760 ? 0 : 1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
+  var BATAS_VIDEO = 25 * 1048576, BATAS_AUDIO = 15 * 1048576;
+  function terlaluBesar(f){ return /^video\//.test(f.type) ? f.size > BATAS_VIDEO : /^audio\//.test(f.type) ? f.size > BATAS_AUDIO : false; }
+  /* Foto dikecilkan di browser sebelum diunggah: sisi terpanjang maksimal 1920 px, JPEG kualitas 0,85.
+     Foto yang sudah kecil, GIF/SVG, atau format yang tidak bisa dibaca browser dibiarkan apa adanya. */
+  function kecilkanFoto(f){
+    if (!/^image\/(jpeg|jpg|png|webp|bmp|heic|heif)$/i.test(f.type) || f.size < 350 * 1024) return Promise.resolve(f);
+    return new Promise(function(ok){
+      var url = URL.createObjectURL(f), img = new Image();
+      img.onload = function(){
+        var M = 1920, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, M / Math.max(w, h));
+        var cv = document.createElement("canvas"); cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+        var g = cv.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, cv.width, cv.height); g.drawImage(img, 0, 0, cv.width, cv.height);
+        URL.revokeObjectURL(url);
+        cv.toBlob(function(b){
+          if (!b || b.size >= f.size) return ok(f);
+          ok(new File([b], f.name.replace(/\.[^.]+$/, "") + ".jpg", {type:"image/jpeg", lastModified:Date.now()}));
+        }, "image/jpeg", .85);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); ok(f); };
+      img.src = url;
+    });
+  }
   function isVid(it){ return it.file ? /^video\//.test(it.file.type) : /\.(mp4|webm|mov|m4v)$/i.test(it.path || ""); }
   function renderSlot(key, opts){
     var box = $("m_" + key), items = state.media[key] || [];
@@ -679,8 +717,14 @@ ol.steps{padding-left:20px;margin:8px 0}
     items.forEach(function(it, i){
       var t = document.createElement("div"); t.className = "thumb";
       var url = mediaUrl(it);
-      if (opts.audio) { t.style.width = "220px"; t.style.height = "auto"; t.style.padding = "8px"; t.innerHTML = '<audio controls src="' + url + '" style="width:100%"></audio>'; }
+      if (opts.audio) { t.className += " audio"; t.style.width = "220px"; t.style.height = "auto"; t.style.padding = "8px"; t.innerHTML = '<audio controls src="' + url + '" style="width:100%"></audio>'; }
       else t.innerHTML = isVid(it) ? '<video src="' + url + '#t=0.1" muted playsinline preload="metadata"></video><span class="tag">VIDEO</span>' : '<img src="' + url + '" alt="">';
+      if (it.file) {
+        var uk = document.createElement("span"), besar = terlaluBesar(it.file);
+        uk.className = "ukuran" + (besar ? " besar" : ""); uk.textContent = ukuranTeks(it.file.size);
+        uk.title = besar ? "File besar: unggahan ke GitHub bisa gagal. Kecilkan dulu (misalnya kirim lewat WhatsApp ke diri sendiri lalu unduh lagi)." : it.dari ? "Dikecilkan otomatis dari " + ukuranTeks(it.dari) : "";
+        t.appendChild(uk);
+      }
       var x = document.createElement("button"); x.type = "button"; x.className = "x"; x.textContent = "×"; x.setAttribute("aria-label","Hapus");
       x.addEventListener("click", function(){ if (it.path) state.removed.push(it.path); items.splice(i,1); markDirty(); renderSlot(key, opts); });
       t.appendChild(x);
@@ -697,11 +741,19 @@ ol.steps{padding-left:20px;margin:8px 0}
       lab.innerHTML = '<span>+ ' + (opts.audio ? "Pilih mp3" : opts.multi ? "Tambah foto / video" : /video/.test(opts.accept) && !/image/.test(opts.accept) ? "Pilih video" : "Pilih foto") + '</span>';
       var inp = document.createElement("input"); inp.type = "file"; inp.accept = opts.accept; if (opts.multi) inp.multiple = true;
       inp.addEventListener("change", function(){
-        Array.prototype.forEach.call(inp.files, function(f){
-          if (f.size > 95*1024*1024) { alertMsg("File " + f.name + " lebih dari 95 MB, tidak bisa diunggah ke GitHub.", true); return; }
-          items.push({file:f});
+        var dipilih = Array.prototype.slice.call(inp.files); if (!dipilih.length) return;
+        alertMsg("Menyiapkan " + dipilih.length + " file…");
+        Promise.all(dipilih.map(function(f){ return kecilkanFoto(f).then(function(k){ return {asli:f, file:k}; }); })).then(function(list){
+          var pesan = [];
+          list.forEach(function(x){
+            var f = x.file;
+            if (f.size > 95*1024*1024) { pesan.push("File " + f.name + " lebih dari 95 MB, tidak bisa diunggah ke GitHub."); return; }
+            if (terlaluBesar(f)) pesan.push(f.name + " berukuran " + ukuranTeks(f.size) + ". Unggahan sebesar ini sering gagal; sebaiknya dikecilkan dulu" + (/^video/.test(f.type) ? " atau pakai link YouTube." : "."));
+            items.push(f === x.asli ? {file:f} : {file:f, dari:x.asli.size});
+          });
+          state.media[key] = items; markDirty(); renderSlot(key, opts);
+          alertMsg(pesan.join(" "), !!pesan.length);
         });
-        state.media[key] = items; markDirty(); renderSlot(key, opts);
       });
       lab.appendChild(inp); box.appendChild(lab);
     }
@@ -718,26 +770,55 @@ ol.steps{padding-left:20px;margin:8px 0}
 
   /* ---------- Baris berulang ---------- */
   var maps = [];
-  function acaraRow(a){
+  function lokasiKunci(a){ return a && a.lokasi && a.lokasi.lat != null ? (+a.lokasi.lat).toFixed(5) + "," + (+a.lokasi.lng).toFixed(5) : ((a && a.tempat || "") + "|" + (a && a.alamat || "")).toLowerCase().trim(); }
+  /* Acara kedua dan seterusnya bisa memakai lokasi acara pertama (satu peta saja di undangan). */
+  function aturLokasiSama(){
+    var rows = $("acaraList").children;
+    Array.prototype.forEach.call(rows, function(el, i){
+      var box = el.querySelector(".sama-box"), cb = el.querySelector(".sama"), isi = el.querySelector(".lokasi-isi");
+      box.hidden = i === 0;
+      var sama = i > 0 && cb.checked;
+      isi.hidden = sama;
+      if (!sama && el._map) setTimeout(function(){ el._map.invalidateSize(); }, 30);
+    });
+  }
+  var PUSAT_AWAL = [-2.5, 118], ZOOM_AWAL = 5; // seluruh Indonesia
+  function acaraRow(a, samaAwal){
     a = a || {};
     var el = document.createElement("div"); el.className = "row-item acara";
     el.innerHTML = '<h3>Acara</h3><button type="button" class="danger small remove">Hapus</button>' +
       '<div class="grid three"><label>Nama acara<input data-k="nama" placeholder="Akad Nikah"></label><label>Tanggal<input type="date" data-k="tanggal"></label>' +
       '<label>Jam mulai<input type="time" data-k="jamMulai"></label><label>Jam selesai (kosong = selesai)<input type="time" data-k="jamSelesai"></label>' +
       '<label>Zona waktu<select data-k="zona"><option>WIB</option><option>WITA</option><option>WIT</option></select></label></div>' +
-      '<div class="grid" style="margin-top:10px"><label>Nama tempat<input data-k="tempat" placeholder="Masjid Al-Ikhlas"></label><label>Alamat<input data-k="alamat" placeholder="Jl. Kenanga No. 12, Bogor"></label></div>' +
-      '<label style="margin-top:10px">Titik lokasi</label><div class="search-row"><input data-k="cari" placeholder="Cari tempat / alamat, atau tempel link Google Maps"><button type="button" class="ghost small" data-act="cari">Cari</button></div>' +
-      '<div class="map-pick"></div><div class="coord"></div>';
+      '<label class="sama-box check" style="margin-top:10px"><input type="checkbox" class="sama"> Tempatnya sama dengan acara pertama (di undangan cukup satu peta)</label>' +
+      '<div class="lokasi-isi">' +
+      '<div class="grid" style="margin-top:10px"><label>Nama tempat<input data-k="tempat" placeholder="Masjid Al-Ikhlas"></label><label>Alamat<input data-k="alamat" placeholder="Jl. Kenanga No. 12, Batam"></label></div>' +
+      '<label style="margin-top:10px">Titik lokasi</label><div class="search-row"><input data-k="cari" placeholder="Nama tempat, jalan, atau kelurahan + kota (mis. Harbour Bay Batam)"><button type="button" class="ghost small" data-act="cari">Cari</button><button type="button" class="ghost small" data-act="saya" title="Pakai lokasi HP/laptop saat ini">Lokasi saya</button></div>' +
+      '<div class="hasil-cari" hidden></div>' +
+      '<div class="map-pick"></div><div class="coord"></div>' +
+      '<p class="hint" style="margin-top:6px">Tempat tidak ketemu? Cari nama kelurahan atau kota saja, pilih mode <b>Satelit</b> di pojok peta, perbesar sampai gedungnya terlihat, lalu klik tepat di gedung itu. Pin bisa digeser. Bisa juga tempel link Google Maps (yang panjang) atau koordinat, misalnya <i>1.1301, 104.0529</i>.</p>' +
+      '</div>';
     Object.keys(a).forEach(function(k){ var f = el.querySelector('[data-k="' + k + '"]'); if (f) f.value = a[k]; });
     if (!a.zona) el.querySelector('[data-k="zona"]').value = "WIB";
+    var cb = el.querySelector(".sama");
+    cb.checked = !!samaAwal;
+    cb.addEventListener("change", function(){ markDirty(); aturLokasiSama(); });
     var loc = a.lokasi && a.lokasi.lat != null ? [a.lokasi.lat, a.lokasi.lng] : null;
     el._loc = loc;
-    var mapEl = el.querySelector(".map-pick"), coord = el.querySelector(".coord");
+    var mapEl = el.querySelector(".map-pick"), coord = el.querySelector(".coord"), hasil = el.querySelector(".hasil-cari");
     var map = null, marker = null;
     if (window.L) {
-      map = L.map(mapEl, { scrollWheelZoom:false }).setView(loc || [-6.595, 106.806], loc ? 16 : 11);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom:19, attribution:"&copy; OpenStreetMap" }).addTo(map);
+      var pertama = $("acaraList").firstElementChild, acuan = pertama && pertama._loc;
+      map = L.map(mapEl, { scrollWheelZoom:false }).setView(loc || acuan || PUSAT_AWAL, loc || acuan ? 16 : ZOOM_AWAL);
+      var jalan = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom:19, attribution:"&copy; OpenStreetMap" });
+      var satelit = L.layerGroup([
+        L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom:19, attribution:"Citra &copy; Esri" }),
+        L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { maxZoom:19 })
+      ]);
+      jalan.addTo(map);
+      L.control.layers({ "Peta": jalan, "Satelit": satelit }, null, { position:"topright", collapsed:false }).addTo(map);
       map.on("click", function(e){ setLoc([e.latlng.lat, e.latlng.lng]); });
+      el._map = map;
     } else { mapEl.hidden = true; }
     function setLoc(ll, zoom){
       el._loc = [+(+ll[0]).toFixed(6), +(+ll[1]).toFixed(6)];
@@ -749,24 +830,58 @@ ol.steps{padding-left:20px;margin:8px 0}
       coord.innerHTML = "Titik: " + el._loc.join(", ") + ' · <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + el._loc.join(",") + '">cek di Google Maps</a>';
       markDirty();
     }
-    if (loc) { setLoc(loc); state.dirty = false; } else coord.textContent = map ? "Belum ada titik. Klik peta atau cari alamat." : "Peta tidak termuat. Tempel link Google Maps atau koordinat (contoh: -6.5971, 106.7990) lalu klik Cari.";
+    if (loc) { setLoc(loc); state.dirty = false; } else coord.textContent = map ? "Belum ada titik. Klik peta atau cari alamat." : "Peta tidak termuat. Tempel link Google Maps atau koordinat (contoh: 1.1301, 104.0529) lalu klik Cari.";
+    function tampilHasil(list){
+      hasil.innerHTML = ""; hasil.hidden = !list.length;
+      list.forEach(function(x){
+        var b = document.createElement("button"); b.type = "button"; b.className = "hasil";
+        b.innerHTML = "<b>" + esc(x.nama) + "</b><span>" + esc(x.ket) + "</span>";
+        b.addEventListener("click", function(){ setLoc([x.lat, x.lng], x.zoom || 17); hasil.hidden = true; coord.innerHTML += " · geser pin bila belum pas"; });
+        hasil.appendChild(b);
+      });
+    }
+    function nominatim(q){
+      var u = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=0&limit=6&countrycodes=id&accept-language=id&q=" + encodeURIComponent(q);
+      if (map && map.getZoom() >= 9) { var b = map.getBounds(); u += "&viewbox=" + [b.getWest(), b.getNorth(), b.getEast(), b.getSouth()].join(","); }
+      return fetch(u).then(function(r){ return r.json(); }).then(function(rs){
+        return rs.map(function(x){ var p = String(x.display_name || "").split(", "); return { nama:p[0], ket:p.slice(1, 4).join(", "), lat:+x.lat, lng:+x.lon, zoom: /city|town|village|suburb|administrative/.test(x.type || x.addresstype || "") ? 14 : 17 }; });
+      }).catch(function(){ return []; });
+    }
+    function photon(q){
+      var u = "https://photon.komoot.io/api/?limit=6&q=" + encodeURIComponent(q);
+      var c = map ? map.getCenter() : null; if (c && map.getZoom() >= 9) u += "&lat=" + c.lat.toFixed(4) + "&lon=" + c.lng.toFixed(4);
+      return fetch(u).then(function(r){ return r.json(); }).then(function(j){
+        return (j.features || []).filter(function(f){ return !f.properties.countrycode || f.properties.countrycode === "ID"; }).map(function(f){
+          var pr = f.properties, ket = [pr.street, pr.district, pr.city || pr.county, pr.state].filter(Boolean).join(", ");
+          return { nama:pr.name || pr.street || pr.city || q, ket:ket, lat:f.geometry.coordinates[1], lng:f.geometry.coordinates[0], zoom: /city|town|village|district|county|state/.test(pr.osm_value || pr.type || "") ? 14 : 17 };
+        });
+      }).catch(function(){ return []; });
+    }
     function cari(){
       var q = el.querySelector('[data-k="cari"]').value.trim(); if (!q) return;
-      var m = q.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || q.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || q.match(/[?&](?:q|query|ll)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/) || q.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);
-      if (m) { setLoc([+m[1], +m[2]], 17); return; }
-      if (/^https?:/.test(q)) { coord.textContent = "Link pendek Google Maps tidak bisa dibaca. Buka link itu, salin link panjang dari address bar (yang ada angka @-6.xx,106.xx), atau ketik nama tempatnya."; return; }
+      var m = q.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || q.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || q.match(/[?&](?:q|query|ll|center)=(-?\d+\.\d+)(?:,|%2C)\s*(-?\d+\.\d+)/) || q.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);
+      if (m) { hasil.hidden = true; setLoc([+m[1], +m[2]], 17); return; }
+      if (/^https?:/.test(q)) { coord.textContent = "Link pendek Google Maps (maps.app.goo.gl) tidak bisa dibaca. Buka link itu di browser laptop, salin link panjang dari address bar (yang berisi @1.1x,104.0x), atau tekan lama titiknya di Google Maps lalu salin angka koordinatnya."; return; }
       coord.textContent = "Mencari…";
-      fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=id&q=" + encodeURIComponent(q))
-        .then(function(r){ return r.json(); }).then(function(rs){
-          if (!rs.length) { coord.textContent = "Tidak ketemu. Coba kata lain, atau klik langsung di peta."; return; }
-          setLoc([+rs[0].lat, +rs[0].lon], 17);
-        }).catch(function(){ coord.textContent = "Pencarian gagal. Klik langsung di peta."; });
+      Promise.all([nominatim(q), photon(q)]).then(function(rs){
+        var semua = [], seen = {};
+        rs[0].concat(rs[1]).forEach(function(x){ var k = x.lat.toFixed(3) + "," + x.lng.toFixed(3) + x.nama; if (!seen[k] && semua.length < 8) { seen[k] = 1; semua.push(x); } });
+        if (!semua.length) { hasil.hidden = true; coord.textContent = "Tidak ketemu. Coba nama kelurahan/kota saja (mis. \"Batam Kota\"), lalu klik gedungnya di mode Satelit."; return; }
+        coord.textContent = "Pilih salah satu hasil di bawah, lalu geser pin bila perlu.";
+        tampilHasil(semua);
+      });
     }
     el.querySelector('[data-act="cari"]').addEventListener("click", cari);
+    el.querySelector('[data-act="saya"]').addEventListener("click", function(){
+      if (!navigator.geolocation) { coord.textContent = "Browser ini tidak bisa membaca lokasi."; return; }
+      coord.textContent = "Membaca lokasi…";
+      navigator.geolocation.getCurrentPosition(function(p){ setLoc([p.coords.latitude, p.coords.longitude], 18); }, function(){ coord.textContent = "Izin lokasi ditolak atau lokasi tidak terbaca."; }, { enableHighAccuracy:true, timeout:15000 });
+    });
     el.querySelector('[data-k="cari"]').addEventListener("keydown", function(e){ if (e.key === "Enter") { e.preventDefault(); cari(); } });
-    el.querySelector(".remove").addEventListener("click", function(){ el.remove(); markDirty(); });
+    el.querySelector(".remove").addEventListener("click", function(){ if (el._map) { el._map.remove(); maps = maps.filter(function(m){ return m !== el._map; }); } el.remove(); markDirty(); aturLokasiSama(); });
     $("acaraList").appendChild(el);
     if (map) { maps.push(map); setTimeout(function(){ map.invalidateSize(); }, 50); }
+    aturLokasiSama();
   }
   function simpleRow(listId, fields, values){
     values = values || {};
@@ -779,7 +894,7 @@ ol.steps{padding-left:20px;margin:8px 0}
   }
   var CERITA = [["waktu","Waktu","Maret 2021"],["judul","Judul","Pertama Bertemu"],["isi","Cerita","area"]];
   var REK = [["bank","Bank / e-wallet","BCA"],["atasNama","Atas nama","Nama pemilik"],["nomor","Nomor","1234 5678 90"]];
-  $("addAcara").addEventListener("click", function(){ acaraRow({}); markDirty(); });
+  $("addAcara").addEventListener("click", function(){ acaraRow({}, $("acaraList").children.length > 0); markDirty(); });
   /* Cerita: teks + satu foto atau video (opsional) + link YouTube (opsional) */
   var ceritaN = 0, MEDIA_CERITA = {accept:"image/*,video/mp4,video/webm,video/quicktime"};
   function ceritaRow(c){
@@ -838,7 +953,9 @@ ol.steps{padding-left:20px;margin:8px 0}
     (d.acara || []).forEach(function(a){
       var row = Object.assign({}, a);
       if (!row.jamMulai && a.jam) { var m = String(a.jam).match(/(\d{1,2})[.:](\d{2})(?:\s*[–-]\s*(\d{1,2})[.:](\d{2}))?\s*(WIB|WITA|WIT)?/); if (m) { row.jamMulai = pad2(m[1]) + ":" + m[2]; if (m[3]) row.jamSelesai = pad2(m[3]) + ":" + m[4]; row.zona = m[5] || "WIB"; } }
-      acaraRow(row);
+      var a0 = (d.acara || [])[0], i = (d.acara || []).indexOf(a);
+      var sama = i > 0 && (a.samaTempat || (!a.tempat && !a.alamat && !a.lokasi) || (lokasiKunci(a) === lokasiKunci(a0) && lokasiKunci(a) !== "|"));
+      acaraRow(row, sama);
     });
     (d.cerita || []).forEach(function(c){ ceritaRow(c); });
     (d.rekening || []).forEach(function(r){ simpleRow("rekList", REK, r); });
@@ -888,7 +1005,7 @@ ol.steps{padding-left:20px;margin:8px 0}
     var pP = $("f_p_panggilan").value.trim(), wP = $("f_w_panggilan").value.trim();
     if (!pP || !wP) { alertMsg("Isi nama panggilan pria dan wanita dulu.", true); return; }
     if (!/^[a-z0-9-]+$/.test(slug) || RESERVED.indexOf(slug) >= 0) { alertMsg("Nama folder hanya boleh huruf kecil, angka, dan tanda hubung.", true); return; }
-    var acara = rowsOf("acaraList");
+    var acara = rowsOf("acaraList").filter(function(a, i){ return i === 0 || a.nama || a.tanggal; });
     if (!acara.length || !acara[0].tanggal) { alertMsg("Isi minimal satu acara beserta tanggalnya.", true); return; }
     if ($("f_video_tipe").value === "youtube" && !/(youtu\.be\/|v=|embed\/|shorts\/|live\/)[A-Za-z0-9_-]{11}/.test($("f_video_yt").value)) { alertMsg("Link YouTube tidak dikenali. Salin link dari tombol Share di YouTube.", true); return; }
     var btn = $("btnSave"); btn.disabled = true;
@@ -908,10 +1025,12 @@ ol.steps{padding-left:20px;margin:8px 0}
       monogram: $("f_mono").value.trim().toUpperCase(),
       tanggal: "",
       fotoPasangan: takeOne("couple","couple"),
-      acara: acara.map(function(a){
+      acara: acara.map(function(a, i){
         var jam = a.jamMulai ? a.jamMulai.replace(":",".") + " – " + (a.jamSelesai ? a.jamSelesai.replace(":",".") : "Selesai") + " " + a.zona : "";
-        var o = { nama:a.nama, tanggal:a.tanggal, jamMulai:a.jamMulai, jamSelesai:a.jamSelesai, zona:a.zona, jam:jam, tempat:a.tempat, alamat:a.alamat };
-        if (a._el._loc) o.lokasi = { lat:a._el._loc[0], lng:a._el._loc[1] };
+        var sama = i > 0 && a._el.querySelector(".sama").checked, src = sama ? acara[0] : a;
+        var o = { nama:a.nama, tanggal:a.tanggal, jamMulai:a.jamMulai, jamSelesai:a.jamSelesai, zona:a.zona, jam:jam, tempat:src.tempat, alamat:src.alamat };
+        if (src._el._loc) o.lokasi = { lat:src._el._loc[0], lng:src._el._loc[1] };
+        if (sama) o.samaTempat = true;
         return o;
       }),
       ayat: { teks:$("f_ayat").value.trim(), sumber:$("f_ayat_sumber").value.trim() },
@@ -969,9 +1088,15 @@ ol.steps{padding-left:20px;margin:8px 0}
         var tree = [];
         var seq = Promise.resolve();
         files.forEach(function(f){
-          seq = seq.then(function(){ return fileToB64(f.file); })
-            .then(function(b64){ return api("/git/blobs", {method:"POST", body:{content:b64, encoding:"base64"}}); })
-            .then(function(b){ tree.push({path:slug + "/" + f.path, mode:"100644", type:"blob", sha:b.sha}); step(); });
+          seq = seq.then(function(){
+            var ada = BLOB_SHA && BLOB_SHA.get(f.file);
+            if (ada) { tree.push({path:slug + "/" + f.path, mode:"100644", type:"blob", sha:ada}); step(); return; }
+            alertMsg("Mengunggah " + (done + 1) + " / " + total + ": " + f.file.name + " (" + ukuranTeks(f.file.size) + ")…");
+            return fileToB64(f.file)
+              .then(function(b64){ return api("/git/blobs", {method:"POST", body:{content:b64, encoding:"base64"}}); })
+              .catch(function(e){ throw new Error(f.file.name + ": " + pesanError(e) + " File yang sudah terkirim tidak perlu diulang; tekan Simpan lagi untuk melanjutkan."); })
+              .then(function(b){ if (BLOB_SHA) BLOB_SHA.set(f.file, b.sha); tree.push({path:slug + "/" + f.path, mode:"100644", type:"blob", sha:b.sha}); step(); });
+          });
         });
         return seq.then(function(){
           return Promise.all([

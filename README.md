@@ -10,6 +10,9 @@ Setiap pasangan punya folder sendiri, dan alamatnya mengikuti nama folder:
 
 Buka **https://purwoadhii.github.io/Undangan-C-S/admin/**, masuk dengan token GitHub (cara membuatnya tertulis di halaman itu), lalu klik **+ Undangan baru**.
 Isi nama, acara (titik lokasi dipilih di peta), foto dan video galeri, rekening, dan musik, lalu klik **Simpan & terbitkan**.
+
+- **Lokasi acara:** bila akad dan resepsi di tempat yang sama, centang "Tempatnya sama dengan acara pertama"; undangan lalu menampilkan satu peta saja. Untuk menandai titik, cari nama tempat/kelurahan/kota, pilih hasilnya, atau pakai mode **Satelit** lalu klik tepat di gedungnya (pin bisa digeser). Tombol **Lokasi saya** memakai lokasi HP/laptop saat ini.
+- **Ukuran file:** foto otomatis dikecilkan (maks. 1920 px) sebelum diunggah. Video di atas 25 MB atau mp3 di atas 15 MB ditandai merah karena sering gagal diunggah; kecilkan dulu atau pakai link YouTube. Bila penyimpanan gagal di tengah, tekan Simpan lagi: file yang sudah terkirim tidak diunggah ulang.
 Inisial (B&S) dan alamat (`/budi-sari/`) dibuat otomatis dari nama panggilan. Undangan tayang dalam 1–2 menit.
 
 ## Musik
