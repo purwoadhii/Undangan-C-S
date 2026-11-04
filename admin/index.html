@@ -991,7 +991,10 @@ ol.steps{padding-left:20px;margin:8px 0}
     $("pvUrl").textContent = pagesBase() + ($("f_slug").value || "nama-folder") + "/";
   }
   ["f_p_panggilan","f_w_panggilan","f_mono"].forEach(function(id){ $(id).addEventListener("input", updatePreview); });
-  $("f_slug").addEventListener("input", function(){ $("f_slug").dataset.auto = ""; $("f_slug").value = slugify($("f_slug").value); updatePreview(); });
+  /* Saat mengetik, tanda hubung di akhir dibiarkan agar "budi-" bisa dilanjutkan jadi "budi-sari"; dirapikan saat kolom ditinggalkan dan saat disimpan. */
+  function slugKetik(v){ return String(v||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+/,"").replace(/-{2,}/g,"-"); }
+  $("f_slug").addEventListener("input", function(){ var f = $("f_slug"), pos = f.selectionStart, v0 = f.value; f.dataset.auto = ""; f.value = slugKetik(v0); if (f.value.length === v0.length) try { f.setSelectionRange(pos, pos); } catch(e){} updatePreview(); });
+  $("f_slug").addEventListener("change", function(){ $("f_slug").value = slugify($("f_slug").value); updatePreview(); });
   $("viewEdit").addEventListener("input", markDirty);
   $("viewEdit").addEventListener("submit", function(e){ e.preventDefault(); });
   function markDirty(){ state.dirty = true; if (!$("btnSave").disabled) alertMsg("Perubahan belum disimpan."); }
@@ -1001,7 +1004,7 @@ ol.steps{padding-left:20px;margin:8px 0}
   /* ---------- Simpan ---------- */
   function ext(f){ var m = /\.([a-z0-9]+)$/i.exec(f.name); return m ? m[1].toLowerCase() : (f.type.split("/")[1] || "bin"); }
   $("btnSave").addEventListener("click", function(){
-    var slug = $("f_slug").value.trim();
+    var slug = slugify($("f_slug").value); if (!$("f_slug").disabled) $("f_slug").value = slug;
     var pP = $("f_p_panggilan").value.trim(), wP = $("f_w_panggilan").value.trim();
     if (!pP || !wP) { alertMsg("Isi nama panggilan pria dan wanita dulu.", true); return; }
     if (!/^[a-z0-9-]+$/.test(slug) || RESERVED.indexOf(slug) >= 0) { alertMsg("Nama folder hanya boleh huruf kecil, angka, dan tanda hubung.", true); return; }
