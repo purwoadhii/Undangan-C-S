@@ -6,7 +6,13 @@ Setiap pasangan punya folder sendiri, dan alamatnya mengikuti nama folder:
 | --- | --- |
 | `riziky-andri/` | https://purwoadhii.github.io/Undangan-C-S/riziky-andri/ |
 
-## Membuat undangan pasangan baru (3 langkah)
+## Cara termudah: halaman admin
+
+Buka **https://purwoadhii.github.io/Undangan-C-S/admin/**, masuk dengan token GitHub (cara membuatnya tertulis di halaman itu), lalu klik **+ Undangan baru**.
+Isi nama, acara (titik lokasi dipilih di peta), foto dan video galeri, rekening, dan musik, lalu klik **Simpan & terbitkan**.
+Inisial (B&S) dan alamat (`/budi-sari/`) dibuat otomatis dari nama panggilan. Undangan tayang dalam 1–2 menit.
+
+## Membuat undangan secara manual (3 langkah)
 
 1. **Salin folder `_template`** lalu beri nama baru, huruf kecil dan pakai tanda hubung, misalnya `budi-sari`.
 2. **Buka `budi-sari/data.js`** lalu ganti teks di antara tanda kutip: nama, orang tua, tanggal, acara, lokasi, cerita, rekening.

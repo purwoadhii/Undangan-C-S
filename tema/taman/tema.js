@@ -38,13 +38,26 @@
       '</div><h3>' + esc(p.panggilan) + '</h3><div class="full">' + esc(p.lengkap) + '</div><p>' + esc(p.orangTua) + '</p></div>';
   };
 
+  function petaUrl(a) {
+    if (a.lokasi && a.lokasi.lat != null) return "https://www.google.com/maps/search/?api=1&query=" + a.lokasi.lat + "," + a.lokasi.lng;
+    if (a.peta) return a.peta;
+    return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent((a.tempat || "") + ", " + (a.alamat || ""));
+  }
+  function embedUrl(a) {
+    var q = a.lokasi && a.lokasi.lat != null ? a.lokasi.lat + "," + a.lokasi.lng : (a.tempat || "") + ", " + (a.alamat || "");
+    return "https://maps.google.com/maps?q=" + encodeURIComponent(q) + "&z=16&output=embed";
+  }
   var acaraHtml = acara.map(function (a) {
     var t = tgl(a.tanggal) || {};
+    var url = esc(petaUrl(a));
     return '<article class="event reveal"><h3>' + esc(a.nama) + '</h3>' +
       '<div class="day">' + esc((t.hari || "").toUpperCase()) + '</div><div class="bigdate">' + esc(t.tgl) + '</div>' +
       '<div class="day">' + esc(((t.bulan || "") + " " + (t.tahun || "")).toUpperCase()) + '</div>' +
-      '<div class="time">' + esc(a.jam) + '</div><div class="place">' + esc(a.tempat) + '</div><address>' + esc(a.alamat) + '</address>' +
-      (a.peta ? '<a class="btn" href="' + esc(a.peta) + '" target="_blank" rel="noopener">Lihat Lokasi</a>' : "") + '</article>';
+      '<div class="time">' + esc(a.jam) + '</div><div class="place">' + esc(a.tempat) + '</div>' +
+      '<a class="addr" href="' + url + '" target="_blank" rel="noopener"><address>' + esc(a.alamat) + '</address></a>' +
+      ((a.lokasi && a.lokasi.lat != null) || a.alamat ? '<a class="map" href="' + url + '" target="_blank" rel="noopener" aria-label="Buka lokasi ' + esc(a.tempat) + ' di Google Maps">' +
+        '<iframe src="' + esc(embedUrl(a)) + '" loading="lazy" tabindex="-1" title="Peta ' + esc(a.tempat) + '"></iframe><span>Ketuk untuk buka Google Maps</span></a>' : "") +
+      '<a class="btn" href="' + url + '" target="_blank" rel="noopener">Lihat Lokasi</a></article>';
   }).join("");
 
   var cerita = D.cerita || [];
@@ -53,8 +66,17 @@
   }).join("");
 
   var galeri = D.galeri && D.galeri.length ? D.galeri : ["assets/foto1.jpg", "assets/foto2.jpg", "assets/foto3.jpg", "assets/foto4.jpg", "assets/foto5.jpg", "assets/foto6.jpg"];
-  var galeriHtml = galeri.map(function (src, i) {
-    return '<figure><img src="' + esc(src) + '" alt="" onerror="this.remove()"><figcaption>FOTO ' + (i + 1) + '</figcaption></figure>';
+  function isVideo(item) {
+    if (item && typeof item === "object") return item.tipe === "video";
+    return /\.(mp4|webm|mov|m4v)$/i.test(String(item));
+  }
+  function srcOf(item) { return item && typeof item === "object" ? item.src : item; }
+  var galeriHtml = galeri.map(function (item, i) {
+    var src = esc(srcOf(item));
+    var media = isVideo(item)
+      ? '<video src="' + src + '#t=0.1" muted playsinline preload="metadata" onerror="this.remove()"></video><span class="play" aria-hidden="true"></span>'
+      : '<img src="' + src + '" alt="" loading="lazy" onerror="this.remove()">';
+    return '<figure tabindex="0" data-i="' + i + '" data-video="' + (isVideo(item) ? 1 : 0) + '" data-src="' + src + '">' + media + '<figcaption>' + (isVideo(item) ? "VIDEO " : "FOTO ") + (i + 1) + '</figcaption></figure>';
   }).join("");
 
   var rekening = D.rekening || [];
@@ -114,6 +136,7 @@
     '<footer><p>' + esc(D.penutup || "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.") + '</p>' +
       '<div class="mono" aria-hidden="true" style="margin-top:18px">' + monoHtml + '</div><div style="font-family:var(--font-script);font-size:34px">' + duaNama + '</div></footer>' +
   '</div>' +
+  '<div class="lightbox" id="lightbox" hidden><button type="button" class="lb-close" aria-label="Tutup">&times;</button><div class="lb-body" id="lbBody"></div></div>' +
   '<nav class="nav" aria-label="Navigasi undangan">' + navItems.map(function (n, i) {
     return '<a href="#' + n[0] + '"' + (i ? "" : ' class="on"') + ' aria-label="' + n[1] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' + n[2] + '</svg><span>' + n[1] + '</span></a>';
   }).join("") + '</nav>';
@@ -222,6 +245,26 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fb); else fb();
     });
   });
+
+  var lb = document.getElementById("lightbox"), lbBody = document.getElementById("lbBody");
+  function openLb(fig) {
+    var src = fig.getAttribute("data-src");
+    lbBody.innerHTML = fig.getAttribute("data-video") === "1"
+      ? '<video src="' + src + '" controls autoplay playsinline></video>'
+      : '<img src="' + src + '" alt="">';
+    lb.hidden = false;
+    if (!audio.paused && fig.getAttribute("data-video") === "1") { audio.pause(); musicBtn.classList.remove("spin"); lb.dataset.resume = "1"; }
+  }
+  function closeLb() {
+    lb.hidden = true; lbBody.innerHTML = "";
+    if (lb.dataset.resume) { delete lb.dataset.resume; playMusic(); }
+  }
+  document.querySelectorAll(".gallery figure").forEach(function (fig) {
+    fig.addEventListener("click", function () { if (fig.querySelector("img,video")) openLb(fig); });
+    fig.addEventListener("keydown", function (e) { if (e.key === "Enter" && fig.querySelector("img,video")) openLb(fig); });
+  });
+  lb.addEventListener("click", function (e) { if (e.target === lb || e.target.classList.contains("lb-close")) closeLb(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !lb.hidden) closeLb(); });
 
   function startPetals() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
