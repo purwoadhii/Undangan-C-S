@@ -325,6 +325,12 @@
     });
   });
 
+  /* Video tegak (dari HP) ditampilkan tegak, tidak mengecil di kotak 16:9 */
+  document.querySelectorAll(".video-box video, .story-media.vid video").forEach(function (v) {
+    function cek() { if (v.videoHeight > v.videoWidth) v.parentNode.classList.add("tegak"); }
+    if (v.readyState >= 1) cek(); else v.addEventListener("loadedmetadata", cek);
+  });
+
   /* Lightbox galeri */
   var lb = document.getElementById("lightbox"), lbBody = document.getElementById("lbBody");
   function openLb(fig) {

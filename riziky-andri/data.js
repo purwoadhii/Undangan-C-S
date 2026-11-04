@@ -6,17 +6,17 @@ window.UNDANGAN = {
     "panggilan": "Riziky",
     "lengkap": "Riziky Pratama, S.T.",
     "orangTua": "Putra dari Bapak Ahmad Suryadi & Ibu Siti Rahmawati",
-    "foto": ""
+    "foto": "assets/pria.jpg"
   },
   "wanita": {
     "panggilan": "Andri",
     "lengkap": "Andriani Putri, S.E.",
     "orangTua": "Putri dari Bapak Budi Santoso & Ibu Dewi Lestari",
-    "foto": ""
+    "foto": "assets/wanita.jpg"
   },
   "monogram": "RA",
   "tanggal": "2026-12-19T08:00:00+07:00",
-  "fotoPasangan": "",
+  "fotoPasangan": "assets/couple.jpg",
   "acara": [
     {
       "nama": "Akad Nikah",
@@ -60,7 +60,24 @@ window.UNDANGAN = {
       "isi": "Dua keluarga bertemu dan merestui langkah kami."
     }
   ],
-  "galeri": [],
+  "galeri": [
+    {
+      "src": "assets/galeri-1.jpg",
+      "tipe": "foto"
+    },
+    {
+      "src": "assets/galeri-2.jpg",
+      "tipe": "foto"
+    },
+    {
+      "src": "assets/galeri-3.jpg",
+      "tipe": "foto"
+    },
+    {
+      "src": "assets/galeri-4.jpg",
+      "tipe": "foto"
+    }
+  ],
   "rekening": [
     {
       "bank": "BCA",
@@ -76,7 +93,7 @@ window.UNDANGAN = {
   "musik": "",
   "video": {
     "youtube": "",
-    "src": "",
+    "src": "assets/video.mp4",
     "judul": "Our Moment"
   },
   "ucapanScriptUrl": "",
