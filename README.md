@@ -12,6 +12,10 @@ Buka **https://purwoadhii.github.io/Undangan-C-S/admin/**, masuk dengan token Gi
 Isi nama, acara (titik lokasi dipilih di peta), foto dan video galeri, rekening, dan musik, lalu klik **Simpan & terbitkan**.
 Inisial (B&S) dan alamat (`/budi-sari/`) dibuat otomatis dari nama panggilan. Undangan tayang dalam 1–2 menit.
 
+## Musik
+
+Di editor admin, kolom **Musik latar** bisa diisi dengan mp3 unggahan sendiri, atau dipilih dari **Koleksi musik** (tombol di bagian atas admin). Lagu di koleksi disimpan sekali di folder `musik/` dan bisa dipakai oleh semua undangan dan semua tema.
+
 ## Kirim undangan lewat WhatsApp
 
 Di admin, klik **Kirim** pada undangan. Ketik nama tamu dan nomor WA, lalu klik **Kirim via WhatsApp**: WhatsApp terbuka dengan pesan berisi nama tamu, link khusus (nama tamu tampil di sampul), dan ucapan terima kasih. Tinggal tekan kirim.
@@ -40,7 +44,7 @@ Tiap undangan memilih satu tema di admin (atau `tema: "..."` di `data.js`). Tiap
 | Jelajah Pantai | `jelajah-pantai` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=jelajah-pantai) |
 | Jelajah Hutan | `jelajah-hutan` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=jelajah-hutan) |
 
-**Tema Jelajah** berupa game jelajah bergaya kartun: tamu memilih karakter laki-laki atau perempuan, membaca sambutan, lalu berjalan di peta (gedung, pantai, atau hutan) dengan lingkaran geser, tombol panah, atau ketuk tujuan. Tiap tempat yang didatangi membuka satu bagian undangan (mempelai, acara, kisah, galeri, kado, buku tamu & RSVP). Tombol bendera menjalankan tur otomatis ke semua tempat. Mesinnya ada di `tema/jelajah/`, warna tiap latar di `tema/jelajah-<latar>/`.
+**Tema Jelajah** berupa game jelajah bergaya kartun: tamu memilih karakter laki-laki atau perempuan, membaca sambutan, lalu berjalan di peta (gedung, pantai, atau hutan) dengan lingkaran geser, tombol panah, atau ketuk tujuan. Tiap tempat yang didatangi membuka satu bagian undangan (mempelai, acara, kisah, galeri, kado, buku tamu & RSVP). Jendela tiap tempat terbuka sendiri hanya saat pertama kali didatangi; setelah itu label tempat diketuk untuk membuka. Tombol bendera menjalankan tur otomatis dengan urutan Ucapan & RSVP, Kisah Kami, Acara, Foto & Video, Mempelai, lalu Kado, dan berhenti saat ucapan terima kasih muncul. Tempat yang belum diisi (misalnya belum ada foto/video) tidak muncul di peta. Mesinnya ada di `tema/jelajah/`, warna tiap latar di `tema/jelajah-<latar>/`.
 
 Undangan yang sudah jalan bisa dicoba dengan tema lain tanpa mengubah apa pun: tambahkan `?tema=pantai` di belakang alamatnya.
 Kata pembuka bawaan tema bisa diganti per pasangan lewat kolom "Kata pembuka" di admin (`pembuka` di `data.js`).

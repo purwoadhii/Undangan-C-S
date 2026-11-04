@@ -124,9 +124,9 @@
     }
   };
   var AKSEN = { gedung: "#9a2f3c", pantai: "#d0654a", hutan: "#3f7d3a" };
-  var NAMA_TEMPAT = { mempelai: "Mempelai", acara: "Acara", cerita: "Kisah Kami", galeri: "Galeri", hadiah: "Kado", ucapan: "Ucapan & RSVP" };
+  var NAMA_TEMPAT = { mempelai: "Mempelai", acara: "Acara", cerita: "Kisah Kami", galeri: "Foto & Video", hadiah: "Kado", ucapan: "Ucapan & RSVP" };
   var ISI_TEMPAT = { mempelai: ["mempelai"], acara: ["acara"], cerita: ["cerita"], galeri: ["galeri", "video"], hadiah: ["hadiah"], ucapan: ["ucapan"] };
-  var URUT_TUR = ["mempelai", "acara", "cerita", "galeri", "hadiah", "ucapan"];
+  var URUT_TUR = ["ucapan", "cerita", "acara", "galeri", "mempelai", "hadiah"];
 
   /* ---------- Alat gambar halus ---------- */
   function acak(x, y, k) { var n = Math.sin(x * 127.1 + y * 311.7 + (k || 0) * 74.7) * 43758.5453; return n - Math.floor(n); }
@@ -508,7 +508,7 @@
   }
 
   /* ---------- Membangun dunia (digambar sekali dalam resolusi tinggi) ---------- */
-  function bangunDunia(latar, R) {
+  function bangunDunia(latar, R, adaIsi) {
     var L = LATAR[latar], peta = L.peta, rows = peta.length, cols = peta[0].length;
     var PX = 9, PY = 6, W = cols + PX * 2, H = rows + PY * 2;
     function ch(x, y) { return peta[Math.max(0, Math.min(rows - 1, y))].charAt(Math.max(0, Math.min(cols - 1, x))); }
@@ -553,6 +553,7 @@
     }
     var tempat = {};
     Object.keys(L.tempat).forEach(function (key) {
+      if (adaIsi && adaIsi.indexOf(key) < 0) return;
       var t = L.tempat[key], tt = { x: t.x + PX, y: t.y + PY, w: t.w, h: t.h, obj: t.obj, ty: (t.ty != null ? t.ty : t.y + t.h) + PY };
       tempat[key] = tt;
       for (var y = tt.y; y < tt.y + tt.h; y++) for (var x = tt.x; x < tt.x + tt.w; x++) padat[y][x] = true;
@@ -606,10 +607,10 @@
       if (!pemain || modalTerbuka) { if (pemain) pemain.jalan = false; return; }
       var vx = input.x, vy = input.y;
       if (kunci.ArrowLeft || kunci.a) vx -= 1; if (kunci.ArrowRight || kunci.d) vx += 1; if (kunci.ArrowUp || kunci.w) vy -= 1; if (kunci.ArrowDown || kunci.s) vy += 1;
-      if (vx || vy) { jalur = null; if (tur) hentikanTur(); }
+      if (vx || vy) { jalur = null; jalurBuka = null; if (tur) hentikanTur(); }
       else if (jalur && jalur.length) {
         var tgt = jalur[0], dx = tgt.x - pemain.x, dy = tgt.y - pemain.y, d = Math.hypot(dx, dy);
-        if (d < 2) { jalur.shift(); if (!jalur.length) { jalur = null; cekTempat(true); } }
+        if (d < 2) { jalur.shift(); if (!jalur.length) { jalur = null; var kb = jalurBuka; jalurBuka = null; terakhir = tempatDekat(); if (kb) bukaTempat(kb); } }
         else { vx = dx / d; vy = dy / d; }
       }
       var len = Math.hypot(vx, vy);
@@ -632,11 +633,16 @@
       });
       return hasil;
     }
-    var terakhir = null;
-    function cekTempat(paksa) {
+    var terakhir = null, jalurBuka = null, tujuanTur = null, turKunjung = {}, ulangTur = false, kotakLabel = [];
+    /* Masuk ke tempat: terbuka sendiri hanya pada kunjungan pertama. Setelah itu label tempat diklik untuk membuka.
+       Saat tur otomatis berjalan, hanya tempat tujuan yang dibuka. */
+    function cekTempat() {
       var key = tempatDekat();
-      if (key && (key !== terakhir || paksa)) { terakhir = key; bukaTempat(key); }
-      if (!key) terakhir = null;
+      if (!key) { terakhir = null; return; }
+      if (key === terakhir) return;
+      terakhir = key;
+      if (tur || jalurBuka) return;
+      if (!kunjungan[key]) bukaTempat(key);
     }
 
     /* kamera & gambar */
@@ -660,19 +666,24 @@
       efek(x0, y0, vw, vh);
       // label tempat (dalam ukuran layar)
       g.setTransform(1, 0, 0, 1, 0, 0);
-      var px = Math.max(12, Math.round(S * 4));
+      var px = Math.round(Math.max(14 * (cv.width / innerWidth), S * 4.8)), dekat = pemain ? tempatDekat() : null;
       g.font = "600 " + px + "px 'Fredoka', 'Nunito', sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
+      kotakLabel = [];
       daftar.forEach(function (key) {
-        var t = dunia.tempat[key], sx = ((t.x + t.w / 2) * T - x0) * S, sy = (t.y * T - 18 - x0 * 0 - y0) * S + Math.sin(waktu * 3 + t.x) * S;
-        var teks = (kunjungan[key] ? "✓ " : "") + NAMA_TEMPAT[key], w = g.measureText(teks).width + px * 1.4, h = px * 1.8;
+        var t = dunia.tempat[key], sudah = kunjungan[key], disini = dekat === key;
+        var sx = ((t.x + t.w / 2) * T - x0) * S, sy = (t.y * T - 20 - y0) * S + (sudah && !disini ? 0 : Math.sin(waktu * 3 + t.x) * S * .9);
+        var teks = NAMA_TEMPAT[key], tw = g.measureText(teks).width, ik = sudah ? px * 1.05 : 0, w = tw + ik + px * 1.6, h = px * 2;
         if (sx < -w || sx > cv.width + w || sy < -h || sy > cv.height + h) return;
-        g.globalAlpha = kunjungan[key] ? .7 : 1;
-        g.shadowColor = "rgba(0,0,0,.25)"; g.shadowBlur = px * .5; g.shadowOffsetY = px * .15;
-        g.fillStyle = kunjungan[key] ? "rgba(255,250,238,.85)" : "#fffaf0"; bulat(g, sx - w / 2, sy - h / 2, w, h, h / 2); g.fill();
-        g.shadowColor = "transparent";
-        g.fillStyle = kunjungan[key] ? "#5f8f52" : AKSEN[latar]; g.fillText(teks, sx, sy + 1);
-        if (!kunjungan[key]) { g.fillStyle = "#fffaf0"; g.beginPath(); g.moveTo(sx - px * .4, sy + h / 2 + 2); g.lineTo(sx + px * .4, sy + h / 2 + 2); g.lineTo(sx, sy + h / 2 + px * .6); g.fill(); }
-        g.globalAlpha = 1;
+        var x = sx - w / 2, y = sy - h / 2, warna = AKSEN[latar];
+        g.shadowColor = "rgba(0,0,0,.28)"; g.shadowBlur = px * .6; g.shadowOffsetY = px * .18;
+        g.fillStyle = sudah ? "#fffaf0" : warna; bulat(g, x, y, w, h, h / 2); g.fill();
+        g.shadowColor = "transparent"; g.shadowBlur = 0; g.shadowOffsetY = 0;
+        g.lineWidth = Math.max(2, px * .16); g.strokeStyle = sudah ? warna : "rgba(255,250,240,.9)"; bulat(g, x + g.lineWidth / 2, y + g.lineWidth / 2, w - g.lineWidth, h - g.lineWidth, h / 2); g.stroke();
+        if (!sudah) { g.fillStyle = warna; g.beginPath(); g.moveTo(sx - px * .45, y + h - 1); g.lineTo(sx + px * .45, y + h - 1); g.lineTo(sx, y + h + px * .55); g.closePath(); g.fill(); }
+        if (sudah) { var cx = x + px * .8 + ik / 2, cy = sy; g.fillStyle = warna; g.beginPath(); g.arc(cx, cy, ik * .45, 0, 6.2832); g.fill(); g.strokeStyle = "#fffaf0"; g.lineWidth = Math.max(1.5, px * .13); g.beginPath(); g.moveTo(cx - ik * .2, cy); g.lineTo(cx - ik * .04, cy + ik * .17); g.lineTo(cx + ik * .22, cy - ik * .17); g.stroke(); }
+        g.fillStyle = sudah ? warna : "#fffaf0"; g.fillText(teks, sx + ik / 2, sy + px * .06);
+        if (disini && sudah && !modalTerbuka) { g.font = "500 " + Math.round(px * .78) + "px 'Fredoka', 'Nunito', sans-serif"; g.fillStyle = "rgba(255,250,240,.95)"; g.shadowColor = "rgba(0,0,0,.5)"; g.shadowBlur = px * .4; g.fillText("ketuk untuk membuka", sx, y - px * .7); g.shadowColor = "transparent"; g.shadowBlur = 0; g.font = "600 " + px + "px 'Fredoka', 'Nunito', sans-serif"; }
+        kotakLabel.push({ key: key, x: x, y: y, w: w, h: h });
       });
       if (jalur && jalur.length) { var last = jalur[jalur.length - 1]; g.strokeStyle = "rgba(255,243,214,.9)"; g.lineWidth = Math.max(2, S * .6); g.beginPath(); g.arc((last.x - x0) * S, (last.y - y0) * S, S * (3 + Math.sin(waktu * 6)), 0, 6.29); g.stroke(); }
     }
@@ -735,6 +746,8 @@
       if (f) f();
     }
     function bukaTempat(key) {
+      if (tur) turKunjung[key] = true;
+      jalurBuka = null;
       jalur = null; input.x = input.y = 0;
       var wadah = el("div", "jl-isi-tempat"), ada = false;
       ISI_TEMPAT[key].forEach(function (id) {
@@ -746,7 +759,7 @@
       kunjungan[key] = true; perbaruiHud();
       semua = daftar.every(function (k) { return kunjungan[k]; });
       bukaModal(wadah, "tempat-" + key, function () {
-        if (semua && !simpanan) { simpanan = true; setTimeout(penutup, 250); }
+        if (semua && !simpanan && !ulangTur) { simpanan = true; setTimeout(penutup, 250); }
         else if (tur) setTimeout(langkahTur, 400);
       });
     }
@@ -802,16 +815,34 @@
     /* tur otomatis */
     var autoBtn;
     function langkahTur() {
-      if (!tur) return;
-      var key = URUT_TUR.filter(function (k) { return daftar.indexOf(k) >= 0 && !kunjungan[k]; })[0];
-      if (!key) { hentikanTur(); return; }
+      if (!tur || modalTerbuka) return;
+      var key = URUT_TUR.filter(function (k) { return daftar.indexOf(k) >= 0 && !turKunjung[k] && (ulangTur || !kunjungan[k]); })[0];
+      if (!key) { var ulang = ulangTur; hentikanTur(); if (ulang) setTimeout(penutup, 250); return; }
+      tujuanTur = key;
       var t = dunia.tempat[key], gx = t.x + Math.floor(t.w / 2), gy = t.ty;
       jalur = cariJalur(Math.floor(pemain.x / T), Math.floor((pemain.y - 2) / T), gx, gy);
-      if (!jalur) { kunjungan[key] = true; langkahTur(); }
-      else if (!jalur.length) { jalur = null; bukaTempat(key); }
+      if (!jalur) { turKunjung[key] = true; langkahTur(); return; }
+      if (!jalur.length) { jalur = null; bukaTempat(key); return; }
+      jalurBuka = key;
     }
-    function mulaiTur() { if (!pemain || modalTerbuka) return; tur = true; if (autoBtn) { autoBtn.classList.add("on"); autoBtn.setAttribute("aria-pressed", "true"); } langkahTur(); }
-    function hentikanTur() { tur = false; if (autoBtn) { autoBtn.classList.remove("on"); autoBtn.setAttribute("aria-pressed", "false"); } }
+    function mulaiTur() {
+      if (!pemain || modalTerbuka) return;
+      tur = true; turKunjung = {}; ulangTur = daftar.every(function (k) { return kunjungan[k]; });
+      if (autoBtn) { autoBtn.classList.add("on"); autoBtn.setAttribute("aria-pressed", "true"); }
+      langkahTur();
+    }
+    function hentikanTur() {
+      if (tur) { jalur = null; jalurBuka = null; }
+      tur = false; ulangTur = false; tujuanTur = null;
+      if (autoBtn) { autoBtn.classList.remove("on"); autoBtn.setAttribute("aria-pressed", "false"); }
+    }
+    function bukaAtauDatangi(key) {
+      if (tempatDekat() === key) { jalur = null; jalurBuka = null; bukaTempat(key); return; }
+      var t = dunia.tempat[key];
+      jalur = cariJalur(Math.floor(pemain.x / T), Math.floor((pemain.y - 2) / T), t.x + Math.floor(t.w / 2), t.ty);
+      if (jalur && !jalur.length) { jalur = null; bukaTempat(key); return; }
+      jalurBuka = jalur ? key : null;
+    }
 
     function pasangKontrol() {
       // joystick
@@ -833,19 +864,22 @@
         if (!pemain || modalTerbuka) return;
         var dpr = cv.width / innerWidth, vw = cv.width / S, vh = cv.height / S;
         var x0 = Math.max(vw / 2, Math.min(dunia.W * T - vw / 2, cam.x)) - vw / 2, y0 = Math.max(vh / 2, Math.min(dunia.H * T - vh / 2, cam.y)) - vh / 2;
-        var wx = x0 + e.clientX * dpr / S, wy = y0 + e.clientY * dpr / S;
-        // ketuk label atau objek tempat = berjalan ke tempat itu
-        var tujuan = null;
-        daftar.forEach(function (key) { var t = dunia.tempat[key]; if (wx >= t.x * T - 6 && wx <= (t.x + t.w) * T + 6 && wy >= t.y * T - 30 && wy <= (t.ty + 1) * T) tujuan = { x: t.x + Math.floor(t.w / 2), y: t.ty }; });
-        if (!tujuan) tujuan = { x: Math.floor(wx / T), y: Math.floor(wy / T) };
-        if (tujuan.y < 0 || tujuan.x < 0 || tujuan.y >= dunia.H || tujuan.x >= dunia.W || dunia.padat[tujuan.y][tujuan.x]) return;
+        var wx = x0 + e.clientX * dpr / S, wy = y0 + e.clientY * dpr / S, px = e.clientX * dpr, py = e.clientY * dpr;
+        // ketuk label tempat = buka (atau berjalan ke sana lalu buka)
+        var kena = null;
+        kotakLabel.forEach(function (k) { if (px >= k.x - 6 && px <= k.x + k.w + 6 && py >= k.y - 6 && py <= k.y + k.h + 6) kena = k.key; });
+        if (!kena) daftar.forEach(function (key) { var t = dunia.tempat[key]; if (wx >= t.x * T - 4 && wx <= (t.x + t.w) * T + 4 && wy >= t.y * T - 20 && wy <= (t.y + t.h) * T) kena = key; });
         hentikanTur();
+        if (kena) { bukaAtauDatangi(kena); return; }
+        var tujuan = { x: Math.floor(wx / T), y: Math.floor(wy / T) };
+        if (tujuan.y < 0 || tujuan.x < 0 || tujuan.y >= dunia.H || tujuan.x >= dunia.W || dunia.padat[tujuan.y][tujuan.x]) return;
         jalur = cariJalur(Math.floor(pemain.x / T), Math.floor((pemain.y - 2) / T), tujuan.x, tujuan.y);
-        terakhir = null;
+        jalurBuka = null;
       });
       addEventListener("keydown", function (e) {
         if (e.key === "Escape" && !modal.hidden && !modal.classList.contains("wajib")) { tutupModal(); return; }
-        if (modalTerbuka || /INPUT|TEXTAREA|SELECT/.test((e.target || {}).tagName || "")) return;
+        if (modalTerbuka || /INPUT|TEXTAREA|SELECT|BUTTON/.test((e.target || {}).tagName || "")) return;
+        if ((e.key === "Enter" || e.key === " ") && pemain && tempatDekat()) { e.preventDefault(); bukaTempat(tempatDekat()); return; }
         var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
         if (/^Arrow|^[wasd]$/.test(k)) { kunci[k] = true; e.preventDefault(); }
       });
@@ -873,7 +907,9 @@
         ctxU = c;
         document.body.classList.add("tema-jelajah", "latar-" + latar);
         var dpr0 = Math.min(window.devicePixelRatio || 1, 2), s0 = Math.max(2, Math.min(innerWidth / (T * 8.5), innerHeight / (T * 14))) * dpr0;
-        dunia = bangunDunia(latar, Math.max(3, Math.min(4, Math.ceil(s0))));
+        daftar = URUT_TUR.filter(function (k) { return LATAR[latar].tempat[k] && ISI_TEMPAT[k].some(function (id) { return document.getElementById(id); }); });
+        if (daftar.indexOf("mempelai") < 0) daftar.push("mempelai");
+        dunia = bangunDunia(latar, Math.max(3, Math.min(4, Math.ceil(s0))), daftar);
         cv = el("canvas", "jl-dunia"); cv.setAttribute("aria-label", "Peta " + LATAR_NAMA[latar] + " acara pernikahan"); cv.setAttribute("role", "img");
         document.body.insertBefore(cv, document.body.firstChild);
         g = cv.getContext("2d");
@@ -910,6 +946,7 @@
       },
       saatBuka: function () {
         daftar = URUT_TUR.filter(function (k) { return dunia.tempat[k] && ISI_TEMPAT[k].some(function (id) { return document.getElementById(id); }); });
+        perbaruiHud();
         setTimeout(function () { pilihKarakter(sambutan); }, 450);
       }
     };

@@ -98,6 +98,7 @@ ol.steps{padding-left:20px;margin:8px 0}
     <div><h1>Admin Undangan</h1><small id="repoLabel"></small></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="ghost" id="btnList" type="button" hidden>Daftar undangan</button>
+      <button class="ghost" id="btnMusik" type="button" hidden>Koleksi musik</button>
       <button class="ghost" id="btnLogout" type="button" hidden>Keluar</button>
     </div>
   </header>
@@ -130,6 +131,15 @@ ol.steps{padding-left:20px;margin:8px 0}
       <button id="btnNew" type="button">+ Undangan baru</button>
     </div>
     <div class="list" id="coupleList"><p class="hint">Memuat…</p></div>
+  </section>
+
+  <!-- ===== Koleksi musik bersama ===== -->
+  <section id="viewMusik" class="card" hidden>
+    <h2>Koleksi musik</h2>
+    <p class="hint">Lagu di sini bisa dipilih oleh semua undangan (kolom "Musik latar" di editor). Unggah file mp3, maksimal 95 MB per file. Pastikan kamu boleh memakai lagu yang diunggah.</p>
+    <label class="ghost small" style="display:inline-flex;cursor:pointer;padding:9px 16px;border:1px solid var(--line);border-radius:10px">+ Unggah mp3<input type="file" id="musikFile" accept="audio/mpeg,audio/mp3,.mp3" multiple hidden></label>
+    <span class="msg" id="musikMsg"></span>
+    <div id="musikList" style="display:grid;gap:10px;margin-top:14px"><p class="hint">Memuat…</p></div>
   </section>
 
   <!-- ===== Kirim undangan lewat WhatsApp ===== -->
@@ -269,7 +279,9 @@ ol.steps{padding-left:20px;margin:8px 0}
     <div class="card">
       <h2>Musik &amp; lainnya</h2>
       <div class="grid">
-        <div><label>Musik latar (mp3)</label><div class="media" id="m_musik"></div></div>
+        <div><label>Musik latar<select id="f_musik_pilih"><option value="">Tanpa musik</option><option value="upload">Unggah mp3 sendiri</option></select></label>
+          <div class="media" id="m_musik" style="margin-top:8px"></div><audio id="musikPv" controls hidden style="width:100%;margin-top:8px"></audio>
+          <small class="hint" style="display:block;margin-top:6px">Tambah lagu ke koleksi lewat tombol "Koleksi musik" di atas.</small></div>
         <label>URL Google Apps Script untuk ucapan (opsional)<input id="f_script" placeholder="https://script.google.com/macros/s/.../exec"></label>
       </div>
       <label style="margin-top:10px">Kalimat penutup<textarea id="f_penutup"></textarea></label>
@@ -290,7 +302,7 @@ ol.steps{padding-left:20px;margin:8px 0}
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
-  var RESERVED = ["tema","admin","_template","assets","contoh"];
+  var RESERVED = ["tema","admin","_template","assets","contoh","musik"];
   var DEFAULT_AYAT = "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.";
   var DEFAULT_PENUTUP = "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.";
   var ZONA = { WIB:"+07:00", WITA:"+08:00", WIT:"+09:00" };
@@ -298,8 +310,8 @@ ol.steps{padding-left:20px;margin:8px 0}
 
   function store(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); }catch(e){} }
   function read(k){ try{ return localStorage.getItem(k) || ""; }catch(e){ return ""; } }
-  function show(view){ ["viewLogin","viewList","viewEdit","viewKirim"].forEach(function(v){ $(v).hidden = v !== view; });
-    $("saveBar").hidden = view !== "viewEdit"; $("btnList").hidden = view !== "viewEdit" && view !== "viewKirim"; $("btnLogout").hidden = view === "viewLogin"; window.scrollTo(0,0); }
+  function show(view){ ["viewLogin","viewList","viewEdit","viewKirim","viewMusik"].forEach(function(v){ $(v).hidden = v !== view; });
+    $("saveBar").hidden = view !== "viewEdit"; $("btnList").hidden = view === "viewList" || view === "viewLogin"; $("btnMusik").hidden = view === "viewLogin" || view === "viewMusik"; $("btnLogout").hidden = view === "viewLogin"; window.scrollTo(0,0); }
   function pagesBase(){
     var p = state.repo.split("/");
     if (location.hostname.endsWith("github.io")) return location.origin + location.pathname.replace(/admin\/?(index\.html)?$/,"");
@@ -370,6 +382,69 @@ ol.steps{padding-left:20px;margin:8px 0}
     if (!$("viewEdit").hidden && state.dirty && !window.confirm("Perubahan belum disimpan. Tetap kembali ke daftar?")) return;
     loadList();
   });
+
+  /* ---------- Koleksi musik (folder musik/ di repo, dipakai bersama) ---------- */
+  var koleksi = [];
+  function rawRoot(path){ return "https://raw.githubusercontent.com/" + state.repo + "/main/" + path; }
+  function muatKoleksi(){
+    return api("/contents/musik", {allow404:true}).then(function(items){
+      koleksi = (items || []).filter(function(i){ return i.type === "file" && /\.mp3$/i.test(i.name); }).map(function(i){ return i.name; });
+      return koleksi;
+    }).catch(function(){ koleksi = []; return koleksi; });
+  }
+  function namaLagu(f){ return f.replace(/\.mp3$/i, "").replace(/[-_]+/g, " "); }
+  function renderKoleksi(){
+    var box = $("musikList");
+    if (!koleksi.length) { box.innerHTML = '<p class="hint">Belum ada lagu. Klik "+ Unggah mp3".</p>'; return; }
+    box.innerHTML = "";
+    koleksi.forEach(function(f){
+      var row = document.createElement("div"); row.className = "row-item"; row.style.display = "grid"; row.style.gap = "6px";
+      row.innerHTML = '<b>' + esc(namaLagu(f)) + '</b><audio controls preload="none" src="' + esc(rawRoot("musik/" + encodeURIComponent(f))) + '" style="width:100%"></audio><button type="button" class="danger small remove">Hapus</button>';
+      row.querySelector(".remove").addEventListener("click", function(){
+        if (!window.confirm("Hapus lagu " + namaLagu(f) + " dari koleksi? Undangan yang memakai lagu ini jadi tanpa musik.")) return;
+        $("musikMsg").textContent = "Menghapus…"; $("musikMsg").className = "msg";
+        commitKeMain([{path:"musik/" + f, mode:"100644", type:"blob", sha:null}], "Hapus lagu " + f + " dari koleksi musik")
+          .then(function(){ koleksi = koleksi.filter(function(x){ return x !== f; }); renderKoleksi(); $("musikMsg").textContent = "Lagu dihapus."; $("musikMsg").className = "msg ok"; })
+          .catch(function(e){ $("musikMsg").textContent = "Gagal menghapus: " + e.message; $("musikMsg").className = "msg err"; });
+      });
+      box.appendChild(row);
+    });
+  }
+  $("btnMusik").addEventListener("click", function(){
+    if (!$("viewEdit").hidden && state.dirty && !window.confirm("Perubahan belum disimpan. Tetap buka koleksi musik?")) return;
+    show("viewMusik"); $("musikList").innerHTML = '<p class="hint">Memuat…</p>'; muatKoleksi().then(renderKoleksi);
+  });
+  $("musikFile").addEventListener("change", function(){
+    var fs = Array.prototype.slice.call($("musikFile").files); $("musikFile").value = "";
+    if (!fs.length) return;
+    var besar = fs.filter(function(f){ return f.size > 95*1024*1024; });
+    if (besar.length) { $("musikMsg").textContent = besar[0].name + " lebih dari 95 MB."; $("musikMsg").className = "msg err"; return; }
+    var entries = [], n = 0;
+    $("musikMsg").className = "msg";
+    fs.reduce(function(p, f){
+      return p.then(function(){ $("musikMsg").textContent = "Mengunggah " + (++n) + " / " + fs.length + "…"; return fileToB64(f); })
+        .then(function(b64){ return api("/git/blobs", {method:"POST", body:{content:b64, encoding:"base64"}}); })
+        .then(function(b){ var nama = (slugify(f.name.replace(/\.mp3$/i, "")) || "lagu") + ".mp3"; entries.push({path:"musik/" + nama, mode:"100644", type:"blob", sha:b.sha}); });
+    }, Promise.resolve())
+      .then(function(){ return commitKeMain(entries, "Tambah " + entries.length + " lagu ke koleksi musik"); })
+      .then(function(){ entries.forEach(function(e){ var f = e.path.slice(6); if (koleksi.indexOf(f) < 0) koleksi.push(f); }); koleksi.sort(); renderKoleksi(); $("musikMsg").textContent = "Tersimpan. Lagu siap dipilih di editor."; $("musikMsg").className = "msg ok"; })
+      .catch(function(e){ $("musikMsg").textContent = "Gagal mengunggah: " + e.message; $("musikMsg").className = "msg err"; });
+  });
+  function isiPilihanMusik(nilai){
+    var sel = $("f_musik_pilih");
+    Array.prototype.slice.call(sel.options).forEach(function(o){ if (o.value && o.value !== "upload") o.remove(); });
+    koleksi.forEach(function(f){ var o = document.createElement("option"); o.value = "../musik/" + f; o.textContent = "Koleksi: " + namaLagu(f); sel.appendChild(o); });
+    if (nilai && /^\.\.\/musik\//.test(nilai) && koleksi.indexOf(nilai.slice(9)) < 0) { var o = document.createElement("option"); o.value = nilai; o.textContent = "Koleksi: " + namaLagu(nilai.slice(9)) + " (tidak ditemukan)"; sel.appendChild(o); }
+    sel.value = nilai || "";
+    musikUi();
+  }
+  function musikUi(){
+    var v = $("f_musik_pilih").value, pv = $("musikPv");
+    $("m_musik").hidden = v !== "upload";
+    if (v && v !== "upload") { pv.hidden = false; var src = rawRoot("musik/" + encodeURIComponent(v.slice(9))); if (pv.getAttribute("src") !== src) pv.src = src; }
+    else { pv.hidden = true; pv.removeAttribute("src"); try { pv.pause(); } catch(e){} }
+  }
+  $("f_musik_pilih").addEventListener("change", function(){ musikUi(); markDirty(); });
 
   /* ---------- Daftar ---------- */
   function loadList(){
@@ -730,7 +805,10 @@ ol.steps{padding-left:20px;margin:8px 0}
     state.media.pria = slug && p.foto ? one(p.foto) : [];
     state.media.wanita = slug && w.foto ? one(w.foto) : [];
     state.media.couple = slug && d.fotoPasangan ? one(d.fotoPasangan) : [];
-    state.media.musik = slug && d.musik ? one(d.musik) : [];
+    var musikKoleksi = /^\.\.\/musik\//.test(d.musik || "");
+    state.media.musik = slug && d.musik && !musikKoleksi ? one(d.musik) : [];
+    isiPilihanMusik(musikKoleksi ? d.musik : "upload");
+    muatKoleksi().then(function(){ var cur = $("f_musik_pilih").value; isiPilihanMusik(cur); });
     var v = d.video || {};
     state.media.video = slug && v.src ? one(v.src) : [];
     $("f_video_tipe").value = v.youtube ? "youtube" : v.src ? "file" : "";
@@ -837,7 +915,13 @@ ol.steps{padding-left:20px;margin:8px 0}
         return {src:it.path, tipe: isVid(it) ? "video" : "foto"};
       }),
       rekening: rowsOf("rekList").map(function(r){ return {bank:r.bank, atasNama:r.atasNama, nomor:r.nomor}; }).filter(function(r){ return r.nomor; }),
-      musik: takeOne("musik","musik"),
+      musik: (function(){
+        var v = $("f_musik_pilih").value;
+        if (v === "upload") return takeOne("musik","musik");
+        (state.media.musik || []).forEach(function(it){ if (it.path) state.removed.push(it.path); });
+        state.media.musik = [];
+        return v;
+      })(),
       video: (function(){
         var t = $("f_video_tipe").value, judul = $("f_video_judul").value.trim();
         if (t === "youtube" && $("f_video_yt").value.trim()) return { youtube:$("f_video_yt").value.trim(), src:"", judul:judul };
