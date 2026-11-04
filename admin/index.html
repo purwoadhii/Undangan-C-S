@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Admin Undangan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Mulish:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+/* Layout: panel kerja satu kolom; kartu per bagian form, tombol simpan menempel di bawah. */
+:root{
+  --bg:#f5f3ef; --card:#ffffff; --ink:#3f3936; --muted:#8a807a; --line:#e7e0da;
+  --rose:#c94b86; --rose-soft:#f8e3ed; --sage:#6f8f6a; --danger:#b3412f;
+  --font:"Mulish","Segoe UI",system-ui,sans-serif; --script:"Great Vibes",cursive;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--font)}
+.wrap{max-width:860px;margin:0 auto;padding:24px max(16px,env(safe-area-inset-right,0px)) 120px max(16px,env(safe-area-inset-left,0px))}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+header.top h1{margin:0;font-family:var(--script);font-weight:400;font-size:40px;color:var(--rose);line-height:1}
+header.top small{display:block;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}
+.card h2{margin:0 0 4px;font-size:17px}
+.card .hint{margin:0 0 14px;color:var(--muted);font-size:13px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grid.three{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+label{display:block;font-size:13px;font-weight:600}
+input,select,textarea{width:100%;margin-top:4px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fcfbfa;color:var(--ink);font:15px var(--font)}
+textarea{min-height:80px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--rose-soft);border-color:var(--rose)}
+button,.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:10px 16px;font:600 14px var(--font);cursor:pointer;text-decoration:none;background:var(--rose);color:#fff}
+button:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+button.ghost,.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button.small{padding:6px 10px;font-size:13px}
+button.danger{background:transparent;color:var(--danger);border:1px solid #efd3cd}
+button:disabled{opacity:.55;cursor:wait}
+.row-item{border:1px dashed var(--line);border-radius:12px;padding:14px;margin-bottom:10px;position:relative}
+.row-item .remove{position:absolute;top:10px;right:10px}
+.row-item h3{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.list{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.couple{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.couple .mono{font-family:var(--script);font-size:34px;color:var(--rose);line-height:1}
+.couple .meta{color:var(--muted);font-size:13px}
+.couple .actions{display:flex;gap:8px;margin-top:auto;padding-top:8px;flex-wrap:wrap}
+.preview-mono{font-family:var(--script);font-size:44px;color:var(--rose);line-height:1}
+.slug{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:#f3eee9;padding:2px 8px;border-radius:6px;word-break:break-all}
+.media{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.thumb{position:relative;width:104px;height:130px;border-radius:10px;overflow:hidden;background:#eee6e9;border:1px solid var(--line)}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .tag{position:absolute;left:4px;top:4px;font-size:10px;background:rgba(0,0,0,.55);color:#fff;padding:1px 6px;border-radius:99px}
+.thumb .x{position:absolute;right:4px;top:4px;width:24px;height:24px;padding:0;justify-content:center;border-radius:50%;background:rgba(255,255,255,.92);color:var(--danger);font-size:16px}
+.thumb .mv{position:absolute;bottom:4px;display:flex;gap:4px;left:4px}
+.thumb .mv button{width:24px;height:24px;padding:0;justify-content:center;border-radius:6px;background:rgba(255,255,255,.92);color:var(--ink);font-size:12px}
+.thumb.empty{display:grid;place-items:center;color:var(--muted);font-size:12px;text-align:center;padding:6px}
+.pick{display:inline-flex}
+.pick input{display:none}
+.map-pick{height:260px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:0}
+.search-row{display:flex;gap:8px;margin-top:8px}
+.search-row input{margin:0}
+.coord{font-size:12px;color:var(--muted);margin-top:6px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.95);backdrop-filter:blur(6px);border-top:1px solid var(--line);z-index:20;
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.bar .in{max-width:860px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bar .msg{flex:1;min-width:180px;font-size:14px}
+.msg.ok{color:var(--sage)} .msg.err{color:var(--danger)}
+.note{background:var(--rose-soft);border-radius:12px;padding:12px 14px;font-size:14px}
+ol.steps{padding-left:20px;margin:8px 0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>Admin Undangan</h1><small id="repoLabel"></small></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ghost" id="btnList" type="button" hidden>Daftar undangan</button>
+      <button class="ghost" id="btnLogout" type="button" hidden>Keluar</button>
+    </div>
+  </header>
+
+  <!-- ===== Login token ===== -->
+  <section id="viewLogin" class="card" hidden>
+    <h2>Masuk dengan token GitHub</h2>
+    <p class="hint">Token dipakai untuk menyimpan undangan langsung ke repo. Token hanya disimpan di browser ini.</p>
+    <div class="note">
+      Cara membuat token (sekali saja):
+      <ol class="steps">
+        <li>Buka <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+        <li>Token name: <b>admin-undangan</b>. Expiration: sesuai kebutuhan.</li>
+        <li>Repository access: <b>Only select repositories</b>, lalu pilih <b>Undangan-C-S</b>.</li>
+        <li>Permissions → Repository permissions → <b>Contents: Read and write</b>.</li>
+        <li>Klik <b>Generate token</b>, salin, lalu tempel di bawah.</li>
+      </ol>
+    </div>
+    <div class="grid" style="margin-top:14px">
+      <label>Token GitHub<input id="inToken" type="password" autocomplete="off" placeholder="github_pat_..."></label>
+      <label>Repo (pemilik/nama)<input id="inRepo" value="purwoadhii/Undangan-C-S"></label>
+    </div>
+    <p style="margin:14px 0 0"><button id="btnLogin" type="button">Masuk</button> <span class="msg" id="loginMsg"></span></p>
+  </section>
+
+  <!-- ===== Daftar ===== -->
+  <section id="viewList" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <h2 style="margin:0;font-size:18px">Semua undangan</h2>
+      <button id="btnNew" type="button">+ Undangan baru</button>
+    </div>
+    <div class="list" id="coupleList"><p class="hint">Memuat…</p></div>
+  </section>
+
+  <!-- ===== Form ===== -->
+  <form id="viewEdit" hidden autocomplete="off">
+    <div class="card">
+      <h2 id="editTitle">Undangan baru</h2>
+      <p class="hint">Inisial dan alamat undangan dibuat otomatis dari nama panggilan.</p>
+      <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+        <div class="preview-mono" id="pvMono">?&amp;?</div>
+        <div style="min-width:0">
+          <div>Alamat: <span class="slug" id="pvUrl"></span></div>
+          <label style="margin-top:8px">Nama folder / alamat <input id="f_slug" pattern="[a-z0-9-]+" placeholder="budi-sari"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Mempelai</h2>
+      <div class="grid">
+        <div>
+          <label>Panggilan pria<input id="f_p_panggilan" required placeholder="Budi"></label>
+          <label style="margin-top:10px">Nama lengkap pria<input id="f_p_lengkap" placeholder="Budi Santoso, S.T."></label>
+          <label style="margin-top:10px">Keterangan orang tua<input id="f_p_ortu" placeholder="Putra dari Bapak ... & Ibu ..."></label>
+          <div style="margin-top:10px"><label>Foto pria</label><div class="media" id="m_pria"></div></div>
+        </div>
+        <div>
+          <label>Panggilan wanita<input id="f_w_panggilan" required placeholder="Sari"></label>
+          <label style="margin-top:10px">Nama lengkap wanita<input id="f_w_lengkap" placeholder="Sari Lestari, S.E."></label>
+          <label style="margin-top:10px">Keterangan orang tua<input id="f_w_ortu" placeholder="Putri dari Bapak ... & Ibu ..."></label>
+          <div style="margin-top:10px"><label>Foto wanita</label><div class="media" id="m_wanita"></div></div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:14px">
+        <label>Inisial (opsional, kosong = otomatis)<input id="f_mono" maxlength="3" placeholder="otomatis"></label>
+        <div><label>Foto berdua (bingkai lengkung)</label><div class="media" id="m_couple"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Acara</h2>
+      <p class="hint">Hitung mundur memakai tanggal dan jam mulai acara pertama. Klik peta untuk menaruh titik lokasi; tamu bisa mengetuk alamat untuk membuka Google Maps.</p>
+      <div id="acaraList"></div>
+      <button class="ghost small" type="button" id="addAcara">+ Tambah acara</button>
+    </div>
+
+    <div class="card">
+      <h2>Galeri foto &amp; video</h2>
+      <p class="hint">Bisa campur foto (jpg, png, webp) dan video (mp4). Video sebaiknya di bawah 25 MB supaya cepat dibuka. Urutan bisa digeser.</p>
+      <div class="media" id="m_galeri"></div>
+    </div>
+
+    <div class="card">
+      <h2>Ayat / kutipan</h2>
+      <label>Teks<textarea id="f_ayat"></textarea></label>
+      <label style="margin-top:10px">Sumber<input id="f_ayat_sumber" placeholder="QS. Ar-Rum : 21"></label>
+    </div>
+
+    <div class="card">
+      <h2>Cerita kami</h2>
+      <div id="ceritaList"></div>
+      <button class="ghost small" type="button" id="addCerita">+ Tambah cerita</button>
+    </div>
+
+    <div class="card">
+      <h2>Tanda kasih (rekening)</h2>
+      <div id="rekList"></div>
+      <button class="ghost small" type="button" id="addRek">+ Tambah rekening</button>
+    </div>
+
+    <div class="card">
+      <h2>Musik &amp; lainnya</h2>
+      <div class="grid">
+        <div><label>Musik latar (mp3)</label><div class="media" id="m_musik"></div></div>
+        <label>URL Google Apps Script untuk ucapan (opsional)<input id="f_script" placeholder="https://script.google.com/macros/s/.../exec"></label>
+      </div>
+      <label style="margin-top:10px">Kalimat penutup<textarea id="f_penutup"></textarea></label>
+    </div>
+  </form>
+</div>
+
+<div class="bar" id="saveBar" hidden>
+  <div class="in">
+    <span class="msg" id="saveMsg">Perubahan belum disimpan.</span>
+    <a class="btn ghost" id="btnOpen" href="#" target="_blank" rel="noopener" hidden>Lihat undangan</a>
+    <button type="button" id="btnSave">Simpan &amp; terbitkan</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var RESERVED = ["tema","admin","_template","assets"];
+  var DEFAULT_AYAT = "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.";
+  var DEFAULT_PENUTUP = "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.";
+  var ZONA = { WIB:"+07:00", WITA:"+08:00", WIT:"+09:00" };
+  var state = { token:"", repo:"", editing:null, media:{}, removed:[], dirty:false };
+
+  function store(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,v); }catch(e){} }
+  function read(k){ try{ return localStorage.getItem(k) || ""; }catch(e){ return ""; } }
+  function show(view){ ["viewLogin","viewList","viewEdit"].forEach(function(v){ $(v).hidden = v !== view; });
+    $("saveBar").hidden = view !== "viewEdit"; $("btnList").hidden = view !== "viewEdit"; $("btnLogout").hidden = view === "viewLogin"; window.scrollTo(0,0); }
+  function pagesBase(){
+    var p = state.repo.split("/");
+    if (location.hostname.endsWith("github.io")) return location.origin + location.pathname.replace(/admin\/?(index\.html)?$/,"");
+    return "https://" + p[0].toLowerCase() + ".github.io/" + p[1] + "/";
+  }
+  function slugify(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+
+  /* ---------- GitHub API ---------- */
+  function api(path, opt){
+    opt = opt || {};
+    return fetch("https://api.github.com/repos/" + state.repo + path, {
+      method: opt.method || "GET",
+      headers: { "Authorization":"Bearer " + state.token, "Accept":"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28" },
+      body: opt.body ? JSON.stringify(opt.body) : undefined
+    }).then(function(r){
+      if (r.status === 404 && opt.allow404) return null;
+      if (!r.ok) return r.json().catch(function(){return {};}).then(function(j){
+        var m = r.status === 401 ? "Token salah atau sudah kedaluwarsa." : r.status === 403 ? "Token tidak punya izin Contents: Read and write untuk repo ini." : r.status === 404 ? "Repo tidak ditemukan atau token tidak punya akses ke repo ini." : (j.message || ("Error " + r.status));
+        throw new Error(m);
+      });
+      return r.status === 204 ? null : r.json();
+    });
+  }
+  function b64ToText(b64){ var bin = atob(b64.replace(/\n/g,"")); var bytes = new Uint8Array(bin.length); for (var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+  function textToB64(t){ var bytes = new TextEncoder().encode(t), s = ""; for (var i=0;i<bytes.length;i+=0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000)); return btoa(s); }
+  function fileToB64(f){ return new Promise(function(res,rej){ var r = new FileReader(); r.onload = function(){ res(String(r.result).split(",")[1]); }; r.onerror = rej; r.readAsDataURL(f); }); }
+  function parseData(txt){
+    var a = txt.indexOf("{"), b = txt.lastIndexOf("}");
+    var body = txt.slice(a, b+1);
+    try { return JSON.parse(body); } catch(e) { return (new Function("return (" + body + ");"))(); }
+  }
+  function rawUrl(slug, path){ return "https://raw.githubusercontent.com/" + state.repo + "/main/" + slug + "/" + path; }
+
+  /* ---------- Login ---------- */
+  function login(token, repo){
+    state.token = token; state.repo = repo;
+    return api("").then(function(info){
+      if (!info.permissions || !info.permissions.push) throw new Error("Token tidak punya izin menulis ke repo ini.");
+      store("adm_token", token); store("adm_repo", repo);
+      $("repoLabel").textContent = repo + " · " + pagesBase();
+      loadList();
+    });
+  }
+  $("btnLogin").addEventListener("click", function(){
+    var t = $("inToken").value.trim(), r = $("inRepo").value.trim();
+    if (!t) { $("loginMsg").textContent = "Tempel token dulu."; return; }
+    $("loginMsg").textContent = "Memeriksa…"; $("btnLogin").disabled = true;
+    login(t, r).catch(function(e){ $("loginMsg").textContent = e.message; $("loginMsg").className = "msg err"; }).finally(function(){ $("btnLogin").disabled = false; });
+  });
+  $("btnLogout").addEventListener("click", function(){ store("adm_token", null); state.token = ""; $("inToken").value = ""; show("viewLogin"); });
+  $("btnList").addEventListener("click", function(){
+    if (state.dirty && !window.confirm("Perubahan belum disimpan. Tetap kembali ke daftar?")) return;
+    loadList();
+  });
+
+  /* ---------- Daftar ---------- */
+  function loadList(){
+    show("viewList");
+    var box = $("coupleList"); box.innerHTML = '<p class="hint">Memuat…</p>';
+    api("/contents/").then(function(items){
+      var dirs = items.filter(function(i){ return i.type === "dir" && RESERVED.indexOf(i.name) < 0 && i.name.charAt(0) !== "_" && i.name.charAt(0) !== "."; });
+      return Promise.all(dirs.map(function(d){
+        return api("/contents/" + d.name + "/data.js", {allow404:true}).then(function(f){
+          if (!f) return null;
+          var data = {}; try { data = parseData(b64ToText(f.content)); } catch(e) {}
+          return { slug:d.name, data:data };
+        });
+      }));
+    }).then(function(list){
+      list = list.filter(Boolean);
+      if (!list.length) { box.innerHTML = '<p class="hint">Belum ada undangan. Klik "+ Undangan baru".</p>'; return; }
+      box.innerHTML = "";
+      list.forEach(function(c){
+        var d = c.data, p = d.pria || {}, w = d.wanita || {};
+        var ac = (d.acara || [])[0] || {};
+        var el = document.createElement("div"); el.className = "couple";
+        el.innerHTML = '<div class="mono">' + esc(monoOf(d)) + '</div><b>' + esc(p.panggilan) + ' &amp; ' + esc(w.panggilan) + '</b>' +
+          '<div class="meta">' + esc(ac.tanggal || "") + ' · ' + esc(ac.tempat || "") + '</div><div class="slug">/' + esc(c.slug) + '/</div>' +
+          '<div class="actions"><button type="button" class="small">Ubah</button><a class="btn ghost small" style="padding:6px 10px;font-size:13px" target="_blank" rel="noopener" href="' + pagesBase() + c.slug + '/">Buka</a></div>';
+        el.querySelector("button").addEventListener("click", function(){ openEditor(c.slug, d); });
+        box.appendChild(el);
+      });
+    }).catch(function(e){ box.innerHTML = '<p class="msg err">' + esc(e.message) + '</p>'; });
+  }
+  $("btnNew").addEventListener("click", function(){ openEditor(null, null); });
+
+  function monoOf(d){
+    var m = (d.monogram || "").trim();
+    var a = ((d.pria||{}).panggilan || "?").charAt(0), b = ((d.wanita||{}).panggilan || "?").charAt(0);
+    if (!m) return (a + "&" + b).toUpperCase();
+    return m.length === 2 ? (m.charAt(0) + "&" + m.charAt(1)).toUpperCase() : m.toUpperCase();
+  }
+
+  /* ---------- Media slots ---------- */
+  // slot item: {path: "assets/x.jpg"} (sudah di repo) atau {file: File}
+  function mediaUrl(it){
+    if (it.file) return it.url || (it.url = URL.createObjectURL(it.file));
+    return state.editing ? rawUrl(state.editing, it.path) : "";
+  }
+  function isVid(it){ return it.file ? /^video\//.test(it.file.type) : /\.(mp4|webm|mov|m4v)$/i.test(it.path || ""); }
+  function renderSlot(key, opts){
+    var box = $("m_" + key), items = state.media[key] || [];
+    box.innerHTML = "";
+    items.forEach(function(it, i){
+      var t = document.createElement("div"); t.className = "thumb";
+      var url = mediaUrl(it);
+      if (opts.audio) { t.style.width = "220px"; t.style.height = "auto"; t.style.padding = "8px"; t.innerHTML = '<audio controls src="' + url + '" style="width:100%"></audio>'; }
+      else t.innerHTML = isVid(it) ? '<video src="' + url + '#t=0.1" muted playsinline preload="metadata"></video><span class="tag">VIDEO</span>' : '<img src="' + url + '" alt="">';
+      var x = document.createElement("button"); x.type = "button"; x.className = "x"; x.textContent = "×"; x.setAttribute("aria-label","Hapus");
+      x.addEventListener("click", function(){ if (it.path) state.removed.push(it.path); items.splice(i,1); markDirty(); renderSlot(key, opts); });
+      t.appendChild(x);
+      if (opts.multi) {
+        var mv = document.createElement("div"); mv.className = "mv";
+        [["‹",-1],["›",1]].forEach(function(b){ var bt = document.createElement("button"); bt.type="button"; bt.textContent=b[0]; bt.setAttribute("aria-label", b[1]<0?"Geser kiri":"Geser kanan");
+          bt.addEventListener("click", function(){ var j = i + b[1]; if (j<0||j>=items.length) return; var tmp = items[i]; items[i]=items[j]; items[j]=tmp; markDirty(); renderSlot(key, opts); }); mv.appendChild(bt); });
+        t.appendChild(mv);
+      }
+      box.appendChild(t);
+    });
+    if (opts.multi || !items.length) {
+      var lab = document.createElement("label"); lab.className = "thumb empty pick"; lab.style.cursor = "pointer";
+      lab.innerHTML = '<span>+ ' + (opts.audio ? "Pilih mp3" : opts.multi ? "Tambah foto / video" : "Pilih foto") + '</span>';
+      var inp = document.createElement("input"); inp.type = "file"; inp.accept = opts.accept; if (opts.multi) inp.multiple = true;
+      inp.addEventListener("change", function(){
+        Array.prototype.forEach.call(inp.files, function(f){
+          if (f.size > 95*1024*1024) { alertMsg("File " + f.name + " lebih dari 95 MB, tidak bisa diunggah ke GitHub.", true); return; }
+          items.push({file:f});
+        });
+        state.media[key] = items; markDirty(); renderSlot(key, opts);
+      });
+      lab.appendChild(inp); box.appendChild(lab);
+    }
+    state.media[key] = items;
+  }
+  var SLOTS = {
+    pria:{accept:"image/*"}, wanita:{accept:"image/*"}, couple:{accept:"image/*"},
+    galeri:{accept:"image/*,video/mp4,video/webm,video/quicktime", multi:true},
+    musik:{accept:"audio/mpeg,audio/mp3,audio/*", audio:true}
+  };
+
+  /* ---------- Baris berulang ---------- */
+  var maps = [];
+  function acaraRow(a){
+    a = a || {};
+    var el = document.createElement("div"); el.className = "row-item acara";
+    el.innerHTML = '<h3>Acara</h3><button type="button" class="danger small remove">Hapus</button>' +
+      '<div class="grid three"><label>Nama acara<input data-k="nama" placeholder="Akad Nikah"></label><label>Tanggal<input type="date" data-k="tanggal"></label>' +
+      '<label>Jam mulai<input type="time" data-k="jamMulai"></label><label>Jam selesai (kosong = selesai)<input type="time" data-k="jamSelesai"></label>' +
+      '<label>Zona waktu<select data-k="zona"><option>WIB</option><option>WITA</option><option>WIT</option></select></label></div>' +
+      '<div class="grid" style="margin-top:10px"><label>Nama tempat<input data-k="tempat" placeholder="Masjid Al-Ikhlas"></label><label>Alamat<input data-k="alamat" placeholder="Jl. Kenanga No. 12, Bogor"></label></div>' +
+      '<label style="margin-top:10px">Titik lokasi</label><div class="search-row"><input data-k="cari" placeholder="Cari tempat / alamat, atau tempel link Google Maps"><button type="button" class="ghost small" data-act="cari">Cari</button></div>' +
+      '<div class="map-pick"></div><div class="coord"></div>';
+    Object.keys(a).forEach(function(k){ var f = el.querySelector('[data-k="' + k + '"]'); if (f) f.value = a[k]; });
+    if (!a.zona) el.querySelector('[data-k="zona"]').value = "WIB";
+    var loc = a.lokasi && a.lokasi.lat != null ? [a.lokasi.lat, a.lokasi.lng] : null;
+    el._loc = loc;
+    var mapEl = el.querySelector(".map-pick"), coord = el.querySelector(".coord");
+    var map = null, marker = null;
+    if (window.L) {
+      map = L.map(mapEl, { scrollWheelZoom:false }).setView(loc || [-6.595, 106.806], loc ? 16 : 11);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom:19, attribution:"&copy; OpenStreetMap" }).addTo(map);
+      map.on("click", function(e){ setLoc([e.latlng.lat, e.latlng.lng]); });
+    } else { mapEl.hidden = true; }
+    function setLoc(ll, zoom){
+      el._loc = [+(+ll[0]).toFixed(6), +(+ll[1]).toFixed(6)];
+      if (map) {
+        if (!marker) { marker = L.marker(ll, {draggable:true}).addTo(map); marker.on("dragend", function(){ var p = marker.getLatLng(); setLoc([p.lat,p.lng]); }); }
+        else marker.setLatLng(ll);
+        if (zoom) map.setView(ll, zoom);
+      }
+      coord.innerHTML = "Titik: " + el._loc.join(", ") + ' · <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + el._loc.join(",") + '">cek di Google Maps</a>';
+      markDirty();
+    }
+    if (loc) { setLoc(loc); state.dirty = false; } else coord.textContent = map ? "Belum ada titik. Klik peta atau cari alamat." : "Peta tidak termuat. Tempel link Google Maps atau koordinat (contoh: -6.5971, 106.7990) lalu klik Cari.";
+    function cari(){
+      var q = el.querySelector('[data-k="cari"]').value.trim(); if (!q) return;
+      var m = q.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || q.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || q.match(/[?&](?:q|query|ll)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/) || q.match(/^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);
+      if (m) { setLoc([+m[1], +m[2]], 17); return; }
+      if (/^https?:/.test(q)) { coord.textContent = "Link pendek Google Maps tidak bisa dibaca. Buka link itu, salin link panjang dari address bar (yang ada angka @-6.xx,106.xx), atau ketik nama tempatnya."; return; }
+      coord.textContent = "Mencari…";
+      fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=id&q=" + encodeURIComponent(q))
+        .then(function(r){ return r.json(); }).then(function(rs){
+          if (!rs.length) { coord.textContent = "Tidak ketemu. Coba kata lain, atau klik langsung di peta."; return; }
+          setLoc([+rs[0].lat, +rs[0].lon], 17);
+        }).catch(function(){ coord.textContent = "Pencarian gagal. Klik langsung di peta."; });
+    }
+    el.querySelector('[data-act="cari"]').addEventListener("click", cari);
+    el.querySelector('[data-k="cari"]').addEventListener("keydown", function(e){ if (e.key === "Enter") { e.preventDefault(); cari(); } });
+    el.querySelector(".remove").addEventListener("click", function(){ el.remove(); markDirty(); });
+    $("acaraList").appendChild(el);
+    if (map) { maps.push(map); setTimeout(function(){ map.invalidateSize(); }, 50); }
+  }
+  function simpleRow(listId, fields, values){
+    values = values || {};
+    var el = document.createElement("div"); el.className = "row-item";
+    el.innerHTML = '<button type="button" class="danger small remove">Hapus</button><div class="grid three" style="padding-right:70px">' +
+      fields.map(function(f){ return '<label>' + f[1] + (f[2] === "area" ? '<textarea data-k="' + f[0] + '"></textarea>' : '<input data-k="' + f[0] + '" placeholder="' + (f[2]||"") + '">') + '</label>'; }).join("") + '</div>';
+    fields.forEach(function(f){ el.querySelector('[data-k="' + f[0] + '"]').value = values[f[0]] || ""; });
+    el.querySelector(".remove").addEventListener("click", function(){ el.remove(); markDirty(); });
+    $(listId).appendChild(el);
+  }
+  var CERITA = [["waktu","Waktu","Maret 2021"],["judul","Judul","Pertama Bertemu"],["isi","Cerita","area"]];
+  var REK = [["bank","Bank / e-wallet","BCA"],["atasNama","Atas nama","Nama pemilik"],["nomor","Nomor","1234 5678 90"]];
+  $("addAcara").addEventListener("click", function(){ acaraRow({}); markDirty(); });
+  $("addCerita").addEventListener("click", function(){ simpleRow("ceritaList", CERITA); markDirty(); });
+  $("addRek").addEventListener("click", function(){ simpleRow("rekList", REK); markDirty(); });
+  function rowsOf(listId){ return Array.prototype.map.call($(listId).children, function(el){ var o = {}; el.querySelectorAll("[data-k]").forEach(function(f){ o[f.dataset.k] = f.value.trim(); }); o._el = el; return o; }); }
+
+  /* ---------- Editor ---------- */
+  function openEditor(slug, d){
+    state.editing = slug; state.removed = []; state.media = {};
+    d = d || { acara:[{nama:"Akad Nikah",zona:"WIB"},{nama:"Resepsi",zona:"WIB"}], ayat:{teks:DEFAULT_AYAT, sumber:"QS. Ar-Rum : 21"}, penutup:DEFAULT_PENUTUP };
+    var p = d.pria || {}, w = d.wanita || {};
+    $("editTitle").textContent = slug ? "Ubah undangan /" + slug + "/" : "Undangan baru";
+    $("f_slug").value = slug || ""; $("f_slug").disabled = !!slug; $("f_slug").dataset.auto = slug ? "" : "1";
+    $("f_p_panggilan").value = p.panggilan || ""; $("f_p_lengkap").value = p.lengkap || ""; $("f_p_ortu").value = p.orangTua || "";
+    $("f_w_panggilan").value = w.panggilan || ""; $("f_w_lengkap").value = w.lengkap || ""; $("f_w_ortu").value = w.orangTua || "";
+    $("f_mono").value = d.monogram || "";
+    $("f_ayat").value = (d.ayat||{}).teks || ""; $("f_ayat_sumber").value = (d.ayat||{}).sumber || "";
+    $("f_script").value = d.ucapanScriptUrl || ""; $("f_penutup").value = d.penutup || "";
+    function one(path){ return path ? [{path:path}] : []; }
+    state.media.pria = slug && p.foto ? one(p.foto) : [];
+    state.media.wanita = slug && w.foto ? one(w.foto) : [];
+    state.media.couple = slug && d.fotoPasangan ? one(d.fotoPasangan) : [];
+    state.media.musik = slug && d.musik ? one(d.musik) : [];
+    state.media.galeri = slug ? (d.galeri || []).map(function(g){ return {path: typeof g === "object" ? g.src : g}; }) : [];
+    // buang file yang sebenarnya belum ada di repo (contoh bawaan)
+    Object.keys(SLOTS).forEach(function(k){ renderSlot(k, SLOTS[k]); });
+    if (slug) checkExisting(slug);
+    maps.forEach(function(m){ m.remove(); }); maps = [];
+    $("acaraList").innerHTML = ""; $("ceritaList").innerHTML = ""; $("rekList").innerHTML = "";
+    (d.acara || []).forEach(function(a){
+      var row = Object.assign({}, a);
+      if (!row.jamMulai && a.jam) { var m = String(a.jam).match(/(\d{1,2})[.:](\d{2})(?:\s*[–-]\s*(\d{1,2})[.:](\d{2}))?\s*(WIB|WITA|WIT)?/); if (m) { row.jamMulai = pad2(m[1]) + ":" + m[2]; if (m[3]) row.jamSelesai = pad2(m[3]) + ":" + m[4]; row.zona = m[5] || "WIB"; } }
+      acaraRow(row);
+    });
+    (d.cerita || []).forEach(function(c){ simpleRow("ceritaList", CERITA, c); });
+    (d.rekening || []).forEach(function(r){ simpleRow("rekList", REK, r); });
+    show("viewEdit"); maps.forEach(function(m){ setTimeout(function(){ m.invalidateSize(); }, 60); });
+    $("btnOpen").hidden = !slug; if (slug) $("btnOpen").href = pagesBase() + slug + "/";
+    updatePreview(); state.dirty = false; alertMsg("Belum ada perubahan.");
+  }
+  function pad2(n){ return ("0" + n).slice(-2); }
+  function checkExisting(slug){
+    api("/contents/" + slug + "/assets", {allow404:true}).then(function(files){
+      var have = {}; (files || []).forEach(function(f){ have["assets/" + f.name] = true; });
+      Object.keys(SLOTS).forEach(function(k){
+        var before = state.media[k].length;
+        state.media[k] = state.media[k].filter(function(it){ return it.file || have[it.path]; });
+        if (state.media[k].length !== before) renderSlot(k, SLOTS[k]);
+      });
+    });
+  }
+  function updatePreview(){
+    var d = { monogram:$("f_mono").value, pria:{panggilan:$("f_p_panggilan").value}, wanita:{panggilan:$("f_w_panggilan").value} };
+    $("pvMono").textContent = monoOf(d);
+    if ($("f_slug").dataset.auto) $("f_slug").value = slugify($("f_p_panggilan").value + "-" + $("f_w_panggilan").value).replace(/^-|-$/g,"");
+    $("pvUrl").textContent = pagesBase() + ($("f_slug").value || "nama-folder") + "/";
+  }
+  ["f_p_panggilan","f_w_panggilan","f_mono"].forEach(function(id){ $(id).addEventListener("input", updatePreview); });
+  $("f_slug").addEventListener("input", function(){ $("f_slug").dataset.auto = ""; $("f_slug").value = slugify($("f_slug").value); updatePreview(); });
+  $("viewEdit").addEventListener("input", markDirty);
+  $("viewEdit").addEventListener("submit", function(e){ e.preventDefault(); });
+  function markDirty(){ state.dirty = true; if (!$("btnSave").disabled) alertMsg("Perubahan belum disimpan."); }
+  function alertMsg(t, err){ var m = $("saveMsg"); m.textContent = t; m.className = "msg" + (err ? " err" : t.indexOf("Tersimpan") === 0 ? " ok" : ""); }
+  window.addEventListener("beforeunload", function(e){ if (state.dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+  /* ---------- Simpan ---------- */
+  function ext(f){ var m = /\.([a-z0-9]+)$/i.exec(f.name); return m ? m[1].toLowerCase() : (f.type.split("/")[1] || "bin"); }
+  $("btnSave").addEventListener("click", function(){
+    var slug = $("f_slug").value.trim();
+    var pP = $("f_p_panggilan").value.trim(), wP = $("f_w_panggilan").value.trim();
+    if (!pP || !wP) { alertMsg("Isi nama panggilan pria dan wanita dulu.", true); return; }
+    if (!/^[a-z0-9-]+$/.test(slug) || RESERVED.indexOf(slug) >= 0) { alertMsg("Nama folder hanya boleh huruf kecil, angka, dan tanda hubung.", true); return; }
+    var acara = rowsOf("acaraList");
+    if (!acara.length || !acara[0].tanggal) { alertMsg("Isi minimal satu acara beserta tanggalnya.", true); return; }
+    var btn = $("btnSave"); btn.disabled = true;
+    var files = [], stamp = Date.now().toString(36);
+
+    function takeOne(key, base){
+      var it = state.media[key][0]; if (!it) return "";
+      if (it.file) { var path = "assets/" + base + "-" + stamp + "." + ext(it.file); files.push({path:path, file:it.file}); it.newPath = path; return path; }
+      return it.path;
+    }
+    var data = {
+      pria: { panggilan:pP, lengkap:$("f_p_lengkap").value.trim(), orangTua:$("f_p_ortu").value.trim(), foto:takeOne("pria","pria") },
+      wanita: { panggilan:wP, lengkap:$("f_w_lengkap").value.trim(), orangTua:$("f_w_ortu").value.trim(), foto:takeOne("wanita","wanita") },
+      monogram: $("f_mono").value.trim().toUpperCase(),
+      tanggal: "",
+      fotoPasangan: takeOne("couple","couple"),
+      acara: acara.map(function(a){
+        var jam = a.jamMulai ? a.jamMulai.replace(":",".") + " – " + (a.jamSelesai ? a.jamSelesai.replace(":",".") : "Selesai") + " " + a.zona : "";
+        var o = { nama:a.nama, tanggal:a.tanggal, jamMulai:a.jamMulai, jamSelesai:a.jamSelesai, zona:a.zona, jam:jam, tempat:a.tempat, alamat:a.alamat };
+        if (a._el._loc) o.lokasi = { lat:a._el._loc[0], lng:a._el._loc[1] };
+        return o;
+      }),
+      ayat: { teks:$("f_ayat").value.trim(), sumber:$("f_ayat_sumber").value.trim() },
+      cerita: rowsOf("ceritaList").map(function(c){ return {waktu:c.waktu, judul:c.judul, isi:c.isi}; }).filter(function(c){ return c.judul || c.isi; }),
+      galeri: state.media.galeri.map(function(it, i){
+        if (it.file) { var vid = /^video\//.test(it.file.type); var path = "assets/galeri-" + stamp + "-" + (i+1) + "." + ext(it.file); files.push({path:path, file:it.file}); return {src:path, tipe: vid ? "video" : "foto"}; }
+        return {src:it.path, tipe: isVid(it) ? "video" : "foto"};
+      }),
+      rekening: rowsOf("rekList").map(function(r){ return {bank:r.bank, atasNama:r.atasNama, nomor:r.nomor}; }).filter(function(r){ return r.nomor; }),
+      musik: takeOne("musik","musik"),
+      ucapanScriptUrl: $("f_script").value.trim(),
+      penutup: $("f_penutup").value.trim()
+    };
+    var a0 = acara[0];
+    data.tanggal = a0.tanggal + "T" + (a0.jamMulai || "08:00") + ":00" + (ZONA[a0.zona] || "+07:00");
+    if (!data.galeri.length) data.galeri = [];
+
+    var BULAN = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"], HARI = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+    var pd = a0.tanggal.split("-"), dt = new Date(+pd[0], +pd[1]-1, +pd[2]);
+    var tglTeks = HARI[dt.getDay()] + ", " + dt.getDate() + " " + BULAN[dt.getMonth()] + " " + dt.getFullYear();
+    var duo = esc(pP) + " &amp; " + esc(wP);
+    var indexHtml = '<!doctype html>\n<html lang="id">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n' +
+      '<!-- Judul untuk tab browser & preview saat link dibagikan di WhatsApp (ganti namanya saja) -->\n<title>' + duo + '</title>\n' +
+      '<meta property="og:title" content="The Wedding of ' + duo + '">\n<meta property="og:description" content="' + esc(tglTeks) + '">\n' +
+      '<!-- Bagian di bawah ini tidak perlu diubah -->\n<meta name="theme-color" content="#f6f3ee">\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+      '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Mulish:wght@400;600;700&display=swap">\n' +
+      '<link rel="stylesheet" href="../tema/taman/style.css">\n</head>\n<body>\n<script src="data.js"><\/script>\n<script src="../tema/taman/gambar.js"><\/script>\n<script src="../tema/taman/tema.js"><\/script>\n</body>\n</html>\n';
+    var dataJs = "/* Data undangan " + pP + " & " + wP + ". Dibuat dan diubah lewat halaman admin. */\nwindow.UNDANGAN = " + JSON.stringify(data, null, 2) + ";\n";
+
+    var isNew = !state.editing;
+    var chain = isNew ? api("/contents/" + slug, {allow404:true}).then(function(ex){ if (ex) throw new Error("Folder /" + slug + "/ sudah ada. Pakai nama lain."); }) : Promise.resolve();
+    var headSha, baseTree, total = files.length + 2, done = 0;
+    function step(){ done++; alertMsg("Mengunggah " + done + " / " + total + "…"); }
+    chain.then(function(){ return api("/git/ref/heads/main"); })
+      .then(function(ref){ headSha = ref.object.sha; return api("/git/commits/" + headSha); })
+      .then(function(c){
+        baseTree = c.tree.sha;
+        var tree = [];
+        var seq = Promise.resolve();
+        files.forEach(function(f){
+          seq = seq.then(function(){ return fileToB64(f.file); })
+            .then(function(b64){ return api("/git/blobs", {method:"POST", body:{content:b64, encoding:"base64"}}); })
+            .then(function(b){ tree.push({path:slug + "/" + f.path, mode:"100644", type:"blob", sha:b.sha}); step(); });
+        });
+        return seq.then(function(){
+          return Promise.all([
+            api("/git/blobs", {method:"POST", body:{content:textToB64(dataJs), encoding:"base64"}}),
+            api("/git/blobs", {method:"POST", body:{content:textToB64(indexHtml), encoding:"base64"}})
+          ]);
+        }).then(function(bs){
+          step(); step();
+          tree.push({path:slug + "/data.js", mode:"100644", type:"blob", sha:bs[0].sha});
+          tree.push({path:slug + "/index.html", mode:"100644", type:"blob", sha:bs[1].sha});
+          var keep = {}; [data.pria.foto, data.wanita.foto, data.fotoPasangan, data.musik].concat(data.galeri.map(function(g){ return g.src; })).forEach(function(p){ if (p) keep[p] = 1; });
+          state.removed.forEach(function(p){ if (!keep[p] && /^assets\//.test(p)) tree.push({path:slug + "/" + p, mode:"100644", type:"blob", sha:null}); });
+          return api("/git/trees", {method:"POST", body:{base_tree:baseTree, tree:tree}});
+        });
+      })
+      .then(function(t){ return api("/git/commits", {method:"POST", body:{message:(isNew ? "Tambah" : "Ubah") + " undangan " + pP + " & " + wP + " (/" + slug + "/)", tree:t.sha, parents:[headSha]}}); })
+      .then(function(c){ return api("/git/refs/heads/main", {method:"PATCH", body:{sha:c.sha}}); })
+      .then(function(){
+        state.dirty = false;
+        var url = pagesBase() + slug + "/";
+        Object.keys(state.media).forEach(function(k){ state.media[k].forEach(function(it, i){
+          if (it.file) { it.path = it.newPath || (k === "galeri" ? data.galeri[i].src : it.path); }
+        }); });
+        state.editing = slug; $("f_slug").disabled = true; $("f_slug").dataset.auto = "";
+        $("editTitle").textContent = "Ubah undangan /" + slug + "/";
+        $("btnOpen").hidden = false; $("btnOpen").href = url;
+        alertMsg("Tersimpan. Undangan tayang di " + url + " dalam 1–2 menit.");
+      })
+      .catch(function(e){ alertMsg("Gagal menyimpan: " + e.message, true); })
+      .finally(function(){ btn.disabled = false; });
+  });
+
+  /* ---------- Mulai ---------- */
+  var t = read("adm_token"), r = read("adm_repo") || "purwoadhii/Undangan-C-S";
+  $("inRepo").value = r;
+  if (t) login(t, r).catch(function(e){ show("viewLogin"); $("loginMsg").textContent = e.message; $("loginMsg").className = "msg err"; });
+  else show("viewLogin");
+})();
+</script>
+</body>
+</html>
