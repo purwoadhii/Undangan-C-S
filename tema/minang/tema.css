@@ -1,0 +1,98 @@
+/* Tema Minang: hitam, merah, emas, songket. */
+:root{
+  --bg:#fbf3e3; --bg2:#f3e4c6; --card:#fffaf0; --ink:#2a1a17; --muted:#866c5f;
+  --accent:#a3161f; --accent-2:#b98422; --on-accent:#fff4dc; --accent-soft:#f6dccf; --line:#ead6b2;
+  --shadow:rgba(42,26,23,.65); --nav-bg:rgba(255,250,240,.95); --input-bg:#fffdf7;
+  --hitam:#1a1414; --emas:#e0ad45;
+  --font-script:"Mrs Saint Delafield","Great Vibes",cursive;
+  --font-cap:"Spectral SC",Georgia,serif;
+  --font-serif:"Yeseva One",Georgia,serif;
+  --font-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --r-card:4px;
+  --pelana:polygon(0 0,15% 8%,32% 13%,50% 15%,68% 13%,85% 8%,100% 0,100% 100%,0 100%);
+  --songket-bg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cg fill='none' stroke='%23e0ad45' stroke-width='1' opacity='.28'%3E%3Cpath d='M16 2 L30 16 L16 30 L2 16Z'/%3E%3Cpath d='M16 9 L23 16 L16 23 L9 16Z'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='2' fill='%23e0ad45' opacity='.45'/%3E%3C/svg%3E");
+}
+.tema-minang .names{font-size:66px;color:var(--accent);line-height:1.1}
+.tema-minang .eyebrow{font-family:var(--font-cap);letter-spacing:.3em;color:var(--accent-2);font-size:14px}
+.tema-minang .paku{display:block;width:170px;margin:8px auto;color:var(--accent-2)}
+
+/* Songket & rumah gadang */
+.tema-minang .songket{position:absolute;inset:0;background:var(--songket-bg),linear-gradient(180deg,#2a0b0e,#5c0d13 45%,#2a0b0e);background-size:32px 32px,cover}
+.tema-minang .songket::before,.tema-minang .songket::after{content:"";position:absolute;left:0;right:0;height:16px;background:repeating-linear-gradient(90deg,var(--emas) 0 6px,transparent 6px 10px,var(--accent) 10px 16px,transparent 16px 20px);opacity:.8}
+.tema-minang .songket::before{top:0}.tema-minang .songket::after{bottom:0}
+.tema-minang .rumah-gadang{position:absolute;left:50%;bottom:16px;width:min(130%,620px,calc(46vh * 1.515));transform:translateX(-50%);filter:drop-shadow(0 -6px 20px rgba(0,0,0,.5))}
+
+/* Sampul: menyusut ke puncak gonjong */
+.tema-minang .cover{clip-path:polygon(0 0,50% 0,100% 0,100% 100%,0 100%);transition:clip-path 1.5s cubic-bezier(.7,0,.3,1) .2s}
+.tema-minang .cover-text{color:#fff1d6;padding-top:calc(46px + env(safe-area-inset-top,0px))}
+.tema-minang .cover-text .eyebrow{color:var(--emas)}
+.tema-minang .cover .paku{color:var(--emas)}
+.tema-minang .cover-text .mono{font-family:var(--font-serif);color:var(--emas);font-size:64px;font-weight:400}
+.tema-minang .cover-text .mono .amp{color:#fff1d6}
+.tema-minang .cover .names{color:#fff1d6;font-size:58px}
+.tema-minang .cover .date{font-family:var(--font-cap);letter-spacing:.16em;color:var(--emas)}
+.tema-minang .cover-bottom{margin-top:26px}
+.tema-minang .guest{background:rgba(26,20,20,.75);border:1px solid var(--emas);color:#fff1d6;border-radius:2px}
+.tema-minang .btn-open{background:var(--emas);color:var(--hitam);border-radius:2px;font-family:var(--font-cap);letter-spacing:.14em;font-size:15px;font-weight:600;box-shadow:0 0 0 3px var(--hitam),0 0 0 4px var(--emas)}
+.tema-minang .cover.open{clip-path:polygon(50% 0,50% 0,50% 0,50% 0,50% 0)}
+.tema-minang .cover.open .cover-text{opacity:0;transition:opacity .5s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-minang .side-text{position:absolute;left:0;right:0;top:12%;text-align:center;color:#fff1d6;z-index:2}
+  .tema-minang .side-text .eyebrow{color:var(--emas)}
+  .tema-minang .side-text .paku{color:var(--emas);width:240px}
+  .tema-minang .side-text .names{font-size:96px;color:#fff1d6}
+  .tema-minang .side-text p{font-family:var(--font-cap);letter-spacing:.2em;color:var(--emas)}
+  .tema-minang .side .rumah-gadang{width:min(80%,760px);bottom:16px}
+}
+
+
+/* Hero: pelaminan bertirai & foto beratap pelana */
+.tema-minang .hero{position:relative;padding:70px 16px 48px;text-align:center;overflow:hidden;background:var(--songket-bg),radial-gradient(circle at 50% 40%,#fff6e3,var(--bg2) 75%);background-size:32px 32px,cover}
+.tema-minang .pelaminan{position:absolute;left:0;right:0;top:0;height:140px;pointer-events:none}
+.tema-minang .pelaminan::before{content:"";position:absolute;left:0;right:0;top:0;height:26px;background:radial-gradient(circle at 50% 0,var(--accent) 12px,transparent 13px) 0 0/30px 26px repeat-x,linear-gradient(var(--hitam),var(--hitam)) top/100% 8px no-repeat}
+.tema-minang .tirai-l,.tema-minang .tirai-r{position:absolute;top:0;width:44%;height:130px;background:linear-gradient(180deg,var(--accent),#6e0d14);transition:transform 1.6s cubic-bezier(.6,0,.3,1) .3s}
+.tema-minang .tirai-l{left:0;border-bottom-right-radius:100% 100%;transform-origin:left top;box-shadow:inset -6px -6px 0 -3px var(--emas)}
+.tema-minang .tirai-r{right:0;border-bottom-left-radius:100% 100%;transform-origin:right top;box-shadow:inset 6px -6px 0 -3px var(--emas)}
+.tema-minang:not(.play) .tirai-l{transform:scaleX(2.3)}.tema-minang:not(.play) .tirai-r{transform:scaleX(2.3)}
+.tema-minang .frame-gonjong{position:relative;width:74%;max-width:300px;aspect-ratio:3/4;margin:30px auto 0;clip-path:var(--pelana);background:linear-gradient(180deg,#f6d58a,#b98422);padding:7px;opacity:0;transform:translateY(30px);transition:all 1.4s .5s}
+.tema-minang.play .frame-gonjong{opacity:1;transform:none}
+.tema-minang .foto-gonjong{position:relative;width:100%;height:100%;clip-path:var(--pelana);background:linear-gradient(170deg,#e8d2b4,#9a6e5c);overflow:hidden}
+.tema-minang .foto-gonjong .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-minang .title-block{margin-top:22px;opacity:0;transition:opacity 1.2s 1s}
+.tema-minang.play .title-block{opacity:1}
+.tema-minang .title-block .date{font-family:var(--font-cap);letter-spacing:.14em;color:var(--ink)}
+
+/* Isi */
+.tema-minang h2{font-family:var(--font-serif);font-size:34px;color:var(--accent);font-weight:400}
+.tema-minang .kicker{font-family:var(--font-cap);color:var(--accent-2)}
+.tema-minang .salam{color:var(--accent)}
+.tema-minang .sec-ayat{background:var(--songket-bg),var(--hitam);background-size:32px 32px,cover;color:#fff1d6}
+.tema-minang .sec-ayat .lead{color:#fff1d6}.tema-minang .sec-ayat .lead cite{color:var(--emas)}.tema-minang .sec-ayat .paku{color:var(--emas)}
+.tema-minang .pic{width:180px;height:230px;border:0;border-radius:0;background:linear-gradient(180deg,#f6d58a,#b98422);clip-path:var(--pelana);padding:6px;box-shadow:none}
+.tema-minang .pelana{position:relative;width:100%;height:100%;clip-path:var(--pelana);background:linear-gradient(170deg,#e8d2b4,#9a6e5c);overflow:hidden}
+.tema-minang .pelana img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-minang .person h3{color:var(--accent);font-size:60px}
+.tema-minang .person .full{font-family:var(--font-serif);font-weight:400}
+.tema-minang .and{color:var(--accent-2);font-family:var(--font-serif);font-size:40px}
+.tema-minang .cd-gonjong{gap:8px}
+.tema-minang .cd-gonjong div{clip-path:var(--pelana);background:var(--songket-bg),var(--accent);background-size:24px 24px,cover;padding:24px 2px 12px}
+.tema-minang .cd-gonjong b{color:#fff1d6;font-family:var(--font-serif);font-weight:400}
+.tema-minang .cd-gonjong span{color:var(--emas)}
+.tema-minang .event{background:var(--card);border:1px solid var(--line);border-radius:2px;padding-top:70px;overflow:hidden;box-shadow:inset 0 -6px 0 var(--accent)}
+.tema-minang .atap-acara{position:absolute;left:-2%;top:0;width:104%;height:58px}
+.tema-minang .event h3{font-family:var(--font-serif);font-weight:400;font-size:28px;color:var(--accent)}
+.tema-minang .event .bigdate{font-family:var(--font-serif);font-weight:400;color:var(--accent-2)}
+.tema-minang .btn{background:var(--hitam);color:var(--emas);border-radius:2px;font-family:var(--font-cap);letter-spacing:.1em}
+.tema-minang .btn.line{background:transparent;color:var(--accent);border-color:var(--accent)}
+.tema-minang .gal-minang{grid-template-columns:repeat(3,1fr);gap:8px}
+.tema-minang .gal-minang figure{aspect-ratio:3/4;border-radius:0;border:2px solid var(--emas)}
+.tema-minang .gal-minang figure:nth-child(4n+1){grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+.tema-minang .story li{border-radius:2px;border-left:4px solid var(--accent);background:var(--card)}
+.tema-minang .video-box{border-radius:2px;border:6px solid var(--hitam);outline:2px solid var(--emas)}
+.tema-minang footer.penutup{background:var(--songket-bg),var(--hitam);background-size:32px 32px,cover;color:#fff1d6}
+.tema-minang footer.penutup .paku{color:var(--emas)}
+.tema-minang footer.penutup .terima{font-family:var(--font-cap);color:var(--emas);font-size:22px;letter-spacing:.2em}
+.tema-minang footer.penutup .mono{color:var(--emas)}.tema-minang footer.penutup .mono .amp{color:#fff1d6}
+.tema-minang footer.penutup .names{color:#fff1d6}

@@ -19,5 +19,7 @@ window.DAFTAR_TEMA = [
   { id: "sunda", nama: "Sunda", ket: "Marun & emas, siger, awi & angklung, kere bambu digulung, bahasa Sunda", warna: ["#faf3e6", "#7b1e2b", "#b8892f"],
     huruf: "family=Forum&family=Alex+Brush&family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600" },
   { id: "betawi", nama: "Betawi", ket: "Merah-hijau-kuning, gigi balang, ondel-ondel, roti buaya, logat Betawi", warna: ["#fff8ec", "#d62839", "#1f8a4c"],
-    huruf: "family=Yellowtail&family=Bree+Serif&family=Poppins:wght@400;600;700" }
+    huruf: "family=Yellowtail&family=Bree+Serif&family=Poppins:wght@400;600;700" },
+  { id: "minang", nama: "Minang", ket: "Hitam-merah-emas, rumah gadang bergonjong, songket, bahasa Minang", warna: ["#fbf3e3", "#a3161f", "#1a1414"],
+    huruf: "family=Spectral+SC:wght@500;600&family=Mrs+Saint+Delafield&family=Yeseva+One&family=Source+Sans+3:wght@400;600;700" }
 ];
