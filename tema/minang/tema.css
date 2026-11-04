@@ -96,3 +96,4 @@
 .tema-minang footer.penutup .terima{font-family:var(--font-cap);color:var(--emas);font-size:22px;letter-spacing:.2em}
 .tema-minang footer.penutup .mono{color:var(--emas)}.tema-minang footer.penutup .mono .amp{color:#fff1d6}
 .tema-minang footer.penutup .names{color:#fff1d6}
+.tema-minang footer.penutup p{color:inherit;opacity:.88}

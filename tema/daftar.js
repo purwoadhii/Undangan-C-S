@@ -23,5 +23,7 @@ window.DAFTAR_TEMA = [
   { id: "minang", nama: "Minang", ket: "Hitam-merah-emas, rumah gadang bergonjong, songket, bahasa Minang", warna: ["#fbf3e3", "#a3161f", "#1a1414"],
     huruf: "family=Spectral+SC:wght@500;600&family=Mrs+Saint+Delafield&family=Yeseva+One&family=Source+Sans+3:wght@400;600;700" },
   { id: "bali", nama: "Bali", ket: "Candi bentar terbuka, penjor, kamboja, kain poleng, salam Om Swastyastu", warna: ["#fbf8f0", "#3f6b4f", "#c48a2c"],
-    huruf: "family=Tenor+Sans&family=Petit+Formal+Script&family=Prata&family=Mulish:wght@400;600;700" }
+    huruf: "family=Tenor+Sans&family=Petit+Formal+Script&family=Prata&family=Mulish:wght@400;600;700" },
+  { id: "palembang", nama: "Melayu Palembang", ket: "Songket lepus emas, rumah limas, mahkota aesan gede, kain dilipat", warna: ["#fff7ea", "#8e1b1b", "#e8b84f"],
+    huruf: "family=Cormorant+SC:wght@500;600;700&family=Rouge+Script&family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Open+Sans:wght@400;600;700" }
 ];
