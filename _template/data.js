@@ -58,6 +58,7 @@ window.UNDANGAN = {
     sumber: "QS. Ar-Rum : 21"
   },
 
+  // Tiap cerita boleh diberi foto: "assets/cerita1.jpg", video: "assets/cerita1.mp4", atau youtube: "link". Semuanya opsional.
   cerita: [
     { waktu: "Bulan Tahun", judul: "Pertama Bertemu", isi: "Ceritakan singkat di sini." },
     { waktu: "Bulan Tahun", judul: "Lamaran",         isi: "Ceritakan singkat di sini." }

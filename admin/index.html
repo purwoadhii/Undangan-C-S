@@ -690,7 +690,25 @@ ol.steps{padding-left:20px;margin:8px 0}
   var CERITA = [["waktu","Waktu","Maret 2021"],["judul","Judul","Pertama Bertemu"],["isi","Cerita","area"]];
   var REK = [["bank","Bank / e-wallet","BCA"],["atasNama","Atas nama","Nama pemilik"],["nomor","Nomor","1234 5678 90"]];
   $("addAcara").addEventListener("click", function(){ acaraRow({}); markDirty(); });
-  $("addCerita").addEventListener("click", function(){ simpleRow("ceritaList", CERITA); markDirty(); });
+  /* Cerita: teks + satu foto atau video (opsional) + link YouTube (opsional) */
+  var ceritaN = 0, MEDIA_CERITA = {accept:"image/*,video/mp4,video/webm,video/quicktime"};
+  function ceritaRow(c){
+    c = c || {};
+    simpleRow("ceritaList", CERITA, c);
+    var el = $("ceritaList").lastElementChild, key = "cerita_" + (++ceritaN);
+    var extra = document.createElement("div"); extra.className = "grid"; extra.style.marginTop = "10px";
+    extra.innerHTML = '<div><label>Foto atau video (opsional)</label><div class="media" id="m_' + key + '"></div></div>' +
+      '<label>Link YouTube (opsional)<input data-k="youtube" placeholder="https://youtu.be/..."></label>';
+    el.appendChild(extra);
+    el.querySelector('[data-k="youtube"]').value = c.youtube || "";
+    el._mk = key;
+    var src = c.foto || c.video;
+    state.media[key] = slug_ada() && src ? [{path:src}] : [];
+    renderSlot(key, MEDIA_CERITA);
+    el.querySelector(".remove").addEventListener("click", function(){ (state.media[key] || []).forEach(function(it){ if (it.path) state.removed.push(it.path); }); delete state.media[key]; });
+  }
+  function slug_ada(){ return !!state.editing; }
+  $("addCerita").addEventListener("click", function(){ ceritaRow(); markDirty(); });
   $("addRek").addEventListener("click", function(){ simpleRow("rekList", REK); markDirty(); });
   function rowsOf(listId){ return Array.prototype.map.call($(listId).children, function(el){ var o = {}; el.querySelectorAll("[data-k]").forEach(function(f){ o[f.dataset.k] = f.value.trim(); }); o._el = el; return o; }); }
 
@@ -729,7 +747,7 @@ ol.steps{padding-left:20px;margin:8px 0}
       if (!row.jamMulai && a.jam) { var m = String(a.jam).match(/(\d{1,2})[.:](\d{2})(?:\s*[–-]\s*(\d{1,2})[.:](\d{2}))?\s*(WIB|WITA|WIT)?/); if (m) { row.jamMulai = pad2(m[1]) + ":" + m[2]; if (m[3]) row.jamSelesai = pad2(m[3]) + ":" + m[4]; row.zona = m[5] || "WIB"; } }
       acaraRow(row);
     });
-    (d.cerita || []).forEach(function(c){ simpleRow("ceritaList", CERITA, c); });
+    (d.cerita || []).forEach(function(c){ ceritaRow(c); });
     (d.rekening || []).forEach(function(r){ simpleRow("rekList", REK, r); });
     show("viewEdit"); maps.forEach(function(m){ setTimeout(function(){ m.invalidateSize(); }, 60); });
     $("btnOpen").hidden = !slug; if (slug) $("btnOpen").href = pagesBase() + slug + "/";
@@ -804,7 +822,16 @@ ol.steps{padding-left:20px;margin:8px 0}
         return o;
       }),
       ayat: { teks:$("f_ayat").value.trim(), sumber:$("f_ayat_sumber").value.trim() },
-      cerita: rowsOf("ceritaList").map(function(c){ return {waktu:c.waktu, judul:c.judul, isi:c.isi}; }).filter(function(c){ return c.judul || c.isi; }),
+      cerita: rowsOf("ceritaList").map(function(c, i){
+        var o = {waktu:c.waktu, judul:c.judul, isi:c.isi}, it = (state.media[c._el._mk] || [])[0];
+        if (it) {
+          var path = it.path;
+          if (it.file) { path = "assets/cerita-" + stamp + "-" + (i+1) + "." + ext(it.file); files.push({path:path, file:it.file}); it.newPath = path; }
+          if (isVid(it)) o.video = path; else o.foto = path;
+        }
+        if (c.youtube) o.youtube = c.youtube;
+        return o;
+      }).filter(function(c){ return c.judul || c.isi || c.foto || c.video || c.youtube; }),
       galeri: state.media.galeri.map(function(it, i){
         if (it.file) { var vid = /^video\//.test(it.file.type); var path = "assets/galeri-" + stamp + "-" + (i+1) + "." + ext(it.file); files.push({path:path, file:it.file}); return {src:path, tipe: vid ? "video" : "foto"}; }
         return {src:it.path, tipe: isVid(it) ? "video" : "foto"};
@@ -856,7 +883,7 @@ ol.steps{padding-left:20px;margin:8px 0}
           step(); step();
           tree.push({path:slug + "/data.js", mode:"100644", type:"blob", sha:bs[0].sha});
           tree.push({path:slug + "/index.html", mode:"100644", type:"blob", sha:bs[1].sha});
-          var keep = {}; [data.pria.foto, data.wanita.foto, data.fotoPasangan, data.musik, data.video.src].concat(data.galeri.map(function(g){ return g.src; })).forEach(function(p){ if (p) keep[p] = 1; });
+          var keep = {}; [data.pria.foto, data.wanita.foto, data.fotoPasangan, data.musik, data.video.src].concat(data.galeri.map(function(g){ return g.src; })).concat(data.cerita.map(function(c){ return c.foto || c.video; })).forEach(function(p){ if (p) keep[p] = 1; });
           state.removed.forEach(function(p){ if (!keep[p] && /^assets\//.test(p)) tree.push({path:slug + "/" + p, mode:"100644", type:"blob", sha:null}); });
           return commitKeMain(tree, (isNew ? "Tambah" : "Ubah") + " undangan " + pP + " & " + wP + " (/" + slug + "/)");
         });

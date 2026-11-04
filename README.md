@@ -40,7 +40,7 @@ Tiap undangan memilih satu tema di admin (atau `tema: "..."` di `data.js`). Tiap
 | Jelajah Pantai | `jelajah-pantai` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=jelajah-pantai) |
 | Jelajah Hutan | `jelajah-hutan` | [lihat](https://purwoadhii.github.io/Undangan-C-S/contoh/?tema=jelajah-hutan) |
 
-**Tema Jelajah** berupa game piksel: tamu memilih karakter laki-laki atau perempuan, membaca sambutan, lalu berjalan di peta (gedung, pantai, atau hutan) dengan lingkaran geser, tombol panah, atau ketuk tujuan. Tiap tempat yang didatangi membuka satu bagian undangan (mempelai, acara, kisah, galeri, kado, buku tamu & RSVP). Tombol bendera menjalankan tur otomatis ke semua tempat. Mesinnya ada di `tema/jelajah/`, warna tiap latar di `tema/jelajah-<latar>/`.
+**Tema Jelajah** berupa game jelajah bergaya kartun: tamu memilih karakter laki-laki atau perempuan, membaca sambutan, lalu berjalan di peta (gedung, pantai, atau hutan) dengan lingkaran geser, tombol panah, atau ketuk tujuan. Tiap tempat yang didatangi membuka satu bagian undangan (mempelai, acara, kisah, galeri, kado, buku tamu & RSVP). Tombol bendera menjalankan tur otomatis ke semua tempat. Mesinnya ada di `tema/jelajah/`, warna tiap latar di `tema/jelajah-<latar>/`.
 
 Undangan yang sudah jalan bisa dicoba dengan tema lain tanpa mengubah apa pun: tambahkan `?tema=pantai` di belakang alamatnya.
 Kata pembuka bawaan tema bisa diganti per pasangan lewat kolom "Kata pembuka" di admin (`pembuka` di `data.js`).

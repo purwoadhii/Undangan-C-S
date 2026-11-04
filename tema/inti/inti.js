@@ -77,7 +77,11 @@
 
   var cerita = D.cerita || [];
   var ceritaHtml = cerita.map(function (c) {
-    return '<li class="reveal"><time>' + esc(c.waktu) + '</time><h4>' + esc(c.judul) + '</h4><p>' + esc(c.isi) + '</p></li>';
+    var yt = youtubeId(c.youtube), media = "";
+    if (c.foto) media += '<figure class="story-media" tabindex="0" data-video="0" data-src="' + esc(c.foto) + '"><img src="' + esc(c.foto) + '" alt="' + esc(c.judul || "") + '" loading="lazy" onerror="this.parentNode.remove()"></figure>';
+    if (c.video) media += '<div class="story-media vid"><video src="' + esc(c.video) + '#t=0.1" controls playsinline preload="metadata" onerror="this.parentNode.remove()"></video></div>';
+    if (yt) media += '<div class="story-media vid"><iframe src="https://www.youtube-nocookie.com/embed/' + yt + '?rel=0" title="' + esc(c.judul || "Video") + '" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>';
+    return '<li class="reveal">' + (c.waktu ? '<time>' + esc(c.waktu) + '</time>' : "") + (c.judul ? '<h4>' + esc(c.judul) + '</h4>' : "") + (c.isi ? '<p>' + esc(c.isi) + '</p>' : "") + media + '</li>';
   }).join("");
 
   var galeri = Array.isArray(D.galeri) ? D.galeri.filter(function (g) { return g && (typeof g === "string" || g.src); }) : [];
@@ -334,7 +338,7 @@
     lb.hidden = true; lbBody.innerHTML = "";
     if (lb.dataset.resume) { delete lb.dataset.resume; playMusic(); }
   }
-  document.querySelectorAll(".gallery figure").forEach(function (fig) {
+  document.querySelectorAll(".gallery figure, figure.story-media").forEach(function (fig) {
     fig.addEventListener("click", function () { if (fig.querySelector("img,video")) openLb(fig); });
     fig.addEventListener("keydown", function (e) { if (e.key === "Enter" && fig.querySelector("img,video")) openLb(fig); });
   });

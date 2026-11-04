@@ -13,9 +13,9 @@ window.UNDANGAN = {
   ],
   ayat: { teks: "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.", sumber: "QS. Ar-Rum : 21" },
   cerita: [
-    { waktu: "Januari 2022", judul: "Pertama Bertemu", isi: "Bertemu di acara komunitas buku di Bogor." },
+    { waktu: "Januari 2022", judul: "Pertama Bertemu", isi: "Bertemu di acara komunitas buku di Bogor.", foto: "assets/galeri2.svg" },
     { waktu: "Mei 2024", judul: "Menjalin Hubungan", isi: "Berawal dari obrolan panjang tentang buku favorit." },
-    { waktu: "Desember 2026", judul: "Lamaran", isi: "Dua keluarga bertemu dan merestui langkah kami." }
+    { waktu: "Desember 2026", judul: "Lamaran", isi: "Dua keluarga bertemu dan merestui langkah kami.", foto: "assets/galeri4.svg" }
   ],
   video: { youtube: "", src: "", judul: "" },
   galeri: [ "assets/galeri1.svg", "assets/galeri2.svg", "assets/galeri3.svg", "assets/galeri4.svg", "assets/galeri5.svg" ],

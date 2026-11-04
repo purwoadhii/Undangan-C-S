@@ -123,265 +123,432 @@
       warna: { latar: "#1f3a24" }
     }
   };
+  var AKSEN = { gedung: "#9a2f3c", pantai: "#d0654a", hutan: "#3f7d3a" };
   var NAMA_TEMPAT = { mempelai: "Mempelai", acara: "Acara", cerita: "Kisah Kami", galeri: "Galeri", hadiah: "Kado", ucapan: "Ucapan & RSVP" };
   var ISI_TEMPAT = { mempelai: ["mempelai"], acara: ["acara"], cerita: ["cerita"], galeri: ["galeri", "video"], hadiah: ["hadiah"], ucapan: ["ucapan"] };
   var URUT_TUR = ["mempelai", "acara", "cerita", "galeri", "hadiah", "ucapan"];
 
-  /* ---------- Sprite karakter (12 x 18 piksel) ---------- */
-  var SPRITE = {
-    pria: {
-      depan: ["...cccccc...", "..cccccccc..", "..hhhhhhhh..", "..hssssssh..", "..sesssses..", "..ssssssss..", "...sSSSSs...", "....ssss....", "..vvwwwwvv..", ".svvvwwvvvs.", ".svvvwwvvvs.", ".s.vvwwvv.s.", "...pppppp...", "...pppppp..."],
-      belakang: ["...cccccc...", "..cccccccc..", "..hhhhhhhh..", "..hhhhhhhh..", "..hhhhhhhh..", "..shhhhhhs..", "...SSSSSS...", "....ssss....", "..vvvvvvvv..", ".svvvvvvvvs.", ".svvvvvvvvs.", ".s.vvvvvv.s.", "...pppppp...", "...pppppp..."],
-      samping: ["...cccccc...", "..ccccccc...", "..hhhhhhh...", "..hhsssss...", "..hssssse...", "..hsssssss..", "...sSSSs....", "....sss.....", "...vvwwv....", "...vvwsw....", "...vvwsw....", "...vvwwv....", "....ppp.....", "....ppp....."],
-      kaki: { depan: [["...pp..pp...", "...pp..pp...", "...ff..ff..."], ["...pp..pp...", "...pp..ff...", "...ff......."], ["...pp..pp...", "...ff..pp...", ".......ff..."]],
-        samping: [["....pp......", "....pp......", "....fff....."], ["...p..p.....", "..p....p....", "..f....ff..."], ["....pp......", "....pp......", "....fff....."]] }
-    },
-    wanita: {
-      depan: ["....hhhh....", "...hhhhhho..", "..hhhhhhhh..", "..hssssssh..", "..sesssses..", "..ssssssss..", "...sSSSSs...", "....ssss....", "..kkkkkkkk..", ".skkkkkkkks.", ".skkkkkkkks.", ".s.kkkkkk.s.", "...gGggGg...", "...gggGgg..."],
-      belakang: ["....hhhh....", "...hhhhhho..", "..hhhhhhhh..", "..hhhhhhhh..", "..hhhhhhhh..", "..shhhhhhs..", "...SSSSSS...", "....ssss....", "..kkkkkkkk..", ".skkkkkkkks.", ".skkkkkkkks.", ".s.kkkkkk.s.", "...gGggGg...", "...gggGgg..."],
-      samping: ["....hhhh....", "..ohhhhhh...", "..hhhhhhh...", "..hhsssss...", "..hssssse...", "..hsssssss..", "...sSSSs....", "....sss.....", "...kkkkk....", "...kkkks....", "...kkkks....", "...kkkkk....", "...gGgggG...", "...ggGgg...."],
-      kaki: { depan: [["...gGgggG...", "...ggGggg...", "....f..f...."], ["...gGgggG...", "...ggGggg...", "....f......."], ["...gGgggG...", "...ggGggg...", ".......f...."]],
-        samping: [["...gGgggG...", "...ggGggg...", "....ff......"], ["...gGgggG...", "...ggGggg...", "...f...f...."], ["...gGgggG...", "...ggGggg...", "....ff......"]] }
-    }
-  };
-  var PALET = {
-    pria: { c: "#1c1c22", h: "#2a1b12", s: "#e2aa7c", S: "#c88c60", e: "#2a1b12", w: "#f4f1e8", v: "#355a8a", p: "#2a2c36", f: "#3b2a1d" },
-    wanita: { h: "#2a1b12", o: "#ffffff", s: "#e8b48a", S: "#cf9468", e: "#2a1b12", k: "#9cc7a8", g: "#6e4a33", G: "#d1a15b", f: "#8a5a3b" },
-    mpria: { c: "#5a3d22", h: "#2a1b12", s: "#d9a072", S: "#bf8558", e: "#2a1b12", w: "#fff4d6", v: "#c9a24a", p: "#6b4a2e", f: "#3b2a1d" },
-    mwanita: { h: "#2a1b12", o: "#f4d77a", s: "#e3ad82", S: "#c98f63", e: "#2a1b12", k: "#fffaf0", g: "#c9a24a", G: "#fff4d6", f: "#c9a24a" },
-    resepsionis: { h: "#3a2418", o: "#ffd36e", s: "#d8a074", S: "#be865a", e: "#2a1b12", k: "#c95b6a", g: "#4a3a5a", G: "#9a8ab0", f: "#3b2a1d" }
-  };
-  var cacheSprite = {};
-  function gambarSprite(jenis, palet, arah, frame) {
-    var key = jenis + palet + arah + frame;
-    if (cacheSprite[key]) return cacheSprite[key];
-    var sp = SPRITE[jenis], P = PALET[palet];
-    var badan = arah === "atas" ? sp.belakang : arah === "bawah" ? sp.depan : sp.samping;
-    var kaki = (arah === "kiri" || arah === "kanan") ? sp.kaki.samping[frame] : sp.kaki.depan[frame];
-    var rows = badan.concat(kaki), cv = document.createElement("canvas");
-    cv.width = 12; cv.height = 18;
-    var g = cv.getContext("2d");
-    for (var y = 0; y < rows.length; y++) for (var x = 0; x < 12; x++) {
-      var ch = rows[y].charAt(x); if (ch === "." || !P[ch]) continue;
-      var xx = arah === "kiri" ? 11 - x : x;
-      g.fillStyle = P[ch]; g.fillRect(xx, y, 1, 1);
-    }
-    // garis luar tipis agar karakter terbaca di atas latar apa pun
-    var img = g.getImageData(0, 0, 12, 18), out = document.createElement("canvas");
-    out.width = 14; out.height = 20;
-    var o = out.getContext("2d");
-    o.fillStyle = "rgba(30,18,10,.55)";
-    for (y = 0; y < 18; y++) for (x = 0; x < 12; x++) if (img.data[(y * 12 + x) * 4 + 3]) {
-      [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) {
-        var nx = x + d[0], ny = y + d[1];
-        if (nx < 0 || ny < 0 || nx > 11 || ny > 17 || !img.data[(ny * 12 + nx) * 4 + 3]) o.fillRect(nx + 1, ny + 1, 1, 1);
-      });
-    }
-    o.drawImage(cv, 1, 1);
-    cacheSprite[key] = out;
-    return out;
+  /* ---------- Alat gambar halus ---------- */
+  function acak(x, y, k) { var n = Math.sin(x * 127.1 + y * 311.7 + (k || 0) * 74.7) * 43758.5453; return n - Math.floor(n); }
+  var GARIS = "rgba(70,42,24,.55)";
+  function kotak(g, x, y, w, h, c) { g.fillStyle = c; g.fillRect(x, y, w, h); }
+  function elips(g, cx, cy, rx, ry, c, garis) { g.beginPath(); g.ellipse(cx, cy, Math.max(.01, rx), Math.max(.01, ry), 0, 0, 6.2832); if (c) { g.fillStyle = c; g.fill(); } if (garis) { g.strokeStyle = garis === true ? GARIS : garis; g.lineWidth = .45; g.stroke(); } }
+  function lingkaran(g, cx, cy, r, c, garis) { elips(g, cx, cy, r, r, c, garis); }
+  function jalurBulat(g, x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+  function bulatIsi(g, x, y, w, h, r, c, garis) { jalurBulat(g, x, y, w, h, r); if (c) { g.fillStyle = c; g.fill(); } if (garis) { g.strokeStyle = garis === true ? GARIS : garis; g.lineWidth = .45; g.stroke(); } }
+  function gradV(g, y0, y1, a, b) { var gr = g.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, a); gr.addColorStop(1, b); return gr; }
+  function cahaya(g, cx, cy, r, warna, kuat) {
+    var gr = g.createRadialGradient(cx, cy, 0, cx, cy, r);
+    gr.addColorStop(0, "rgba(" + warna + "," + (kuat || .5) + ")"); gr.addColorStop(1, "rgba(" + warna + ",0)");
+    g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, r, 0, 6.2832); g.fill();
+  }
+  function bayangan(g, cx, cy, rx, ry) { elips(g, cx, cy, rx, ry, "rgba(40,30,20,.18)"); }
+  function bungaKecil(g, x, y, r, warna, tengah) {
+    for (var i = 0; i < 5; i++) { var a = i * 1.2566; lingkaran(g, x + Math.cos(a) * r, y + Math.sin(a) * r, r * .85, warna); }
+    lingkaran(g, x, y, r * .6, tengah || "#f7c948");
   }
 
-  /* ---------- Gambar petak (piksel) ---------- */
-  function acak(x, y, k) { var n = Math.sin(x * 127.1 + y * 311.7 + (k || 0) * 74.7) * 43758.5453; return n - Math.floor(n); }
-  function kotak(g, x, y, w, h, c) { g.fillStyle = c; g.fillRect(x, y, w, h); }
-
-  function rumput(g, X, Y, tx, ty, gelap) {
-    kotak(g, X, Y, T, T, gelap ? "#5c9440" : "#74b14e");
-    for (var i = 0; i < 7; i++) {
-      var a = acak(tx, ty, i), b = acak(ty, tx, i + 9);
-      kotak(g, X + Math.floor(a * 15), Y + Math.floor(b * 15), 1, 2, i % 2 ? "#5f9a3d" : "#8cc65e");
+  /* ---------- Orang (digambar dengan bentuk halus, gaya kartun) ---------- */
+  var PALET = {
+    pria: { kulit: "#f1c29b", rambut: "#3a2618", atas: "#f7f4ec", atas2: "#3d6aa8", bawah: "#2f3445", sepatu: "#3b2a1d", gaya: "rompi" },
+    wanita: { kulit: "#f3c7a3", rambut: "#3a2618", atas: "#9cc7a8", atas2: "#e9f4eb", bawah: "#7a5136", motif: "#e2b36a", sepatu: "#8a5a3b", gaya: "kebaya", hias: "#ffffff" },
+    mpria: { kulit: "#e8b58c", rambut: "#2a1b12", atas: "#f6e8c6", atas2: "#c9a24a", bawah: "#6b4a2e", motif: "#d8b25a", sepatu: "#3b2a1d", gaya: "beskap", kepala: "blangkon" },
+    mwanita: { kulit: "#f0c09a", rambut: "#2a1b12", atas: "#fffaf2", atas2: "#d9b25a", bawah: "#c9a24a", motif: "#fff1c4", sepatu: "#c9a24a", gaya: "kebaya", kepala: "siger", hias: "#ffffff" },
+    resepsionis: { kulit: "#e6b48c", rambut: "#3a2418", atas: "#d86b7a", atas2: "#f6d3d8", bawah: "#4a3a5a", motif: "#b6a6cc", sepatu: "#3b2a1d", gaya: "kebaya", hias: "#ffd36e" }
+  };
+  /* o: {jenis: pria|wanita, palet, arah: bawah|atas|kiri|kanan, jalan, anim}; kaki di (x, y), tinggi sekitar 24 */
+  function gambarOrang(g, o, x, y, t) {
+    var P = PALET[o.palet], cewek = o.jenis === "wanita";
+    var ay = o.jalan ? Math.sin(o.anim * 1.25) : 0, naik = o.jalan ? Math.abs(Math.sin(o.anim * 1.25)) * .7 : Math.sin(t * 2.2 + x) * .15;
+    var samping = o.arah === "kiri" || o.arah === "kanan", belakang = o.arah === "atas";
+    bayangan(g, x, y, 5.2, 1.8);
+    g.save(); g.translate(x, y - naik);
+    if (o.arah === "kiri") g.scale(-1, 1);
+    // kaki & bawahan
+    if (cewek || P.gaya === "beskap") {
+      if (samping) { elips(g, 1.6 + ay * 1.6, -.4, 1.5, .9, P.sepatu); elips(g, -1.2 - ay * 1.6, -.4, 1.5, .9, P.sepatu); }
+      else { elips(g, -1.6, -.4 - Math.max(0, ay) * .8, 1.3, .9, P.sepatu); elips(g, 1.6, -.4 - Math.max(0, -ay) * .8, 1.3, .9, P.sepatu); }
+      g.beginPath(); var lb = samping ? 3.6 : 4.4, sw = samping ? ay * .8 : 0;
+      g.moveTo(-3.1, -10); g.lineTo(3.1, -10); g.quadraticCurveTo(lb + .6 + sw, -5, lb + sw, -.9); g.quadraticCurveTo(0, -.2, -lb + sw, -.9); g.quadraticCurveTo(-lb - .6 + sw, -5, -3.1, -10); g.closePath();
+      g.fillStyle = P.bawah; g.fill(); g.strokeStyle = GARIS; g.lineWidth = .45; g.stroke();
+      g.save(); g.clip(); g.strokeStyle = P.motif; g.lineWidth = .5; g.globalAlpha = .9;
+      for (var i = -9; i < 0; i += 2.2) { g.beginPath(); for (var k = -6; k <= 6; k += 1.5) g.lineTo(k, i + ((k / 1.5) % 2 ? .6 : -.2)); g.stroke(); }
+      g.restore();
+    } else {
+      var kk = samping ? [[-1 - ay * 1.8, 1], [1 + ay * 1.8, 1]] : [[-1.7, Math.max(0, ay)], [1.7, Math.max(0, -ay)]];
+      kk.forEach(function (k) { var kx = k[0], kz = samping ? 0 : k[1] * 1; bulatIsi(g, kx - 1.35, -7.5 - kz, 2.7, 6.6, 1.2, P.bawah, true); elips(g, kx + (samping ? .5 : 0), -.6 - kz, samping ? 1.7 : 1.4, .95, P.sepatu); });
     }
+    // badan
+    var bw = samping ? 6.2 : 8.4;
+    g.beginPath(); g.moveTo(-bw / 2 + .5, -15.5); g.quadraticCurveTo(-bw / 2 - .4, -12, -bw / 2 + .2, -8.6); g.lineTo(bw / 2 - .2, -8.6); g.quadraticCurveTo(bw / 2 + .4, -12, bw / 2 - .5, -15.5); g.closePath();
+    g.fillStyle = belakang && P.gaya === "rompi" ? P.atas2 : P.atas; g.fill(); g.strokeStyle = GARIS; g.lineWidth = .45; g.stroke();
+    g.save(); g.clip();
+    if (P.gaya === "rompi" && !belakang) { kotak(g, -bw / 2 - 1, -16, samping ? 3.4 : 3, 8, P.atas2); if (!samping) { kotak(g, bw / 2 - 2, -16, 3, 8, P.atas2); elips(g, 0, -14.6, 1.3, .7, "#9b2f3a"); } }
+    if (P.gaya === "kebaya" && !belakang) { g.fillStyle = P.atas2; g.beginPath(); g.moveTo(-1.6, -15.6); g.lineTo(0, -11.5); g.lineTo(1.6, -15.6); g.fill(); kotak(g, -bw / 2 - 1, -9.6, bw + 2, 1, P.atas2); }
+    if (P.gaya === "beskap") { kotak(g, -bw / 2 - 1, -9.4, bw + 2, 1, P.atas2); if (!belakang && !samping) for (var b = 0; b < 3; b++) lingkaran(g, 1.2, -14.4 + b * 1.6, .45, P.atas2); }
+    g.restore();
+    // lengan
+    function lengan(lx, ly) { bulatIsi(g, lx - 1.1, ly, 2.2, 5.6, 1.1, P.gaya === "rompi" ? P.atas : P.atas, true); lingkaran(g, lx, ly + 5.6, 1.05, P.kulit, true); }
+    if (samping) lengan(ay * 1.2, -15);
+    else { lengan(-bw / 2 - .6, -15 + (o.jalan ? ay * .7 : 0)); lengan(bw / 2 + .6, -15 - (o.jalan ? ay * .7 : 0)); }
+    // kepala
+    var hy = -20.2, hr = 5.3;
+    if (cewek && (belakang || samping)) lingkaran(g, samping ? -3.2 : 0, hy - (samping ? 2.4 : 3.6), 2.4, P.rambut, true); // sanggul
+    lingkaran(g, 0, hy, hr, P.kulit, true);
+    g.save(); jalurBulat(g, -hr - 1, hy - hr - 2, hr * 2 + 2, hr * 2 + 3, 0); g.beginPath(); g.arc(0, hy, hr, 0, 6.2832); g.clip();
+    g.fillStyle = P.rambut;
+    if (belakang) g.fillRect(-hr, hy - hr, hr * 2, hr * 2 - (cewek ? .5 : 1.8));
+    else if (samping) { g.beginPath(); g.moveTo(-hr, hy + 3); g.lineTo(-hr, hy - hr); g.lineTo(hr, hy - hr); g.lineTo(hr, hy - 2.2); g.quadraticCurveTo(1.5, hy - 2.8, .6, hy - 1); g.quadraticCurveTo(-.6, hy + 1.6, -1.2, hy + (cewek ? 4 : 2.6)); g.closePath(); g.fill(); }
+    else {
+      g.beginPath(); g.moveTo(-hr, hy + (cewek ? 2.5 : .8)); g.lineTo(-hr, hy - hr); g.lineTo(hr, hy - hr); g.lineTo(hr, hy + (cewek ? 2.5 : .8));
+      g.quadraticCurveTo(hr - .6, hy - 2.4, 1.4, hy - 2.6); g.quadraticCurveTo(0, hy - 1.6, -.6, hy - 2.9); g.quadraticCurveTo(-3.5, hy - 2.5, -hr, hy + (cewek ? 2.5 : .8)); g.closePath(); g.fill();
+    }
+    g.restore();
+    g.beginPath(); g.arc(0, hy, hr, 0, 6.2832); g.strokeStyle = GARIS; g.lineWidth = .45; g.stroke();
+    if (cewek && !belakang && !samping) lingkaran(g, 0, hy - 5.6, 2.3, P.rambut, true);
+    // wajah
+    if (!belakang) {
+      var ex = samping ? [2.6] : [-2, 2];
+      ex.forEach(function (e) { elips(g, e, hy + .6, .62, .85, "#2a1b12"); lingkaran(g, e + .22, hy + .25, .22, "#ffffff"); elips(g, e + (samping ? .3 : (e < 0 ? -.5 : .5)), hy + 2.2, .9, .55, "rgba(240,120,120,.45)"); });
+      g.beginPath(); if (samping) g.arc(3.4, hy + 2.6, .7, 1.2, 2.6); else g.arc(0, hy + 2.3, .9, .35, 2.8); g.strokeStyle = "#8a4b3a"; g.lineWidth = .4; g.stroke();
+    }
+    // hiasan kepala
+    if (P.kepala === "blangkon") {
+      g.save(); g.beginPath(); g.arc(0, hy, hr + .25, Math.PI * 1.02, Math.PI * 1.98); g.lineTo(hr + .2, hy - 1.2); g.lineTo(-hr - .2, hy - 1.2); g.closePath();
+      g.fillStyle = "#5a3d22"; g.fill(); g.strokeStyle = GARIS; g.lineWidth = .45; g.stroke(); g.clip();
+      g.strokeStyle = "#c9a24a"; g.lineWidth = .4; for (var m = -6; m < 6; m += 1.6) { g.beginPath(); g.moveTo(m, hy - 6); g.lineTo(m + 2.4, hy - 1); g.stroke(); }
+      g.restore();
+      if (belakang || samping) lingkaran(g, samping ? -4.6 : 0, hy - .4, 1.6, "#5a3d22", true);
+    } else if (P.kepala === "siger") {
+      g.beginPath(); g.moveTo(-4.4, hy - 3.6); g.lineTo(-3, hy - 7.6); g.lineTo(-1.4, hy - 5.6); g.lineTo(0, hy - 9); g.lineTo(1.4, hy - 5.6); g.lineTo(3, hy - 7.6); g.lineTo(4.4, hy - 3.6); g.quadraticCurveTo(0, hy - 5.2, -4.4, hy - 3.6);
+      g.fillStyle = "#e6bf55"; g.fill(); g.strokeStyle = "#9c7a2a"; g.lineWidth = .4; g.stroke();
+      lingkaran(g, 0, hy - 6.6, .7, "#fff7d6");
+      if (!belakang) { for (var j = -1; j <= 1; j += 2) { g.strokeStyle = "rgba(255,255,255,.9)"; g.lineWidth = .7; g.beginPath(); g.moveTo(j * 4.6, hy - 1); g.quadraticCurveTo(j * 6, hy + 4, j * 4.8, hy + 7); g.stroke(); } }
+    } else if (cewek && P.hias) {
+      var fx = belakang ? 0 : samping ? -3.2 : 1.8, fy = belakang ? hy - 5.2 : samping ? hy - 4.4 : hy - 6.4;
+      bungaKecil(g, fx, fy, .75, P.hias);
+    }
+    g.restore();
+  }
+  function potretOrang(cv, jenis, palet, potong) {
+    var g = cv.getContext("2d"), s = potong ? cv.width / 13 : cv.height / 27;
+    g.clearRect(0, 0, cv.width, cv.height);
+    g.save(); g.scale(s, s);
+    if (potong) g.translate(6.5, 26 + 0); else g.translate(cv.width / s / 2, 26);
+    gambarOrang(g, { jenis: jenis, palet: palet, arah: "bawah", jalan: false, anim: 0 }, 0, 0, 0);
+    g.restore();
+  }
+
+  /* ---------- Petak tanah ---------- */
+  function rumput(g, X, Y, tx, ty, gelap) {
+    kotak(g, X - .02, Y - .02, T + .04, T + .04, gelap ? "#64a24a" : "#7cbd5a");
+    for (var i = 0; i < 2; i++) elips(g, X + acak(tx, ty, i) * T, Y + acak(ty, tx, i + 5) * T, 3 + acak(tx, i, ty) * 3, 2 + acak(i, ty, tx) * 2, gelap ? "rgba(90,150,64,.55)" : "rgba(146,206,110,.5)");
+    g.strokeStyle = gelap ? "#548c3d" : "#64a447"; g.lineWidth = .5; g.lineCap = "round";
+    for (i = 0; i < 3; i++) { var x = X + 2 + acak(tx, ty, i + 9) * 12, y = Y + 3 + acak(ty, tx, i + 12) * 11; g.beginPath(); g.moveTo(x - 1, y - 1.6); g.lineTo(x, y); g.lineTo(x + 1, y - 1.8); g.stroke(); }
   }
   function lantaiMarmer(g, X, Y, tx, ty) {
-    kotak(g, X, Y, T, T, (tx + ty) % 2 ? "#efe7d8" : "#e3d7c3");
-    kotak(g, X, Y, T, 1, "rgba(255,255,255,.35)");
-    if (acak(tx, ty) > .6) kotak(g, X + 3 + Math.floor(acak(ty, tx) * 8), Y + 5, 4, 1, "rgba(160,140,110,.25)");
+    kotak(g, X, Y, T, T, (tx + ty) % 2 ? "#f3eee4" : "#e9e0cf");
+    g.strokeStyle = "rgba(150,128,96,.3)"; g.lineWidth = .35; g.strokeRect(X + .2, Y + .2, T - .4, T - .4);
+    if (acak(tx, ty) > .5) { g.strokeStyle = "rgba(175,155,125,.16)"; g.lineWidth = .35; g.beginPath(); var a = acak(ty, tx) * 10; g.moveTo(X + 2, Y + 3 + a * .6); g.bezierCurveTo(X + 6, Y + a, X + 9, Y + 12 - a * .5, X + 14, Y + 6 + a * .4); g.stroke(); }
+    kotak(g, X + 1, Y + 1, 5, .6, "rgba(255,255,255,.55)");
   }
-  function jalanBatu(g, X, Y, tx, ty) {
-    kotak(g, X, Y, T, T, "#d8c39a");
-    kotak(g, X + 1, Y + 1, 6, 6, "#e3d1ab"); kotak(g, X + 9, Y + 2, 6, 5, "#e0cca3"); kotak(g, X + 2, Y + 9, 5, 6, "#e3d0a9"); kotak(g, X + 8, Y + 9, 7, 5, "#dfcaa0");
-    kotak(g, X, Y + 7, T, 1, "#b9a377"); kotak(g, X + 7, Y, 1, 7, "#b9a377"); kotak(g, X + 7, Y + 8, 1, 8, "#b9a377");
+  function karpet(g, X, Y, kiri, kanan, tx, ty) {
+    kotak(g, X - .02, Y, T + .04, T, "#b3343f");
+    g.fillStyle = "rgba(240,196,110,.28)"; g.beginPath(); g.moveTo(X + 8, Y + 4); g.lineTo(X + 11, Y + 8); g.lineTo(X + 8, Y + 12); g.lineTo(X + 5, Y + 8); g.closePath(); g.fill();
+    if (kiri) { kotak(g, X, Y, 2, T, "#d9b260"); kotak(g, X + 2, Y, .5, T, "#8f2830"); }
+    if (kanan) { kotak(g, X + 14, Y, 2, T, "#d9b260"); kotak(g, X + 13.5, Y, .5, T, "#8f2830"); }
   }
   function pasir(g, X, Y, tx, ty, basah) {
-    kotak(g, X, Y, T, T, basah ? "#dcc48f" : "#f0dca7");
-    for (var i = 0; i < 6; i++) kotak(g, X + Math.floor(acak(tx, ty, i) * 15), Y + Math.floor(acak(ty, tx, i + 3) * 15), 1, 1, i % 2 ? "#e2c98d" : "#f8ebc6");
-    if (basah) { kotak(g, X, Y, T, 3, "#f4fbfb"); kotak(g, X + (tx * 5 % 9), Y + 3, 6, 1, "#f4fbfb"); }
+    kotak(g, X - .02, Y - .02, T + .04, T + .04, basah ? "#e6cf9b" : "#f3e1b1");
+    for (var i = 0; i < 5; i++) lingkaran(g, X + acak(tx, ty, i) * T, Y + acak(ty, tx, i + 3) * T, .3 + acak(i, tx, ty) * .3, i % 2 ? "rgba(205,170,110,.55)" : "rgba(255,248,225,.8)");
+    if (acak(tx, ty, 77) > .93 && !basah) { g.fillStyle = "#f2a28a"; g.beginPath(); g.moveTo(X + 6, Y + 9); g.quadraticCurveTo(X + 8, Y + 5, X + 10, Y + 9); g.closePath(); g.fill(); }
   }
   function air(g, X, Y, tx, ty) {
-    kotak(g, X, Y, T, T, "#3aa6c8");
-    kotak(g, X + Math.floor(acak(tx, ty) * 8), Y + 4 + Math.floor(acak(ty, tx) * 6), 5, 1, "#7fd3e6");
-    kotak(g, X + 9, Y + 12, 4, 1, "#2c8fb3");
-  }
-  function karpet(g, X, Y, kiri, kanan) {
-    kotak(g, X, Y, T, T, "#a8323a");
-    kotak(g, X, Y + 3, T, 1, "#8f2830"); kotak(g, X, Y + 11, T, 1, "#8f2830");
-    if (kiri) kotak(g, X, Y, 2, T, "#d4ac55");
-    if (kanan) kotak(g, X + 14, Y, 2, T, "#d4ac55");
+    kotak(g, X - .02, Y - .02, T + .04, T + .04, "#43a9cd");
+    elips(g, X + acak(tx, ty) * T, Y + acak(ty, tx) * T, 4, 1.5, "rgba(120,205,230,.35)");
   }
   function kelopakJalan(g, X, Y, tx, ty, kiri, kanan) {
     pasir(g, X, Y, tx, ty);
-    kotak(g, X + (kiri ? 2 : 0), Y, T - (kiri ? 2 : 0) - (kanan ? 2 : 0), T, "#fbf6ec");
-    if (kiri) kotak(g, X + 2, Y, 1, T, "#e6d8bd"); if (kanan) kotak(g, X + 13, Y, 1, T, "#e6d8bd");
-    var w = ["#ffffff", "#f6a9c0", "#fbd38d"];
-    for (var i = 0; i < 5; i++) kotak(g, X + Math.floor(acak(tx, ty, i + 20) * 14), Y + Math.floor(acak(ty, tx, i + 30) * 14), 2, 1, w[i % 3]);
+    var x0 = X + (kiri ? 2 : -.02), x1 = X + T - (kanan ? 2 : -.02);
+    kotak(g, x0, Y - .02, x1 - x0, T + .04, "#fbf7ef");
+    if (kiri) kotak(g, x0, Y, .5, T, "#e8dcc4"); if (kanan) kotak(g, x1 - .5, Y, .5, T, "#e8dcc4");
+    var w = ["#f6a9c0", "#ffffff", "#fbc6a4", "#f28aa7"];
+    for (var i = 0; i < 4; i++) { g.save(); g.translate(X + 2 + acak(tx, ty, i + 20) * 12, Y + 1 + acak(ty, tx, i + 30) * 14); g.rotate(acak(i, tx, ty) * 6); elips(g, 0, 0, 1.1, .6, w[i % 4]); g.restore(); }
   }
-  function papanKayu(g, X, Y, diAir) {
-    if (diAir) kotak(g, X, Y, T, T, "#3aa6c8");
-    kotak(g, X + 1, Y, 14, T, "#a8794a");
-    for (var i = 0; i < 4; i++) kotak(g, X + 1, Y + i * 4 + 3, 14, 1, "#7c5530");
-    if (diAir) { kotak(g, X, Y, 2, T, "#6b4426"); kotak(g, X + 14, Y, 2, T, "#6b4426"); }
+  function jalanBatu(g, X, Y, tx, ty) {
+    kotak(g, X - .02, Y - .02, T + .04, T + .04, "#dcc79c");
+    for (var i = 0; i < 4; i++) lingkaran(g, X + acak(tx, ty, i + 60) * T, Y + acak(ty, tx, i + 61) * T, .35 + acak(i, ty, tx) * .4, i % 2 ? "rgba(170,140,95,.6)" : "rgba(250,240,215,.8)");
+    if (acak(tx, ty, 62) > .45) { var bx = X + 2 + acak(tx, ty, 63) * 8, by = Y + 2 + acak(ty, tx, 64) * 8; elips(g, bx + 2.5, by + 2, 3.2, 2.2, "#e9dcbd", "rgba(150,125,85,.55)"); elips(g, bx + 1.8, by + 1.4, 1.4, .6, "rgba(255,255,255,.55)"); }
   }
-  function dinding(g, X, Y, bawahDinding, tx) {
-    if (bawahDinding) { kotak(g, X, Y, T, T, "#4a3226"); kotak(g, X, Y + 14, T, 2, "#5e4232"); return; }
-    kotak(g, X, Y, T, T, "#efe2c8");
-    kotak(g, X, Y, T, 2, "#d4ac55");
-    kotak(g, X, Y + 9, T, 7, "#8a5a3b"); kotak(g, X, Y + 9, T, 1, "#d4ac55");
-    kotak(g, X + 3, Y + 11, 10, 3, "#7a4e32");
-    if (tx % 3 === 0) { kotak(g, X + 6, Y + 3, 4, 4, "#d4ac55"); kotak(g, X + 7, Y + 4, 2, 2, "#fff3c4"); }
+  function papanKayu(g, X, Y, diAir, tx, ty) {
+    if (diAir) air(g, X, Y, tx, ty);
+    for (var i = 0; i < 4; i++) { bulatIsi(g, X + 1, Y + i * 4 + .3, 14, 3.5, .8, i % 2 ? "#b88a5b" : "#a97c4f", "rgba(90,58,30,.6)"); lingkaran(g, X + 2.5, Y + i * 4 + 2, .35, "#6b4426"); lingkaran(g, X + 13.5, Y + i * 4 + 2, .35, "#6b4426"); }
+    if (diAir) { bulatIsi(g, X - .5, Y, 2, T, .8, "#7a5130", true); bulatIsi(g, X + 14.5, Y, 2, T, .8, "#7a5130", true); }
+  }
+  function dinding(g, X, Y, atas, tx) {
+    if (atas) { kotak(g, X - .02, Y - .02, T + .04, T + .04, "#5a3e2e"); return; }
+    kotak(g, X - .02, Y, T + .04, T, gradV(g, Y, Y + T, "#f7eedc", "#eadcc0"));
+    kotak(g, X - .02, Y, T + .04, 1.2, "#d9b260");
+    kotak(g, X - .02, Y + 9, T + .04, 7, gradV(g, Y + 9, Y + T, "#97633f", "#7a4d30"));
+    kotak(g, X - .02, Y + 9, T + .04, .8, "#e2bf6e");
+    bulatIsi(g, X + 2.5, Y + 10.8, 11, 3.6, .8, null, "rgba(60,35,20,.45)");
+    if (tx % 3 === 0) { cahaya(g, X + 8, Y + 4.5, 7, "255,226,150", .45); bulatIsi(g, X + 6.6, Y + 2.5, 2.8, 4, 1, "#e2bf6e", true); elips(g, X + 8, Y + 3.6, .8, 1.1, "#fff6d6"); }
   }
   function semak(g, X, Y, tx, ty, alas) {
-    alas(); kotak(g, X + 1, Y + 4, 14, 11, "#3f7d3a"); kotak(g, X + 3, Y + 2, 10, 4, "#4f9446"); kotak(g, X + 3, Y + 6, 4, 3, "#66ad5a"); kotak(g, X + 9, Y + 8, 3, 2, "#66ad5a");
-    if (acak(tx, ty) > .5) { kotak(g, X + 5, Y + 5, 2, 2, "#f6a9c0"); kotak(g, X + 11, Y + 10, 2, 2, "#ffffff"); }
+    alas();
+    bayangan(g, X + 8, Y + 13.5, 7, 2.2);
+    [[4.5, 9, 4.6], [11, 9, 4.6], [8, 6, 5.2], [8, 10.5, 5]].forEach(function (c) { lingkaran(g, X + c[0], Y + c[1], c[2], "#3f8a3e"); });
+    [[4, 8, 3.2], [10.5, 8, 3.2], [7.5, 5, 3.6]].forEach(function (c) { lingkaran(g, X + c[0], Y + c[1], c[2], "#54a24c"); });
+    lingkaran(g, X + 6.4, Y + 3.8, 1.5, "rgba(170,225,140,.6)");
+    if (acak(tx, ty) > .45) { bungaKecil(g, X + 4.5, Y + 7, .8, "#f6a9c0"); bungaKecil(g, X + 11.5, Y + 9.5, .8, "#ffffff"); }
   }
   function bunga(g, X, Y, tx, ty) {
     var w = ["#f6a9c0", "#ffffff", "#fbd38d", "#c9a0e8"];
-    for (var i = 0; i < 6; i++) { var x = X + 2 + Math.floor(acak(tx, ty, i + 40) * 11), y = Y + 2 + Math.floor(acak(ty, tx, i + 50) * 11); kotak(g, x, y + 2, 1, 2, "#3f7d3a"); kotak(g, x - 1, y, 3, 2, w[i % 4]); kotak(g, x, y, 1, 1, "#fbd38d"); }
+    for (var i = 0; i < 5; i++) { var x = X + 3 + acak(tx, ty, i + 40) * 10, y = Y + 3 + acak(ty, tx, i + 50) * 10; g.strokeStyle = "#4f8f3e"; g.lineWidth = .5; g.beginPath(); g.moveTo(x, y); g.lineTo(x, y + 2.6); g.stroke(); bungaKecil(g, x, y, .8, w[i % 4]); }
+  }
+  function rumputPantai(g, X, Y, tx, ty) {
+    pasir(g, X, Y, tx, ty);
+    g.strokeStyle = "#93ad57"; g.lineWidth = .6; g.lineCap = "round";
+    for (var i = 0; i < 6; i++) { var x = X + 1.5 + i * 2.5 + acak(tx, ty, i) * 1.5, h = 6 + acak(ty, tx, i) * 5, c = (acak(i, tx, ty) - .5) * 4; g.beginPath(); g.moveTo(x, Y + 14); g.quadraticCurveTo(x + c * .4, Y + 14 - h * .6, x + c, Y + 14 - h); g.stroke(); }
   }
 
-  /* objek tinggi: bagian bawah di lapisan tanah, bagian atas (kanopi, atap) di lapisan atas */
+  /* ---------- Objek tinggi: bagian bawah di lapisan tanah, bagian atas di lapisan atas ---------- */
   function pohon(gt, ga, X, Y, tx, ty) {
-    kotak(gt, X + 6, Y + 6, 4, 10, "#6b4426"); kotak(gt, X + 6, Y + 6, 1, 10, "#8a5a33");
-    kotak(gt, X + 2, Y + 14, 12, 2, "rgba(0,0,0,.18)");
-    var c = ["#2f6b34", "#3a7d3c", "#4c9446"];
+    bayangan(gt, X + 8, Y + 14.5, 7, 2.4);
+    bulatIsi(gt, X + 6, Y + 4, 4, 11, 1.5, gradV(gt, Y, Y + 15, "#8a5a33", "#6b4426"), true);
     var cx = X + 8, cy = Y - 1;
-    lingkaran(ga, cx, cy, 11, c[0]); lingkaran(ga, cx - 2, cy - 2, 8, c[1]); lingkaran(ga, cx - 4, cy - 4, 4, c[2]);
-    if (acak(tx, ty) > .7) { kotak(ga, cx + 3, cy - 2, 2, 2, "#e85a5a"); kotak(ga, cx - 5, cy + 4, 2, 2, "#e85a5a"); }
-  }
-  function lingkaran(g, cx, cy, r, c) {
-    g.fillStyle = c;
-    for (var y = -r; y <= r; y++) { var w = Math.round(Math.sqrt(r * r - y * y)); g.fillRect(cx - w, cy + y, w * 2, 1); }
+    lingkaran(ga, cx, cy + 1.5, 11, "#2f6e35", "rgba(30,60,30,.5)");
+    lingkaran(ga, cx - 3, cy - 2, 7.5, "#3d8240");
+    lingkaran(ga, cx + 3.5, cy - 1, 6.5, "#3d8240");
+    lingkaran(ga, cx - 3.5, cy - 4.5, 4, "#57a04f");
+    lingkaran(ga, cx + 2, cy - 5, 2.6, "rgba(140,205,120,.55)");
+    if (acak(tx, ty) > .6) { lingkaran(ga, cx + 4, cy + 2, 1, "#e85a5a"); lingkaran(ga, cx - 5, cy + 4, 1, "#e85a5a"); lingkaran(ga, cx + 1, cy - 2, 1, "#e85a5a"); }
   }
   function kelapa(gt, ga, X, Y) {
-    for (var i = 0; i < 14; i++) kotak(gt, X + 7 + Math.round(Math.sin(i / 5) * 2), Y + 2 + i, 3, 1, i % 3 ? "#8a6a45" : "#6e5233");
-    for (i = 0; i < 18; i++) kotak(ga, X + 8 + Math.round(Math.sin(i / 6) * 3), Y - 14 + i, 3, 1, i % 3 ? "#8a6a45" : "#6e5233");
-    var cx = X + 9, cy = Y - 16;
-    [[-1, 0], [1, 0], [-.7, .6], [.7, .6], [-.4, -.5], [.4, -.5]].forEach(function (d, k) {
-      for (var j = 0; j < 12; j++) { var x = Math.round(cx + d[0] * j * 1.2), y = Math.round(cy + d[1] * j + j * j * .06); kotak(ga, x, y, 2, 2, k % 2 ? "#3c8a4e" : "#2f7140"); kotak(ga, x, y + 2, 1, 1, "#4fa862"); }
+    bayangan(gt, X + 10, Y + 14.5, 6, 2);
+    function batang(g, y0, y1) {
+      g.strokeStyle = "#8a6a45"; g.lineWidth = 3.2; g.lineCap = "round"; g.beginPath(); g.moveTo(X + 8, Y + 14); g.quadraticCurveTo(X + 6, Y - 2, X + 10, Y - 16); g.stroke();
+      g.strokeStyle = "#6e5233"; g.lineWidth = .5;
+      for (var i = 0; i < 12; i++) { var t = i / 12, px = (1 - t) * (1 - t) * (X + 8) + 2 * (1 - t) * t * (X + 6) + t * t * (X + 10), py = (1 - t) * (1 - t) * (Y + 14) + 2 * (1 - t) * t * (Y - 2) + t * t * (Y - 16); if (py > y0 && py < y1) { g.beginPath(); g.moveTo(px - 1.6, py); g.lineTo(px + 1.6, py - .6); g.stroke(); } }
+    }
+    batang(gt, Y + 1, Y + 20); batang(ga, Y - 30, Y + 1);
+    var cx = X + 10, cy = Y - 16;
+    [[-1, .15], [1, .1], [-.75, .7], [.8, .7], [-.4, -.6], [.45, -.65], [0, .9]].forEach(function (d, k) {
+      var ex = cx + d[0] * 13, ey = cy + d[1] * 8 + 4;
+      ga.beginPath(); ga.moveTo(cx, cy); ga.quadraticCurveTo(cx + d[0] * 7, cy + d[1] * 4 - 4, ex, ey);
+      ga.quadraticCurveTo(cx + d[0] * 7 + 1.4, cy + d[1] * 4 - 1, cx, cy + 1); ga.closePath();
+      ga.fillStyle = k % 2 ? "#3a8a4c" : "#2f7a42"; ga.fill(); ga.strokeStyle = "rgba(20,60,30,.5)"; ga.lineWidth = .4; ga.stroke();
     });
-    kotak(ga, cx - 2, cy + 1, 3, 3, "#7a5530"); kotak(ga, cx + 1, cy + 2, 3, 3, "#6b4426");
+    lingkaran(ga, cx - 1.4, cy + 1.6, 1.5, "#7a5530", true); lingkaran(ga, cx + 1.2, cy + 2.2, 1.5, "#6b4426", true);
   }
   function kursi(g, X, Y, latar) {
-    if (latar === "hutan") { kotak(g, X + 1, Y + 6, 14, 4, "#8a5a33"); kotak(g, X + 1, Y + 6, 14, 1, "#a8794a"); kotak(g, X + 2, Y + 10, 2, 4, "#6b4426"); kotak(g, X + 12, Y + 10, 2, 4, "#6b4426"); return; }
-    kotak(g, X + 4, Y + 3, 8, 3, "#ffffff"); kotak(g, X + 4, Y + 6, 8, 5, "#f2efe8"); kotak(g, X + 4, Y + 11, 1, 4, "#d8d2c4"); kotak(g, X + 11, Y + 11, 1, 4, "#d8d2c4");
-    kotak(g, X + 7, Y + 3, 2, 3, "#f6a9c0");
+    if (latar === "hutan") {
+      bayangan(g, X + 8, Y + 13, 7.5, 1.8);
+      bulatIsi(g, X + 2, Y + 9, 2, 4.5, .6, "#6b4426"); bulatIsi(g, X + 12, Y + 9, 2, 4.5, .6, "#6b4426");
+      bulatIsi(g, X + .5, Y + 6, 15, 4, 1.2, gradV(g, Y + 6, Y + 10, "#b4844f", "#8a5a33"), true);
+      kotak(g, X + 1.5, Y + 7, 13, .5, "rgba(255,255,255,.3)");
+      return;
+    }
+    bayangan(g, X + 8, Y + 13.6, 4.8, 1.4);
+    kotak(g, X + 4.6, Y + 9, .9, 4.6, "#d8d0c0"); kotak(g, X + 10.5, Y + 9, .9, 4.6, "#d8d0c0");
+    bulatIsi(g, X + 4, Y + 2, 8, 6.5, 2, "#ffffff", "rgba(140,120,90,.6)");
+    for (var i = 0; i < 3; i++) kotak(g, X + 5.6 + i * 2, Y + 3.2, .5, 4.4, "#e7e0d2");
+    bulatIsi(g, X + 3.6, Y + 7.8, 8.8, 2.4, 1, "#f6f2ea", "rgba(140,120,90,.6)");
+    elips(g, X + 6.6, Y + 2.6, 1.2, .8, "#f6a9c0"); elips(g, X + 9.4, Y + 2.6, 1.2, .8, "#f6a9c0"); lingkaran(g, X + 8, Y + 2.7, .6, "#e57a9a");
   }
   function meja(g, X, Y, latar) {
     if (latar === "hutan") {
-      kotak(g, X - 4, Y + 2, 24, 3, "#8a5a33"); kotak(g, X - 4, Y + 5, 24, 6, "#a8794a"); kotak(g, X - 4, Y + 11, 24, 3, "#8a5a33");
-      kotak(g, X + 3, Y + 6, 3, 3, "#f6a9c0"); kotak(g, X + 10, Y + 7, 4, 2, "#ffffff"); return;
+      bayangan(g, X + 8, Y + 13, 13, 2.6);
+      bulatIsi(g, X - 4, Y + 2, 24, 3, 1, "#8a5a33", true); bulatIsi(g, X - 4, Y + 11, 24, 3, 1, "#8a5a33", true);
+      bulatIsi(g, X - 2, Y + 4.6, 20, 7, 1.4, gradV(g, Y + 4, Y + 12, "#c09060", "#9a6b40"), true);
+      kotak(g, X + 5, Y + 4.6, 6, 7, "rgba(255,255,255,.75)");
+      bungaKecil(g, X + 8, Y + 7.5, .9, "#f6a9c0"); bungaKecil(g, X + 6.4, Y + 9, .7, "#ffffff"); bungaKecil(g, X + 9.8, Y + 9, .7, "#fbd38d");
+      return;
     }
-    kotak(g, X - 5, Y + 3, 4, 4, "#d4ac55"); kotak(g, X + 17, Y + 3, 4, 4, "#d4ac55"); kotak(g, X + 6, Y - 3, 4, 3, "#d4ac55"); kotak(g, X + 6, Y + 15, 4, 3, "#d4ac55");
-    lingkaran(g, X + 8, Y + 7, 9, "#d9d2c4"); lingkaran(g, X + 8, Y + 6, 9, "#ffffff");
-    lingkaran(g, X + 8, Y + 6, 3, "#f6a9c0"); kotak(g, X + 7, Y + 5, 2, 2, "#fbd38d");
+    [[-6.5, 7], [22.5, 7], [8, -3.5], [8, 17.5]].forEach(function (c) { bayangan(g, X + c[0], Y + c[1] + 2, 2.6, 1); lingkaran(g, X + c[0], Y + c[1], 2.4, "#e2bf6e", true); lingkaran(g, X + c[0], Y + c[1] - .4, 1.5, "#fff6dd"); });
+    bayangan(g, X + 8, Y + 9.5, 10, 4);
+    lingkaran(g, X + 8, Y + 7.6, 9.6, "#e4dccb", true);
+    lingkaran(g, X + 8, Y + 6.8, 9, "#ffffff");
+    for (var i = 0; i < 12; i++) { var a = i / 12 * 6.2832; lingkaran(g, X + 8 + Math.cos(a) * 8.6, Y + 6.8 + Math.sin(a) * 8.6 + .6, .55, "rgba(228,214,190,.9)"); }
+    [[0, 0, "#f6a9c0"], [-1.6, 1, "#ffffff"], [1.6, 1, "#fbc6a4"], [0, -1.6, "#f28aa7"]].forEach(function (b) { bungaKecil(g, X + 8 + b[0], Y + 6.6 + b[1], .8, b[2]); });
+    elips(g, X + 4.2, Y + 9.6, .9, .6, "#9cc7a8"); elips(g, X + 11.8, Y + 9.6, .9, .6, "#9cc7a8");
   }
   function lampuTaman(gt, ga, X, Y) {
-    kotak(gt, X + 7, Y + 2, 2, 13, "#3b3b44"); kotak(gt, X + 5, Y + 14, 6, 2, "#2b2b33");
-    kotak(ga, X + 5, Y - 4, 6, 7, "#3b3b44"); kotak(ga, X + 6, Y - 3, 4, 5, "#ffe7a3");
+    bayangan(gt, X + 8, Y + 14.5, 3, 1);
+    bulatIsi(gt, X + 7.2, Y + 1, 1.6, 14, .6, "#3d3d48"); bulatIsi(gt, X + 5.5, Y + 13.5, 5, 2, .8, "#2e2e38");
+    cahaya(ga, X + 8, Y - 1, 12, "255,222,140", .45);
+    bulatIsi(ga, X + 5.2, Y - 4.6, 5.6, 7, 1.4, "#3d3d48"); bulatIsi(ga, X + 6.2, Y - 3.6, 3.6, 5, 1, "#ffe7a3");
+    g_atap(ga, X + 8, Y - 4.6);
   }
+  function g_atap(g, cx, y) { g.fillStyle = "#2e2e38"; g.beginPath(); g.moveTo(cx - 3.6, y); g.lineTo(cx, y - 2.6); g.lineTo(cx + 3.6, y); g.closePath(); g.fill(); }
 
-  /* objek tempat */
+  /* ---------- Objek tempat ---------- */
+  function bingkaiFoto(g, x, y, w, h, isi) {
+    bulatIsi(g, x, y, w, h, .8, "#d9b260", "rgba(110,80,30,.7)");
+    kotak(g, x + 1, y + 1, w - 2, h - 2, isi === 1 ? "#d6e6f2" : "#f8dcc8");
+    elips(g, x + w / 2, y + h - 1.2, w / 2 - 1, 2.2, isi === 1 ? "#9cc7a8" : "#e8b49a");
+    lingkaran(g, x + w / 2 - 1.2, y + h / 2 - .3, 1.1, "#7a5136"); lingkaran(g, x + w / 2 + 1.2, y + h / 2 - .3, 1.1, "#3a2618");
+    g.fillStyle = "#e85a7a"; g.beginPath(); var hx = x + w / 2, hy = y + 2.6; g.moveTo(hx, hy + 1.3); g.bezierCurveTo(hx - 1.6, hy, hx - .9, hy - 1, hx, hy - .2); g.bezierCurveTo(hx + .9, hy - 1, hx + 1.6, hy, hx, hy + 1.3); g.fill();
+  }
   function gambarTempat(gt, ga, key, t, latar) {
-    var X = t.x * T, Y = t.y * T, W = t.w * T, H = t.h * T;
-    var o = t.obj;
+    var X = t.x * T, Y = t.y * T, W = t.w * T, H = t.h * T, o = t.obj, i;
     if (o === "pelaminan") {
-      kotak(gt, X - 6, Y + H - 10, W + 12, 12, "#c9a24a"); kotak(gt, X - 6, Y + H - 10, W + 12, 2, "#f4dc98");
-      kotak(gt, X, Y - 2, W, H - 8, "#fff7e8");
-      for (var i = 0; i < W; i += 8) kotak(gt, X + i, Y - 2, 4, H - 8, "#f6ecd8");
-      kotak(gt, X, Y - 4, W, 4, "#c9a24a");
-      kotak(gt, X + W / 2 - 18, Y + 12, 36, 12, "#b8323a"); kotak(gt, X + W / 2 - 18, Y + 12, 36, 3, "#d4505a");
-      [X + 2, X + W - 16].forEach(function (x) { for (var k = 0; k < 10; k++) kotak(gt, x + Math.floor(acak(x, k) * 12), Y + 4 + Math.floor(acak(k, x) * 22), 3, 3, ["#ffffff", "#f6a9c0", "#fbd38d"][k % 3]); kotak(gt, x + 4, Y + 28, 6, 8, "#3f7d3a"); });
+      bayangan(gt, X + W / 2, Y + H - 2, W / 2 + 6, 4);
+      bulatIsi(gt, X - 6, Y + H - 11, W + 12, 11, 2, gradV(gt, Y + H - 11, Y + H, "#e2bf6e", "#b78f3c"), "rgba(110,80,30,.7)");
+      kotak(gt, X - 5, Y + H - 10.5, W + 10, .8, "rgba(255,245,210,.8)");
+      bulatIsi(gt, X - 2, Y + H - 6, W + 4, 6, 1.5, "#b3343f", "rgba(100,20,30,.6)");
+      // dinding latar dengan tiga lengkung
+      bulatIsi(gt, X, Y - 6, W, H - 3, 3, gradV(gt, Y - 6, Y + H, "#fffaf0", "#f3e6cc"), "rgba(150,120,70,.6)");
+      [X + W * .17, X + W * .5, X + W * .83].forEach(function (cx, k) {
+        var r = k === 1 ? 10 : 7, top = Y - 1 + (k === 1 ? 0 : 4);
+        gt.beginPath(); gt.moveTo(cx - r, Y + H - 9); gt.lineTo(cx - r, top + r); gt.arc(cx, top + r, r, Math.PI, 0); gt.lineTo(cx + r, Y + H - 9); gt.closePath();
+        gt.fillStyle = k === 1 ? "#f6e3c0" : "#f8ecd6"; gt.fill(); gt.strokeStyle = "#d9b260"; gt.lineWidth = .8; gt.stroke();
+      });
+      // sofa
+      bulatIsi(gt, X + W / 2 - 15, Y + 10, 30, 10, 4, gradV(gt, Y + 10, Y + 20, "#c94a55", "#9c2f3a"), "rgba(90,20,25,.7)");
+      bulatIsi(gt, X + W / 2 - 17, Y + 14, 5, 9, 2.4, "#b03a45", true); bulatIsi(gt, X + W / 2 + 12, Y + 14, 5, 9, 2.4, "#b03a45", true);
+      kotak(gt, X + W / 2 - 13, Y + 11.2, 26, .8, "#e2bf6e");
+      // tirai dan bunga
+      [-1, 1].forEach(function (s) {
+        var ex = s < 0 ? X + 1 : X + W - 1;
+        gt.fillStyle = "rgba(255,255,255,.85)"; gt.beginPath(); gt.moveTo(ex, Y - 6); gt.quadraticCurveTo(ex + s * 9, Y + 4, ex + s * 3, Y + H - 10); gt.lineTo(ex, Y + H - 10); gt.closePath(); gt.fill();
+        for (var k = 0; k < 9; k++) bungaKecil(gt, ex + s * (2 + acak(k, s) * 6), Y + H - 14 + acak(s, k) * 6 - k * .4, 1.1, ["#f6a9c0", "#ffffff", "#fbc6a4", "#e57a9a"][k % 4]);
+        lingkaran(gt, ex + s * 4, Y + H - 9, 2.6, "#4f9446");
+      });
+      for (i = 0; i < 16; i++) bungaKecil(gt, X + 6 + i * (W - 12) / 15, Y - 6 + Math.sin(i / 15 * Math.PI) * -3 + acak(i, 5) * 2, 1.1, ["#f6a9c0", "#ffffff", "#fbc6a4", "#e57a9a"][i % 4]);
     } else if (o === "gapura-pantai" || o === "gapura-hutan") {
-      var kayu = o === "gapura-pantai" ? "#f4efe4" : "#7a5230";
-      kotak(gt, X + 6, Y + 4, 4, H - 4, kayu); kotak(gt, X + W - 10, Y + 4, 4, H - 4, kayu);
-      kotak(ga, X + 2, Y - 10, W - 4, 4, kayu); kotak(ga, X + 6, Y - 14, W - 12, 4, kayu);
-      if (o === "gapura-pantai") { for (i = 0; i < 6; i++) { kotak(ga, X + 6 + i * 3, Y - 6 + i * 3, 3, 4, "rgba(255,255,255,.85)"); kotak(ga, X + W - 9 - i * 3, Y - 6 + i * 3, 3, 4, "rgba(255,255,255,.85)"); } }
-      else { for (i = 0; i < 16; i++) kotak(ga, X + 4 + i * 3.5, Y - 16 + Math.round(acak(i, 3) * 4), 4, 4, i % 2 ? "#3f7d3a" : "#4f9446"); }
-      for (i = 0; i < 14; i++) kotak(ga, X + 2 + Math.floor(acak(i, 9) * (W - 6)), Y - 15 + Math.floor(acak(9, i) * 8), 3, 3, ["#ffffff", "#f6a9c0", "#fbd38d", "#e85a7a"][i % 4]);
-      kotak(gt, X + 2, Y + H - 2, W - 4, 2, "rgba(0,0,0,.12)");
+      var pantai = o === "gapura-pantai", kayu = pantai ? "#fbf8f2" : "#8a5a33", gelap = pantai ? "rgba(150,140,120,.7)" : "rgba(60,35,20,.8)";
+      bayangan(gt, X + W / 2, Y + H - 1, W / 2, 3);
+      bulatIsi(gt, X + 5, Y + 2, 3.4, H - 2, 1.2, kayu, gelap); bulatIsi(gt, X + W - 8.4, Y + 2, 3.4, H - 2, 1.2, kayu, gelap);
+      ga.beginPath(); ga.moveTo(X + 6.7, Y + 4); ga.quadraticCurveTo(X + W / 2, Y - 22, X + W - 6.7, Y + 4);
+      ga.strokeStyle = kayu; ga.lineWidth = 3.4; ga.lineCap = "round"; ga.stroke(); ga.strokeStyle = gelap; ga.lineWidth = .4; ga.stroke();
+      if (pantai) {
+        [-1, 1].forEach(function (s) { ga.fillStyle = "rgba(255,255,255,.7)"; ga.beginPath(); var bx = s < 0 ? X + 6.7 : X + W - 6.7; ga.moveTo(bx, Y - 2); ga.quadraticCurveTo(bx + s * 8, Y + 6, bx + s * 2, Y + H - 2); ga.lineTo(bx, Y + H - 2); ga.closePath(); ga.fill(); });
+      } else {
+        for (i = 0; i < 18; i++) { var tt = i / 17, vx = (1 - tt) * (1 - tt) * (X + 6.7) + 2 * (1 - tt) * tt * (X + W / 2) + tt * tt * (X + W - 6.7), vy = (1 - tt) * (1 - tt) * (Y + 4) + 2 * (1 - tt) * tt * (Y - 22) + tt * tt * (Y + 4); lingkaran(ga, vx + (acak(i, 2) - .5) * 3, vy + (acak(2, i) - .5) * 3, 2.4, i % 2 ? "#3f8a3e" : "#54a24c"); }
+        for (i = 0; i < 6; i++) { lingkaran(gt, X + 5 + acak(i, 7) * 3, Y + 4 + i * 4, 1.8, "#4f9446"); lingkaran(gt, X + W - 6 - acak(7, i) * 3, Y + 4 + i * 4, 1.8, "#4f9446"); }
+      }
+      for (i = 0; i < 14; i++) { var t2 = .05 + i / 13 * .9, fx = (1 - t2) * (1 - t2) * (X + 6.7) + 2 * (1 - t2) * t2 * (X + W / 2) + t2 * t2 * (X + W - 6.7), fy = (1 - t2) * (1 - t2) * (Y + 4) + 2 * (1 - t2) * t2 * (Y - 22) + t2 * t2 * (Y + 4); bungaKecil(ga, fx + (acak(i, 9) - .5) * 2, fy + (acak(9, i) - .5) * 2, 1.2, ["#ffffff", "#f6a9c0", "#fbc6a4", "#e85a7a"][i % 4]); }
+      [X + 6.7, X + W - 6.7].forEach(function (bx, s) { for (var k = 0; k < 5; k++) bungaKecil(gt, bx + (acak(k, s) - .5) * 5, Y + H - 4 - acak(s, k) * 4, 1.1, ["#ffffff", "#f6a9c0", "#fbc6a4"][k % 3]); lingkaran(gt, bx, Y + H - 2, 2.2, "#4f9446"); });
     } else if (o === "easel") {
       for (i = 0; i < t.w; i++) {
-        var ex = X + i * T;
-        kotak(gt, ex + 3, Y + 6, 2, 10, "#6b4426"); kotak(gt, ex + 11, Y + 6, 2, 10, "#6b4426");
-        kotak(ga, ex + 1, Y - 6, 14, 14, "#8a5a33"); kotak(ga, ex + 2, Y - 5, 12, 12, i % 2 ? "#cfe3ef" : "#f6d6c0");
-        kotak(ga, ex + 4, Y + 1, 8, 4, i % 2 ? "#7fb38a" : "#e3a07a"); lingkaran(ga, ex + 10, Y - 2, 2, "#ffffff");
+        var ex2 = X + i * T;
+        bayangan(gt, ex2 + 8, Y + 15, 5, 1.4);
+        gt.strokeStyle = "#7a5130"; gt.lineWidth = 1; gt.lineCap = "round";
+        gt.beginPath(); gt.moveTo(ex2 + 4, Y + 15); gt.lineTo(ex2 + 8, Y + 2); gt.lineTo(ex2 + 12, Y + 15); gt.moveTo(ex2 + 8, Y + 2); gt.lineTo(ex2 + 8, Y + 14); gt.stroke();
+        bulatIsi(ga, ex2 + 1.5, Y - 7, 13, 12, .8, "#9a6b40", "rgba(60,35,20,.7)");
+        kotak(ga, ex2 + 2.5, Y - 6, 11, 10, i % 2 ? gradV(ga, Y - 6, Y + 4, "#bfe0f0", "#e8f4fa") : gradV(ga, Y - 6, Y + 4, "#fbd7c0", "#fff1e6"));
+        elips(ga, ex2 + 6, Y + 3.5, 5, 3, i % 2 ? "#8cc28a" : "#e8a27e"); elips(ga, ex2 + 11, Y + 4, 4, 2.4, i % 2 ? "#6aa86c" : "#d58463");
+        lingkaran(ga, ex2 + 10.5, Y - 3, 1.6, i % 2 ? "#fff8d0" : "#ffffff");
+        kotak(ga, ex2 + 3, Y + 4.6, 10, 1, "#7a5130");
       }
     } else if (o === "kado") {
-      kotak(gt, X + 1, Y + T * t.h - 9, W - 2, 8, latar === "gedung" ? "#ffffff" : "#a8794a");
-      [["#d4505a", 2, -4, 10], ["#5a8ad4", 13, -2, 9], ["#e8b84f", 22, -6, 8], ["#7fb38a", 8, -12, 8]].forEach(function (b) {
-        kotak(ga, X + b[1], Y + T * t.h - 9 + b[2] - b[3], b[3], b[3], b[0]); kotak(ga, X + b[1] + b[3] / 2 - 1, Y + T * t.h - 9 + b[2] - b[3], 2, b[3], "#fff3c4"); kotak(ga, X + b[1], Y + T * t.h - 9 + b[2] - b[3] / 2 - 1, b[3], 2, "#fff3c4");
+      var mx = X + W / 2, alas = Y + H - 3;
+      bayangan(gt, mx, alas + 1, W / 2, 2.4);
+      bulatIsi(gt, X + 1, alas - 6, W - 2, 6, 1.2, latar === "gedung" ? "#ffffff" : latar === "pantai" ? "#fbf3e3" : "#a97c4f", true);
+      [["#e05d6f", 3, 9, 8], ["#5a8ad4", 12.5, 8, 9], ["#f0b84f", 22, 7, 7], ["#7fbf8a", 8, 6.5, 13], ["#c48ad8", 17, 6, 12.5]].forEach(function (b) {
+        var bx = X + b[1], s = b[2], by = alas - 6 - s - (b[3] > 10 ? 6.5 : 0);
+        bulatIsi(ga, bx, by, s, s, 1, b[0], "rgba(60,35,30,.6)");
+        kotak(ga, bx + s / 2 - .6, by, 1.2, s, "#fff3d0"); kotak(ga, bx, by + s / 2 - .6, s, 1.2, "#fff3d0");
+        elips(ga, bx + s / 2 - 1.2, by - .6, 1.3, .8, "#fff3d0"); elips(ga, bx + s / 2 + 1.2, by - .6, 1.3, .8, "#fff3d0");
       });
     } else if (o === "bingkai") {
-      kotak(gt, X + 1, Y + 8, W - 2, 6, "#8a5a33"); kotak(gt, X + 2, Y + 14, 2, 2, "#6b4426"); kotak(gt, X + W - 4, Y + 14, 2, 2, "#6b4426");
-      for (i = 0; i < t.w; i++) { kotak(ga, X + i * T + 3, Y - 4, 10, 13, "#d4ac55"); kotak(ga, X + i * T + 4, Y - 3, 8, 9, i % 2 ? "#f6d6c0" : "#d6e6f2"); lingkaran(ga, X + i * T + 8, Y + 1, 2, "#e85a7a"); }
+      bayangan(gt, X + W / 2, Y + 14.5, W / 2, 1.8);
+      bulatIsi(gt, X + 1, Y + 8, W - 2, 5, 1, gradV(gt, Y + 8, Y + 13, "#b4844f", "#8a5a33"), true);
+      kotak(gt, X + 2.5, Y + 13, 1.2, 2.2, "#6b4426"); kotak(gt, X + W - 3.7, Y + 13, 1.2, 2.2, "#6b4426");
+      for (i = 0; i < Math.max(2, t.w * 2 - 1); i++) bingkaiFoto(ga, X + 2 + i * ((W - 12) / Math.max(1, t.w * 2 - 2)), Y - 2 - (i % 2) * 3, 8, 10, i % 2);
     } else if (o === "papan") {
-      kotak(gt, X + 4, Y + 4, 2, 12, "#6b4426"); kotak(gt, X + W - 6, Y + 4, 2, 12, "#6b4426");
-      kotak(ga, X + 1, Y - 8, W - 2, 14, "#8a5a33"); kotak(ga, X + 2, Y - 7, W - 4, 12, "#f4e6c4");
-      kotak(ga, X + W / 2 - 5, Y - 5, 10, 8, "#ffffff"); kotak(ga, X + W / 2 - 5, Y - 5, 10, 2, "#d4505a"); kotak(ga, X + W / 2 - 2, Y - 1, 4, 3, "#d4505a");
+      bayangan(gt, X + W / 2, Y + 15, W / 2 - 2, 1.6);
+      bulatIsi(gt, X + 4, Y + 2, 1.8, 13.5, .6, "#7a5130", true); bulatIsi(gt, X + W - 5.8, Y + 2, 1.8, 13.5, .6, "#7a5130", true);
+      bulatIsi(ga, X + 1, Y - 9, W - 2, 14, 1.6, gradV(ga, Y - 9, Y + 5, "#a97c4f", "#86592f"), "rgba(60,35,20,.8)");
+      bulatIsi(ga, X + 2.5, Y - 7.5, W - 5, 11, 1, "#fbf1d8");
+      bulatIsi(ga, X + W / 2 - 5, Y - 6, 10, 8.5, 1, "#ffffff", "rgba(120,90,60,.6)");
+      bulatIsi(ga, X + W / 2 - 5, Y - 6, 10, 2.6, 1, "#e05d6f");
+      lingkaran(ga, X + W / 2 - 2.5, Y - 6.2, .6, "#5a3a22"); lingkaran(ga, X + W / 2 + 2.5, Y - 6.2, .6, "#5a3a22");
+      g_hati(ga, X + W / 2, Y - 1, 1.6, "#e05d6f");
     } else if (o === "meja-tamu") {
-      kotak(gt, X, Y + 4, W, 10, "#ffffff"); kotak(gt, X, Y + 12, W, 2, "#d8d2c4"); kotak(gt, X, Y + 4, W, 2, "#d4ac55");
-      kotak(gt, X + 6, Y + 5, 12, 6, "#f8f1df"); kotak(gt, X + 12, Y + 5, 1, 6, "#c9b48a"); kotak(gt, X + 20, Y + 3, 1, 6, "#3b2a1d");
-      kotak(gt, X + 24, Y + 2, 4, 6, "#7fb38a"); kotak(gt, X + 25, Y, 2, 2, "#f6a9c0");
+      bayangan(gt, X + W / 2, Y + 14.5, W / 2 + 1, 2);
+      bulatIsi(gt, X, Y + 3, W, 11, 1.4, gradV(gt, Y + 3, Y + 14, "#ffffff", "#ece6da"), "rgba(130,110,80,.7)");
+      kotak(gt, X, Y + 3, W, 1.4, "#d9b260");
+      for (i = 0; i < 6; i++) elips(gt, X + 2.6 + i * (W - 5) / 5, Y + 13.2, 2.4, 1, "rgba(220,205,180,.7)");
+      bulatIsi(gt, X + 5, Y + 4.6, 13, 6, .6, "#fbf5e6", "rgba(120,90,60,.6)"); kotak(gt, X + 11.3, Y + 4.6, .5, 6, "#c9b48a");
+      gt.strokeStyle = "#2f2a26"; gt.lineWidth = .6; gt.beginPath(); gt.moveTo(X + 20, Y + 9); gt.lineTo(X + 23, Y + 4); gt.stroke();
+      bulatIsi(gt, X + 24.5, Y + 2, 4, 6, 1.2, "#cfe6e8", true);
+      bungaKecil(gt, X + 26.5, Y + 1, 1, "#f6a9c0"); bungaKecil(gt, X + 25, Y + 2.4, .8, "#ffffff"); bungaKecil(gt, X + 28, Y + 2.4, .8, "#fbd38d");
     }
   }
+  function g_hati(g, x, y, s, c) { g.fillStyle = c; g.beginPath(); g.moveTo(x, y + s); g.bezierCurveTo(x - s * 1.6, y, x - s * .8, y - s * 1.1, x, y - s * .3); g.bezierCurveTo(x + s * .8, y - s * 1.1, x + s * 1.6, y, x, y + s); g.fill(); }
   function gambarHias(ga, h) {
     if (h.t === "lampu-gantung") {
       var X = h.x * T, Y = h.y * T;
-      lingkaran(ga, X, Y, 9, "rgba(255,230,160,.18)");
-      kotak(ga, X - 7, Y - 1, 14, 2, "#d4ac55"); kotak(ga, X - 5, Y - 4, 10, 2, "#d4ac55"); kotak(ga, X - 1, Y - 8, 2, 4, "#d4ac55");
-      [-7, -3, 1, 5].forEach(function (d) { kotak(ga, X + d, Y + 1, 2, 3, "#fff3c4"); });
+      cahaya(ga, X, Y + 1, 16, "255,232,170", .35);
+      ga.strokeStyle = "#c9a24a"; ga.lineWidth = .5; ga.beginPath(); ga.moveTo(X, Y - 10); ga.lineTo(X, Y - 3); ga.stroke();
+      elips(ga, X, Y, 7.5, 2.6, null, "#d9b260"); ga.lineWidth = .9; ga.strokeStyle = "#d9b260"; ga.beginPath(); ga.ellipse(X, Y, 7.5, 2.6, 0, 0, 6.2832); ga.stroke();
+      elips(ga, X, Y - 3, 4, 1.4, "#e2bf6e", true);
+      for (var i = 0; i < 8; i++) { var a = i / 8 * 6.2832, cx = X + Math.cos(a) * 7.5, cy = Y + Math.sin(a) * 2.6; kotak(ga, cx - .4, cy - 2.4, .8, 2.4, "#fffaf0"); elips(ga, cx, cy - 3, .5, .9, "#ffcf5a"); lingkaran(ga, cx, cy + 1.2, .5, "rgba(220,240,255,.9)"); }
     } else if (h.t === "payung") {
-      var cx = h.x * T, cy = h.y * T;
-      kotak(ga, cx - 1, cy, 2, 18, "#8a6a45");
-      for (var y = 0; y < 9; y++) { var w = 4 + y * 2; for (var x = -w; x < w; x += 4) kotak(ga, cx + x, cy - 9 + y, 4, 1, ((x + 40) / 4) % 2 ? "#e0785c" : "#fff4e0"); }
+      var px = h.x * T, py = h.y * T;
+      bayangan(ga, px, py + 18, 9, 2.4);
+      kotak(ga, px - .5, py - 1, 1, 19, "#8a6a45");
+      for (var k = 0; k < 8; k++) {
+        var a0 = Math.PI + k / 8 * Math.PI, a1 = Math.PI + (k + 1) / 8 * Math.PI;
+        ga.beginPath(); ga.moveTo(px, py - 9); ga.lineTo(px + Math.cos(a0) * 13, py + Math.sin(a0) * 4 + 1); ga.quadraticCurveTo(px + Math.cos((a0 + a1) / 2) * 11.5, py + 2.6, px + Math.cos(a1) * 13, py + Math.sin(a1) * 4 + 1); ga.closePath();
+        ga.fillStyle = k % 2 ? "#e47b5f" : "#fff6e6"; ga.fill(); ga.strokeStyle = "rgba(120,60,40,.45)"; ga.lineWidth = .35; ga.stroke();
+      }
+      lingkaran(ga, px, py - 9, .8, "#8a6a45");
     } else if (h.t === "lampu-tali") {
-      var x1 = h.x * T, x2 = h.x2 * T, yy = h.y * T - 18;
-      for (var i = 0; i <= (x2 - x1); i += 2) { var sag = Math.sin(i / (x2 - x1) * Math.PI) * 10; kotak(ga, x1 + i, Math.round(yy + sag), 2, 1, "#3b2a1d"); if (i % 10 === 0) kotak(ga, x1 + i, Math.round(yy + sag) + 1, 2, 3, ["#ffe7a3", "#fbd38d", "#fff3c4"][(i / 10) % 3]); }
+      var x1 = h.x * T, x2 = h.x2 * T, yy = h.y * T - 18, n = Math.round((x2 - x1) / 6);
+      ga.strokeStyle = "#3b2a1d"; ga.lineWidth = .4; ga.beginPath(); ga.moveTo(x1, yy); ga.quadraticCurveTo((x1 + x2) / 2, yy + 20, x2, yy); ga.stroke();
+      for (var j = 1; j < n; j++) {
+        var tt = j / n, bx = (1 - tt) * (1 - tt) * x1 + 2 * (1 - tt) * tt * (x1 + x2) / 2 + tt * tt * x2, by = (1 - tt) * (1 - tt) * yy + 2 * (1 - tt) * tt * (yy + 20) + tt * tt * yy;
+        var w = ["255,225,140", "255,200,150", "255,245,200"][j % 3];
+        cahaya(ga, bx, by + 1.6, 4, w, .55); elips(ga, bx, by + 1.6, .9, 1.2, "rgb(" + w + ")");
+      }
     }
   }
 
-  /* ---------- Membangun dunia ---------- */
-  function bangunDunia(latar) {
+  /* ---------- Membangun dunia (digambar sekali dalam resolusi tinggi) ---------- */
+  function bangunDunia(latar, R) {
     var L = LATAR[latar], peta = L.peta, rows = peta.length, cols = peta[0].length;
-    var PX = 12, PY = 8, W = cols + PX * 2, H = rows + PY * 2;
+    var PX = 9, PY = 6, W = cols + PX * 2, H = rows + PY * 2;
     function ch(x, y) { return peta[Math.max(0, Math.min(rows - 1, y))].charAt(Math.max(0, Math.min(cols - 1, x))); }
     var tanah = document.createElement("canvas"), atas = document.createElement("canvas");
-    tanah.width = atas.width = W * T; tanah.height = atas.height = H * T;
+    tanah.width = atas.width = Math.round(W * T * R); tanah.height = atas.height = Math.round(H * T * R);
     var gt = tanah.getContext("2d"), ga = atas.getContext("2d");
-    var padat = [];
+    gt.setTransform(R, 0, 0, R, 0, 0); ga.setTransform(R, 0, 0, R, 0, 0);
+    var padat = [], tinggi = [];
     for (var ty = 0; ty < H; ty++) {
       padat.push([]);
       for (var tx = 0; tx < W; tx++) {
-        var mx = tx - PX, my = ty - PY, c = ch(mx, my), X = tx * T, Y = ty * T, luar = mx < 0 || my < 0 || mx >= cols || my >= rows;
-        var alas = latar === "gedung" ? (my >= 19 ? function () { rumput(gt, X, Y, tx, ty); } : function () { lantaiMarmer(gt, X, Y, tx, ty); })
-          : latar === "pantai" ? function () { pasir(gt, X, Y, tx, ty); } : function () { rumput(gt, X, Y, tx, ty); };
-        var solid = luar || "#~TPbLcou|".indexOf(c) >= 0;
-        if (c === ".") alas();
-        else if (c === ",") { if (latar === "gedung" && my < 19) karpet(gt, X, Y, ch(mx - 1, my) !== ",", ch(mx + 1, my) !== ","); else if (latar === "pantai") kelopakJalan(gt, X, Y, tx, ty, ch(mx - 1, my) !== ",", ch(mx + 1, my) !== ","); else jalanBatu(gt, X, Y, tx, ty); }
+        var mx = tx - PX, my = ty - PY, c = ch(mx, my), luar = mx < 0 || my < 0 || mx >= cols || my >= rows;
+        padat[ty].push(luar || "#~TPbLcou|".indexOf(c) >= 0);
+      }
+    }
+    // dua lintasan: alas dulu, lalu objek (agar bayangan & tajuk tidak terpotong petak tetangga)
+    for (var pass = 0; pass < 2; pass++) for (ty = 0; ty < H; ty++) for (tx = 0; tx < W; tx++) {
+      mx = tx - PX; my = ty - PY; c = ch(mx, my);
+      var X = tx * T, Y = ty * T;
+      var rumputTaman = latar === "gedung" && my >= 19;
+      var alas = latar === "gedung" ? (rumputTaman ? function () { rumput(gt, X, Y, tx, ty); } : function () { lantaiMarmer(gt, X, Y, tx, ty); })
+        : latar === "pantai" ? function () { pasir(gt, X, Y, tx, ty); } : function () { rumput(gt, X, Y, tx, ty); };
+      if (pass === 0) {
+        if (c === ",") { if (latar === "gedung" && !rumputTaman) karpet(gt, X, Y, ch(mx - 1, my) !== ",", ch(mx + 1, my) !== ",", tx, ty); else if (latar === "pantai") kelopakJalan(gt, X, Y, tx, ty, ch(mx - 1, my) !== ",", ch(mx + 1, my) !== ","); else jalanBatu(gt, X, Y, tx, ty); }
         else if (c === "s") pasir(gt, X, Y, tx, ty);
         else if (c === "w") pasir(gt, X, Y, tx, ty, true);
         else if (c === "~") air(gt, X, Y, tx, ty);
-        else if (c === "=") papanKayu(gt, X, Y, latar !== "pantai");
+        else if (c === "=") papanKayu(gt, X, Y, latar !== "pantai", tx, ty);
         else if (c === "#") dinding(gt, X, Y, ch(mx, my + 1) === "#" || mx <= 0 || mx >= cols - 1, tx);
-        else if (c === "T") { rumput(gt, X, Y, tx, ty, true); pohon(gt, ga, X, Y, tx, ty); }
-        else if (c === "P") { alas(); kelapa(gt, ga, X, Y); }
-        else if (c === "b") { if (latar === "pantai") { pasir(gt, X, Y, tx, ty); for (var k = 0; k < 6; k++) kotak(gt, X + 1 + k * 2.5, Y + 4 + (k % 3), 1, 10 - (k % 3), k % 2 ? "#8faa52" : "#a8c06a"); } else semak(gt, X, Y, tx, ty, alas); }
-        else if (c === "f") { alas(); bunga(gt, X, Y, tx, ty); }
-        else if (c === "L") { alas(); lampuTaman(gt, ga, X, Y); }
-        else if (c === "c") { alas(); kursi(gt, X, Y, latar); }
-        else if (c === "o") { alas(); meja(gt, X, Y, latar); }
+        else if (c === "T") rumput(gt, X, Y, tx, ty, true);
+        else if (c === "b" && latar === "pantai") rumputPantai(gt, X, Y, tx, ty);
         else alas();
-        padat[ty].push(solid);
+      } else {
+        if (c === "T") pohon(gt, ga, X, Y, tx, ty);
+        else if (c === "P") kelapa(gt, ga, X, Y);
+        else if (c === "b" && latar !== "pantai") semak(gt, X, Y, tx, ty, function () {});
+        else if (c === "f") bunga(gt, X, Y, tx, ty);
+        else if (c === "L") lampuTaman(gt, ga, X, Y);
+        else if (c === "c") kursi(gt, X, Y, latar);
+        else if (c === "o") meja(gt, X, Y, latar);
       }
     }
     var tempat = {};
@@ -390,16 +557,11 @@
       tempat[key] = tt;
       for (var y = tt.y; y < tt.y + tt.h; y++) for (var x = tt.x; x < tt.x + tt.w; x++) padat[y][x] = true;
     });
-    // pastikan tidak ada objek tempat yang menutupi jalan masuk ke pemicunya
-    Object.keys(tempat).forEach(function (key) {
-      var tt = tempat[key];
-      for (var x = tt.x; x < tt.x + tt.w; x++) padat[tt.ty][x] = false;
-    });
+    Object.keys(tempat).forEach(function (key) { var tt = tempat[key]; for (var x = tt.x; x < tt.x + tt.w; x++) padat[tt.ty][x] = false; });
     Object.keys(tempat).forEach(function (key) { gambarTempat(gt, ga, key, tempat[key], latar); });
     (L.hias || []).forEach(function (h) { var hh = {}; for (var k in h) hh[k] = h[k]; hh.x += PX; hh.y += PY; if (hh.x2 != null) { hh.x2 += PX; hh.y2 += PY; } gambarHias(ga, hh); });
-    return { tanah: tanah, atas: atas, padat: padat, W: W, H: H, PX: PX, PY: PY, tempat: tempat, awal: { x: (L.awal.x + PX) * T, y: (L.awal.y + PY) * T }, kamera: { x: (L.kamera.x + PX) * T, y: (L.kamera.y + PY) * T }, latar: latar, air: [] };
+    return { tanah: tanah, atas: atas, R: R, padat: padat, W: W, H: H, PX: PX, PY: PY, tempat: tempat, awal: { x: (L.awal.x + PX) * T, y: (L.awal.y + PY) * T }, kamera: { x: (L.kamera.x + PX) * T, y: (L.kamera.y + PY) * T }, latar: latar };
   }
-
   /* ---------- Antarmuka ---------- */
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 
@@ -412,8 +574,8 @@
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.round(innerWidth * dpr); cv.height = Math.round(innerHeight * dpr);
       cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px";
-      S = Math.max(2, Math.round(Math.min(innerWidth / (T * 8.5), innerHeight / (T * 14)))) * dpr;
-      g.imageSmoothingEnabled = false;
+      S = Math.max(2, Math.min(innerWidth / (T * 8.5), innerHeight / (T * 14))) * dpr;
+      g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "high";
     }
     function solid(px, py) {
       var tx = Math.floor(px / T), ty = Math.floor(py / T);
@@ -483,35 +645,33 @@
       var fx = pemain ? pemain.x : cam.tx, fy = pemain ? pemain.y - 10 : cam.ty;
       cam.x += (fx - cam.x) * .12; cam.y += (fy - cam.y) * .12;
       var minX = vw / 2, maxX = dunia.W * T - vw / 2, minY = vh / 2, maxY = dunia.H * T - vh / 2;
-      var x0 = Math.round((Math.max(minX, Math.min(maxX, cam.x)) - vw / 2) * S) / S, y0 = Math.round((Math.max(minY, Math.min(maxY, cam.y)) - vh / 2) * S) / S;
+      var x0 = Math.max(minX, Math.min(maxX, cam.x)) - vw / 2, y0 = Math.max(minY, Math.min(maxY, cam.y)) - vh / 2;
       g.setTransform(1, 0, 0, 1, 0, 0);
       g.fillStyle = LATAR[latar].warna.latar; g.fillRect(0, 0, cv.width, cv.height);
       g.setTransform(S, 0, 0, S, -x0 * S, -y0 * S);
-      g.imageSmoothingEnabled = false;
-      g.drawImage(dunia.tanah, 0, 0);
+      var R = dunia.R, sx0 = Math.max(0, x0), sy0 = Math.max(0, y0), sw = Math.min(vw, dunia.W * T - sx0), sh = Math.min(vh, dunia.H * T - sy0);
+      g.imageSmoothingEnabled = true;
+      g.drawImage(dunia.tanah, sx0 * R, sy0 * R, sw * R, sh * R, sx0, sy0, sw, sh);
       animasiAir(x0, y0, vw, vh);
       var tokoh = npc.slice(); if (pemain) tokoh.push(pemain);
       tokoh.sort(function (a, b) { return a.y - b.y; });
-      tokoh.forEach(function (o) {
-        var fr = o.jalan ? [0, 1, 0, 2][Math.floor(o.anim) % 4] : 0;
-        var bob = o.jalan && fr ? -1 : 0;
-        g.fillStyle = "rgba(0,0,0,.2)"; g.fillRect(Math.round(o.x - 5), Math.round(o.y - 1), 10, 3);
-        g.drawImage(gambarSprite(o.jenis, o.palet, o.arah, fr), Math.round(o.x - 7), Math.round(o.y - 19 + bob));
-      });
-      g.drawImage(dunia.atas, 0, 0);
+      tokoh.forEach(function (o) { gambarOrang(g, o, o.x, o.y, waktu); });
+      g.drawImage(dunia.atas, sx0 * R, sy0 * R, sw * R, sh * R, sx0, sy0, sw, sh);
       efek(x0, y0, vw, vh);
       // label tempat (dalam ukuran layar)
       g.setTransform(1, 0, 0, 1, 0, 0);
-      var px = Math.max(11, Math.round(S * 4.2));
-      g.font = "600 " + px + "px 'Pixelify Sans', 'Nunito', sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
+      var px = Math.max(12, Math.round(S * 4));
+      g.font = "600 " + px + "px 'Fredoka', 'Nunito', sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
       daftar.forEach(function (key) {
         var t = dunia.tempat[key], sx = ((t.x + t.w / 2) * T - x0) * S, sy = (t.y * T - 18 - x0 * 0 - y0) * S + Math.sin(waktu * 3 + t.x) * S;
         var teks = (kunjungan[key] ? "✓ " : "") + NAMA_TEMPAT[key], w = g.measureText(teks).width + px * 1.4, h = px * 1.8;
         if (sx < -w || sx > cv.width + w || sy < -h || sy > cv.height + h) return;
         g.globalAlpha = kunjungan[key] ? .7 : 1;
-        g.fillStyle = "rgba(40,26,16,.82)"; bulat(g, sx - w / 2, sy - h / 2, w, h, h / 2); g.fill();
-        g.fillStyle = kunjungan[key] ? "#cfe8c0" : "#fff3d6"; g.fillText(teks, sx, sy + 1);
-        if (!kunjungan[key]) { g.fillStyle = "#ffd36e"; g.beginPath(); g.moveTo(sx - px * .4, sy + h / 2 + 2); g.lineTo(sx + px * .4, sy + h / 2 + 2); g.lineTo(sx, sy + h / 2 + px * .6); g.fill(); }
+        g.shadowColor = "rgba(0,0,0,.25)"; g.shadowBlur = px * .5; g.shadowOffsetY = px * .15;
+        g.fillStyle = kunjungan[key] ? "rgba(255,250,238,.85)" : "#fffaf0"; bulat(g, sx - w / 2, sy - h / 2, w, h, h / 2); g.fill();
+        g.shadowColor = "transparent";
+        g.fillStyle = kunjungan[key] ? "#5f8f52" : AKSEN[latar]; g.fillText(teks, sx, sy + 1);
+        if (!kunjungan[key]) { g.fillStyle = "#fffaf0"; g.beginPath(); g.moveTo(sx - px * .4, sy + h / 2 + 2); g.lineTo(sx + px * .4, sy + h / 2 + 2); g.lineTo(sx, sy + h / 2 + px * .6); g.fill(); }
         g.globalAlpha = 1;
       });
       if (jalur && jalur.length) { var last = jalur[jalur.length - 1]; g.strokeStyle = "rgba(255,243,214,.9)"; g.lineWidth = Math.max(2, S * .6); g.beginPath(); g.arc((last.x - x0) * S, (last.y - y0) * S, S * (3 + Math.sin(waktu * 6)), 0, 6.29); g.stroke(); }
@@ -524,11 +684,14 @@
         var my = Math.max(0, Math.min(peta.length - 1, ty - dunia.PY)), mx = Math.max(0, Math.min(peta[0].length - 1, tx - dunia.PX));
         var c = peta[my].charAt(mx);
         if (c === "~") {
-          var ph = (waktu * 1.6 + tx * .7 + ty * 1.3) % 4;
-          g.fillStyle = "rgba(220,248,255,.55)"; g.fillRect(tx * T + Math.floor(ph * 3), ty * T + 3 + (tx % 3) * 3, 4, 1);
+          var ph = waktu * 1.4 + tx * .9 + ty * 1.7, ox = tx * T + 3 + Math.sin(ph) * 2.5, oy = ty * T + 5 + (tx * 7 + ty * 3) % 7;
+          g.strokeStyle = "rgba(230,250,255," + (.35 + Math.sin(ph * 1.3) * .2) + ")"; g.lineWidth = .6; g.lineCap = "round";
+          g.beginPath(); g.moveTo(ox, oy); g.quadraticCurveTo(ox + 2.5, oy - 1.2, ox + 5, oy); g.stroke();
         } else if (c === "w") {
-          var o = Math.sin(waktu * 1.5 + tx * .4) * 2;
-          g.fillStyle = "rgba(255,255,255,.75)"; g.fillRect(tx * T, ty * T - 1 + o, T, 2);
+          var o = Math.sin(waktu * 1.3 + tx * .35) * 1.6;
+          g.fillStyle = "rgba(255,255,255,.8)"; g.beginPath(); g.moveTo(tx * T, ty * T - 2 + o);
+          g.quadraticCurveTo(tx * T + 4, ty * T + 2 + o, tx * T + 8, ty * T + o); g.quadraticCurveTo(tx * T + 12, ty * T - 2 + o, tx * T + 16, ty * T + 1 + o);
+          g.lineTo(tx * T + 16, ty * T - 3); g.lineTo(tx * T, ty * T - 3); g.closePath(); g.fill();
         }
       }
     }
@@ -540,8 +703,8 @@
           var a = (Math.sin(waktu * 2 + k.p) + 1) / 2;
           var x = k.x + Math.sin(waktu * .5 + k.p) * 8, y = k.y + Math.cos(waktu * .4 + k.p) * 6;
           if (x < x0 || x > x0 + vw || y < y0 || y > y0 + vh) return;
-          g.fillStyle = latar === "hutan" ? "rgba(255,236,140," + (.25 + a * .7) + ")" : "rgba(255,245,210," + (a * .5) + ")";
-          g.fillRect(Math.round(x), Math.round(y), 1, 1);
+          cahaya(g, x, y, latar === "hutan" ? 2.4 : 1.6, latar === "hutan" ? "255,236,140" : "255,248,220", latar === "hutan" ? .2 + a * .7 : a * .5);
+          lingkaran(g, x, y, .35, "rgba(255,250,220," + (.4 + a * .6) + ")");
         });
       }
     }
@@ -599,8 +762,7 @@
       var box = el("div", "jl-pilih", '<h3>Pilih karakter kamu</h3><div class="jl-kartu-wrap"></div>');
       ["pria", "wanita"].forEach(function (j) {
         var b = el("button", "jl-kartu"); b.type = "button";
-        var c = document.createElement("canvas"); c.width = 14 * 6; c.height = 20 * 6;
-        var cg = c.getContext("2d"); cg.imageSmoothingEnabled = false; cg.drawImage(gambarSprite(j, j, "bawah", 0), 0, 0, 84, 120);
+        var c = document.createElement("canvas"); c.width = 180; c.height = 240; potretOrang(c, j, j);
         b.appendChild(c); b.appendChild(el("span", "", j === "pria" ? "Laki-laki" : "Perempuan"));
         b.addEventListener("click", function () { jenis = j; tutupModal(); lanjut(); });
         box.querySelector(".jl-kartu-wrap").appendChild(b);
@@ -632,7 +794,7 @@
       pemain = { x: dunia.awal.x, y: dunia.awal.y, arah: "atas", jalan: false, anim: 0, jenis: jenis, palet: jenis };
       document.body.classList.add("jl-main");
       var av = document.getElementById("jlAvatar");
-      if (av) { var cg = av.getContext("2d"); cg.imageSmoothingEnabled = false; cg.clearRect(0, 0, av.width, av.height); cg.drawImage(gambarSprite(jenis, jenis, "bawah", 0), 0, 0, 14, 11, 0, 0, av.width, av.width * 11 / 14); }
+      if (av) potretOrang(av, jenis, jenis, true);
       perbaruiHud();
       if (petunjuk) { petunjuk.hidden = false; setTimeout(function () { petunjuk.hidden = true; }, 5000); }
     }
@@ -700,8 +862,8 @@
       kata: opsi.kata || { buka: "Buka Undangan" },
       jedaBuka: 500, lamaBuka: 900,
       sampul: function (c) {
-        return '<div class="cover-text"><div class="eyebrow">The Wedding of</div><div class="jl-nama"><span>' + c.esc(c.nama1) + '</span><b>&amp;</b><span>' + c.esc(c.nama2) + '</span></div>' +
-          '<div class="jl-tgl">' + c.esc(c.tanggalPendek) + '</div>' +
+        return '<div class="cover-text"><div class="jl-sampul"><div class="eyebrow">The Wedding of</div><div class="jl-nama"><span>' + c.esc(c.nama1) + '</span><b>&amp;</b><span>' + c.esc(c.nama2) + '</span></div>' +
+          '<div class="jl-tgl">' + c.esc(c.tanggalPendek) + '</div></div>' +
           '<div class="cover-bottom"><div class="guest"><small>' + c.kepada + '</small><strong id="guestName">Tamu Undangan</strong></div>' +
           '<button class="btn-open jl-btn" id="openBtn" type="button">' + c.tombolBuka + '</button></div></div>';
       },
@@ -710,7 +872,8 @@
       siap: function (c) {
         ctxU = c;
         document.body.classList.add("tema-jelajah", "latar-" + latar);
-        dunia = bangunDunia(latar);
+        var dpr0 = Math.min(window.devicePixelRatio || 1, 2), s0 = Math.max(2, Math.min(innerWidth / (T * 8.5), innerHeight / (T * 14))) * dpr0;
+        dunia = bangunDunia(latar, Math.max(3, Math.min(4, Math.ceil(s0))));
         cv = el("canvas", "jl-dunia"); cv.setAttribute("aria-label", "Peta " + LATAR_NAMA[latar] + " acara pernikahan"); cv.setAttribute("role", "img");
         document.body.insertBefore(cv, document.body.firstChild);
         g = cv.getContext("2d");
@@ -726,7 +889,7 @@
         var tu = dunia.tempat.ucapan;
         if (tu) { npc.push({ x: (tu.x + tu.w) * T + 8, y: (tu.y + 1) * T - 2, arah: "kiri", jalan: false, anim: 0, jenis: "wanita", palet: "resepsionis" }); dunia.padat[tu.y][tu.x + tu.w] = true; }
         // HUD
-        var hud = el("div", "jl-hud", '<div class="jl-judul"><b>' + c.duaNama + '</b><small id="jlSisa"></small></div><canvas id="jlAvatar" width="44" height="34" aria-hidden="true"></canvas>');
+        var hud = el("div", "jl-hud", '<div class="jl-judul"><b>' + c.duaNama + '</b><small id="jlSisa"></small></div><canvas id="jlAvatar" width="96" height="96" aria-hidden="true"></canvas>');
         document.body.appendChild(hud);
         holder = el("div", "jl-simpan"); holder.hidden = true; document.body.appendChild(holder);
         modal = el("div", "jl-modal", '<div class="jl-panel" role="dialog" aria-modal="true"><button type="button" class="jl-tutup" aria-label="Tutup">&times;</button><div class="jl-isi"></div></div>');
