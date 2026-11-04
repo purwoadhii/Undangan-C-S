@@ -5,5 +5,7 @@ window.DAFTAR_TEMA = [
   { id: "gelap-elegan", nama: "Gelap Elegan", ket: "Hitam & emas art deco, pintu terbuka, debu emas", warna: ["#0e0d0b", "#d4b06a", "#efe6d4"],
     huruf: "family=Cinzel:wght@400;600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,500;1,500&family=Jost:wght@300;400;500" },
   { id: "pantai", nama: "Pantai", ket: "Senja di pantai, ombak menyapu, kelapa & camar", warna: ["#fdf7ee", "#e0785c", "#2f8ea4"],
-    huruf: "family=Sacramento&family=Josefin+Sans:wght@400;600&family=Lora:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700" }
+    huruf: "family=Sacramento&family=Josefin+Sans:wght@400;600&family=Lora:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700" },
+  { id: "laut", nama: "Bawah Laut", ket: "Samudra biru, ikan & ubur-ubur, jendela kapal, menyelam saat dibuka", warna: ["#06324a", "#7fe0e6", "#ffb385"],
+    huruf: "family=Allura&family=Raleway:wght@400;600;700&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;500;600" }
 ];
