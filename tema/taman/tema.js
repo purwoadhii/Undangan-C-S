@@ -65,7 +65,29 @@
     return '<li class="reveal"><time>' + esc(String(c.waktu || "").toUpperCase()) + '</time><h4>' + esc(c.judul) + '</h4><p>' + esc(c.isi) + '</p></li>';
   }).join("");
 
-  var galeri = D.galeri && D.galeri.length ? D.galeri : ["assets/foto1.jpg", "assets/foto2.jpg", "assets/foto3.jpg", "assets/foto4.jpg", "assets/foto5.jpg", "assets/foto6.jpg"];
+  var galeri = Array.isArray(D.galeri) ? D.galeri.filter(function (g) { return g && (typeof g === "string" || g.src); }) : [];
+  /* File yang hilang dibuang; bagian yang jadi kosong disembunyikan (tidak ada kotak kosong). */
+  window.__undanganHilang = function (el) {
+    var fig = el.closest("figure"); if (fig) fig.remove();
+    var gal = document.querySelector(".gallery");
+    if (gal && !gal.querySelector("figure")) sembunyikan("galeri");
+  };
+  window.__videoHilang = function () { sembunyikan("video"); };
+  function sembunyikan(id) {
+    var sec = document.getElementById(id); if (sec) sec.remove();
+    var a = document.querySelector('.nav a[href="#' + id + '"]');
+    if (a && id === "galeri" && document.getElementById("video")) { a.setAttribute("href", "#video"); a.setAttribute("aria-label", "Video"); a.querySelector("span").textContent = "Video"; }
+    else if (a) a.remove();
+  }
+  function youtubeId(v) {
+    var m = String(v || "").match(/(?:youtu\.be\/|v=|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : (/^[A-Za-z0-9_-]{11}$/.test(String(v || "")) ? v : "");
+  }
+  var vid = D.video || {};
+  var ytId = youtubeId(vid.youtube);
+  var videoHtml = ytId
+    ? '<div class="video-box reveal"><iframe src="https://www.youtube-nocookie.com/embed/' + ytId + '?rel=0" title="Video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>'
+    : vid.src ? '<div class="video-box reveal"><video src="' + esc(vid.src) + '" controls playsinline preload="metadata" onerror="__videoHilang()"></video></div>' : "";
   function isVideo(item) {
     if (item && typeof item === "object") return item.tipe === "video";
     return /\.(mp4|webm|mov|m4v)$/i.test(String(item));
@@ -74,8 +96,8 @@
   var galeriHtml = galeri.map(function (item, i) {
     var src = esc(srcOf(item));
     var media = isVideo(item)
-      ? '<video src="' + src + '#t=0.1" muted playsinline preload="metadata" onerror="this.remove()"></video><span class="play" aria-hidden="true"></span>'
-      : '<img src="' + src + '" alt="" loading="lazy" onerror="this.remove()">';
+      ? '<video src="' + src + '#t=0.1" muted playsinline preload="metadata" onerror="__undanganHilang(this)"></video><span class="play" aria-hidden="true"></span>'
+      : '<img src="' + src + '" alt="" onerror="__undanganHilang(this)">';
     return '<figure tabindex="0" data-i="' + i + '" data-video="' + (isVideo(item) ? 1 : 0) + '" data-src="' + src + '">' + media + '<figcaption>' + (isVideo(item) ? "VIDEO " : "FOTO ") + (i + 1) + '</figcaption></figure>';
   }).join("");
 
@@ -95,7 +117,11 @@
     ["galeri", "Gallery", '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/>'],
     ["hadiah", "Gift", '<rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 13h18M12 9v12M12 9c-2-4-6-4-6-1s6 1 6 1zm0 0c2-4 6-4 6-1s-6 1-6 1z"/>'],
     ["ucapan", "Wishes", '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>']
-  ].filter(function (n) { return n[0] !== "hadiah" || rekening.length; });
+  ].filter(function (n) {
+    if (n[0] === "hadiah") return rekening.length;
+    if (n[0] === "galeri") return galeri.length || videoHtml;
+    return true;
+  }).map(function (n) { return n[0] === "galeri" && !galeri.length ? ["video", "Video", n[2]] : n; });
 
   var html = (window.TEMA_TAMAN_GAMBAR || "") +
   '<div id="cover" role="dialog" aria-label="Sampul undangan"><div class="lace" aria-hidden="true"></div>' +
@@ -125,7 +151,8 @@
     cerah("acara", "Save the Date", "MENUJU HARI BAHAGIA",
       '<div class="countdown reveal"><div><b id="cd-d">00</b><span>Hari</span></div><div><b id="cd-h">00</b><span>Jam</span></div><div><b id="cd-m">00</b><span>Menit</span></div><div><b id="cd-s">00</b><span>Detik</span></div></div><div style="height:34px"></div>' + acaraHtml, false) +
     (cerita.length ? cerah("cerita", "Our Story", "CERITA KAMI", '<ol class="story">' + ceritaHtml + '</ol>', true) : "") +
-    cerah("galeri", "Gallery", "MOMEN BAHAGIA", '<div class="gallery reveal">' + galeriHtml + '</div>', false) +
+    (videoHtml ? cerah("video", esc(vid.judul || "Our Moment"), "VIDEO KAMI", videoHtml, true) : "") +
+    (galeri.length ? cerah("galeri", "Gallery", "MOMEN BAHAGIA", '<div class="gallery reveal">' + galeriHtml + '</div>', false) : "") +
     (rekening.length ? cerah("hadiah", "Wedding Gift", "TANDA KASIH", '<p class="lead reveal" style="margin-bottom:22px">Doa restu Anda adalah hadiah terindah. Bila ingin memberi tanda kasih, dapat melalui:</p><div class="gift">' + rekHtml + '</div>', true) : "") +
     cerah("ucapan", "Wishes", "KONFIRMASI KEHADIRAN &amp; UCAPAN",
       '<form class="rsvp reveal" id="rsvpForm"><div><label for="f-name">Nama</label><input id="f-name" name="nama" required placeholder="Nama Anda"></div>' +
@@ -194,12 +221,10 @@
     reveals.forEach(function (el) { io.observe(el); });
   } else reveals.forEach(function (el) { el.classList.add("in"); });
 
-  var links = document.querySelectorAll(".nav a");
-  var secs = Array.prototype.map.call(links, function (a) { return document.querySelector(a.getAttribute("href")); });
   function setActive() {
-    var y = window.innerHeight * .45, idx = 0;
-    secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < y) idx = i; });
-    links.forEach(function (a, i) { a.classList.toggle("on", i === idx); });
+    var links = document.querySelectorAll(".nav a"), y = window.innerHeight * .45, idx = 0;
+    Array.prototype.forEach.call(links, function (a, i) { var s = document.querySelector(a.getAttribute("href")); if (s && s.getBoundingClientRect().top < y) idx = i; });
+    Array.prototype.forEach.call(links, function (a, i) { a.classList.toggle("on", i === idx); });
   }
   window.addEventListener("scroll", setActive, { passive: true }); setActive();
 

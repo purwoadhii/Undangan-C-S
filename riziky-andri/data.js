@@ -58,6 +58,10 @@ window.UNDANGAN = {
     { waktu: "Juni 2026",    judul: "Lamaran",           isi: "Dua keluarga bertemu dan merestui langkah kami." }
   ],
 
+  // Video khusus (opsional): isi link YouTube ATAU file mp4 di assets. Kosongkan keduanya bila tidak ada, bagiannya tidak tampil.
+  video: { youtube: "", src: "", judul: "Our Moment" },
+
+  // Galeri foto & video. Kosongkan (galeri: [],) bila tidak ada, bagiannya tidak tampil.
   galeri: [
     "assets/foto1.jpg", "assets/foto2.jpg", "assets/foto3.jpg",
     "assets/foto4.jpg", "assets/foto5.jpg", "assets/foto6.jpg"
