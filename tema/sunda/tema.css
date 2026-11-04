@@ -1,0 +1,102 @@
+/* Tema Sunda: krem, merah marun, emas, hijau awi. */
+:root{
+  --bg:#faf3e6; --bg2:#f1e5cf; --card:#fffaf1; --ink:#4a2a24; --muted:#8b6e62;
+  --accent:#7b1e2b; --accent-2:#b8892f; --on-accent:#fff6e6; --accent-soft:#f2dcc8; --line:#e8d6bb;
+  --shadow:rgba(74,42,36,.6); --nav-bg:rgba(255,250,241,.95); --input-bg:#fffdf8;
+  --font-script:"Alex Brush","Great Vibes",cursive;
+  --font-cap:"Forum","Cinzel",Georgia,serif;
+  --font-serif:"EB Garamond",Georgia,serif;
+  --font-body:"Work Sans","Segoe UI",system-ui,sans-serif;
+  --r-card:8px;
+  --kere:repeating-linear-gradient(180deg,#d9b97f 0 8px,#b38a4e 8px 9px,#e6c992 9px 10px),#d9b97f;
+  --anyaman:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cg fill='%23b8892f' opacity='.12'%3E%3Crect width='12' height='6'/%3E%3Crect x='12' y='6' width='12' height='6'/%3E%3Crect y='12' width='6' height='12'/%3E%3Crect x='18' y='12' width='6' height='12'/%3E%3C/g%3E%3C/svg%3E");
+}
+.tema-sunda .names{font-size:58px;color:var(--accent)}
+.tema-sunda .eyebrow{font-family:var(--font-cap);letter-spacing:.3em;color:var(--accent-2)}
+.tema-sunda .hias-sunda{display:block;width:130px;margin:4px auto;color:var(--accent-2)}
+
+/* Kere bambu, awi, siger */
+.tema-sunda .kere{position:absolute;inset:0;background:var(--kere)}
+.tema-sunda .kere::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 23%,rgba(90,50,20,.35) 23% calc(23% + 2px),transparent calc(23% + 2px) 50%)}
+.tema-sunda .kere::after{content:"";position:absolute;left:max(12%,calc(50% - 250px));right:max(12%,calc(50% - 250px));top:0;bottom:0;background:linear-gradient(180deg,#8a2433,#6a1823);box-shadow:0 0 0 3px #d4ac55,0 0 0 7px #6a1823,0 0 0 8px #d4ac55,0 20px 40px rgba(0,0,0,.4)}
+.tema-sunda .awi{position:absolute;bottom:0;height:100%;width:150px;z-index:2;transform-origin:50% 100%;animation:awi 6s ease-in-out infinite}
+.tema-sunda .awi.kiri{left:-80px}.tema-sunda .awi.kanan{right:-80px;transform:scaleX(-1);animation-name:awiKanan;animation-delay:-3s}
+@keyframes awi{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+@keyframes awiKanan{0%,100%{transform:scaleX(-1) rotate(-1.2deg)}50%{transform:scaleX(-1) rotate(1.2deg)}}
+.tema-sunda .siger{display:block;width:180px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.tema-sunda .siger.goyang{animation:kilauSiger 3s ease-in-out infinite}
+@keyframes kilauSiger{0%,100%{filter:drop-shadow(0 6px 10px rgba(0,0,0,.35)) brightness(1)}50%{filter:drop-shadow(0 6px 14px rgba(255,220,140,.5)) brightness(1.15)}}
+
+/* Sampul: kere digulung ke atas */
+.tema-sunda .cover{background:#d9b97f;clip-path:inset(0 0 0 0);transition:clip-path 1.5s cubic-bezier(.7,0,.3,1) .3s}
+.tema-sunda .cover-text{color:#fff3dc;padding-left:16%;padding-right:16%}
+.tema-sunda .cover-text .eyebrow{color:#e9c774;font-size:12px}
+.tema-sunda .cover .names{color:#fff3dc;font-size:50px;line-height:1.05}
+.tema-sunda .cover .hias-sunda{color:#e9c774}
+.tema-sunda .cover .date{font-family:var(--font-serif);font-size:17px;color:#f3d9a8}
+.tema-sunda .guest{background:rgba(255,243,220,.12);border:1px solid #d4ac55;color:#fff3dc;border-radius:6px}
+.tema-sunda .btn-open{background:linear-gradient(180deg,#f3d58c,#c49a45);color:#5a141e;border-radius:6px;font-family:var(--font-cap);font-size:16px;letter-spacing:.1em;box-shadow:0 8px 18px -8px rgba(0,0,0,.6)}
+.tema-sunda .cover.open{clip-path:inset(0 0 100% 0)}
+.tema-sunda .cover.open .cover-text{opacity:0;transition:opacity .4s}
+
+/* Panel laptop */
+@media (min-width:900px){
+  .tema-sunda .side .kere::after{left:max(18%,calc(50% - 280px));right:max(18%,calc(50% - 280px))}
+  .tema-sunda .side .awi{width:220px}.tema-sunda .side .awi.kiri{left:-40px}.tema-sunda .side .awi.kanan{right:-40px}
+  .tema-sunda .side-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff3dc;z-index:3}
+  .tema-sunda .side-text .eyebrow{color:#e9c774}
+  .tema-sunda .side-text .siger{width:260px}
+  .tema-sunda .side-text .names{font-size:84px;color:#fff3dc}
+  .tema-sunda .side-text .hias-sunda{color:#e9c774;width:180px}
+  .tema-sunda .side-text p{font-family:var(--font-serif);font-size:20px;color:#f3d9a8;margin:0}
+}
+
+/* Hero: foto lengkung bermahkota siger, angklung bergetar */
+.tema-sunda .hero{position:relative;padding:60px 16px 48px;text-align:center;overflow:hidden;background:var(--anyaman),linear-gradient(180deg,var(--bg2),var(--bg));background-size:24px 24px,cover}
+.tema-sunda .angklung{position:absolute;top:120px;width:64px;transform-origin:50% 100%;animation:getar 2.4s ease-in-out infinite}
+.tema-sunda .angklung.a1{left:4px}.tema-sunda .angklung.a2{right:4px;animation-delay:-1.2s}
+@keyframes getar{0%,60%,100%{transform:rotate(0)}65%{transform:rotate(-6deg)}70%{transform:rotate(6deg)}75%{transform:rotate(-4deg)}80%{transform:rotate(3deg)}}
+.tema-sunda .siger-frame{position:relative;width:68%;max-width:280px;margin:0 auto;padding-top:56px;opacity:0;transform:translateY(40px);transition:all 1.5s cubic-bezier(.2,.8,.2,1)}
+.tema-sunda.play .siger-frame{opacity:1;transform:none}
+.tema-sunda .siger.atas{position:absolute;left:-8%;right:-8%;top:0;width:116%;z-index:2}
+.tema-sunda .foto-lengkung{position:relative;aspect-ratio:3/4;border-radius:999px 999px 10px 10px;overflow:hidden;background:linear-gradient(170deg,#e9d2b9,#a7746a);box-shadow:0 0 0 5px var(--card),0 0 0 7px var(--accent-2),0 22px 40px -22px var(--shadow)}
+.tema-sunda .foto-lengkung .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-sunda .title-block{margin-top:24px;opacity:0;transition:opacity 1.3s .7s}
+.tema-sunda.play .title-block{opacity:1}
+.tema-sunda .title-block .date{font-family:var(--font-serif);font-size:18px;color:var(--muted)}
+
+/* Isi */
+.tema-sunda h2{font-family:var(--font-cap);font-size:36px;color:var(--accent);letter-spacing:.04em}
+.tema-sunda .kicker{color:var(--accent-2)}
+.tema-sunda .salam{color:var(--accent)}
+.tema-sunda .sec-ayat{background:var(--accent);color:#fff3dc}
+.tema-sunda .sec-ayat .lead{color:#fff3dc}.tema-sunda .sec-ayat .lead cite{color:#e9c774}.tema-sunda .sec-ayat .hias-sunda{color:#e9c774}
+.tema-sunda .pic{width:180px;height:230px;border-radius:999px 999px 10px 10px;border:0;background:none;box-shadow:none;overflow:visible;padding:0;margin-top:30px}
+.tema-sunda .siger.mini{position:absolute;left:-12%;width:124%;top:-38px;z-index:2}
+.tema-sunda .lengkung{position:relative;width:100%;height:100%;border-radius:inherit;overflow:hidden;background:linear-gradient(170deg,#e9d2b9,#a7746a);box-shadow:0 0 0 4px var(--card),0 0 0 6px var(--accent-2)}
+.tema-sunda .lengkung img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tema-sunda .person h3{color:var(--accent)}
+.tema-sunda .and{color:var(--accent-2)}
+.tema-sunda .cd-angklung{gap:10px;align-items:end}
+.tema-sunda .cd-angklung div{position:relative;border-radius:14px 14px 6px 6px;padding:22px 2px 14px;
+  background:repeating-linear-gradient(180deg,transparent 0 30px,rgba(95,127,62,.55) 30px 33px),linear-gradient(90deg,#c9a55e,#ecd49b 45%,#b38a4e);box-shadow:0 10px 18px -12px var(--shadow)}
+.tema-sunda .cd-angklung div:nth-child(1){height:110px}.tema-sunda .cd-angklung div:nth-child(2){height:96px}.tema-sunda .cd-angklung div:nth-child(3){height:84px}.tema-sunda .cd-angklung div:nth-child(4){height:74px}
+.tema-sunda .cd-angklung b{color:var(--accent);font-family:var(--font-cap);font-size:28px}
+.tema-sunda .cd-angklung span{color:#5a3a1e}
+.tema-sunda .event{background:var(--card);border-radius:8px;border:1px solid var(--line);padding-top:54px;overflow:hidden}
+.tema-sunda .pita{position:absolute;left:0;right:0;top:0;padding:8px;background:var(--accent);color:#fff3dc;font-family:var(--font-cap);letter-spacing:.3em;text-transform:uppercase;font-size:13px}
+.tema-sunda .pita::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;background:repeating-linear-gradient(90deg,#d4ac55 0 8px,transparent 8px 12px)}
+.tema-sunda .event h3{font-family:var(--font-script);font-weight:400;font-size:48px;color:var(--accent)}
+.tema-sunda .event .bigdate{font-family:var(--font-cap);color:var(--accent-2)}
+.tema-sunda .btn{background:var(--accent);border-radius:6px}
+.tema-sunda .btn.line{background:transparent;color:var(--accent);border-color:var(--accent)}
+.tema-sunda .gal-bilik{grid-template-columns:repeat(2,1fr);grid-auto-rows:120px;grid-auto-flow:dense;gap:8px;padding:10px;background:var(--anyaman),var(--bg2);background-size:24px 24px,cover;border-radius:10px}
+.tema-sunda .gal-bilik figure{aspect-ratio:auto;border-radius:6px;border:3px solid var(--card)}
+.tema-sunda .gal-bilik figure:nth-child(3n+1){grid-row:span 2}
+.tema-sunda .story li{border-radius:8px;border-left:4px solid var(--accent-2)}
+.tema-sunda .video-box{border-radius:10px;border:5px solid var(--card);box-shadow:0 0 0 2px var(--accent-2)}
+.tema-sunda footer.penutup{background:var(--accent);color:#fff3dc}
+.tema-sunda footer.penutup .terima{font-family:var(--font-cap);color:#e9c774;font-size:24px;letter-spacing:.2em}
+.tema-sunda footer.penutup .hias-sunda{color:#e9c774}
+.tema-sunda footer.penutup .mono{color:#e9c774}.tema-sunda footer.penutup .mono .amp{color:#fff3dc}
+.tema-sunda footer.penutup .names{color:#fff3dc}
