@@ -21,5 +21,7 @@ window.DAFTAR_TEMA = [
   { id: "betawi", nama: "Betawi", ket: "Merah-hijau-kuning, gigi balang, ondel-ondel, roti buaya, logat Betawi", warna: ["#fff8ec", "#d62839", "#1f8a4c"],
     huruf: "family=Yellowtail&family=Bree+Serif&family=Poppins:wght@400;600;700" },
   { id: "minang", nama: "Minang", ket: "Hitam-merah-emas, rumah gadang bergonjong, songket, bahasa Minang", warna: ["#fbf3e3", "#a3161f", "#1a1414"],
-    huruf: "family=Spectral+SC:wght@500;600&family=Mrs+Saint+Delafield&family=Yeseva+One&family=Source+Sans+3:wght@400;600;700" }
+    huruf: "family=Spectral+SC:wght@500;600&family=Mrs+Saint+Delafield&family=Yeseva+One&family=Source+Sans+3:wght@400;600;700" },
+  { id: "bali", nama: "Bali", ket: "Candi bentar terbuka, penjor, kamboja, kain poleng, salam Om Swastyastu", warna: ["#fbf8f0", "#3f6b4f", "#c48a2c"],
+    huruf: "family=Tenor+Sans&family=Petit+Formal+Script&family=Prata&family=Mulish:wght@400;600;700" }
 ];
